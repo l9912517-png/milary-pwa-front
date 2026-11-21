@@ -6,9 +6,9 @@ registerScreen("help", function () {
     container.innerHTML = `
         <div class="help-page">
 
-            <button type="button" class="btn-wide help-support" onclick="openSupport()">
-                ${iconSvg("M4 5h16v14H4z M4 7l8 6 8-6")}
-                Написать в поддержку
+            <button type="button" class="btn-wide help-support" onclick="openScreen('support')">
+                ${iconSvg("M21 15a4 4 0 0 1-4 4H8l-5 3V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z")}
+                Поддержка <span class="count-badge dark" data-support-count="user" hidden></span>
             </button>
 
             <nav class="help-card help-toc" aria-label="Содержание">
@@ -67,6 +67,9 @@ registerScreen("help", function () {
 
         </div>
     `;
+
+    // число непрочитанных ответов на кнопке «Поддержка»
+    if (typeof supportRefreshUnread === "function") supportRefreshUnread();
 });
 
 function scrollHelp(id) {

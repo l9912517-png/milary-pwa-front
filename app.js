@@ -413,8 +413,17 @@ function setNavActive(id) {
     document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.toggle("active", btn.id === id));
 }
 
-/* «Главная» и кнопка «назад» в шапке */
+/* Кнопка «назад» в шапке: экран может задать свой шаг назад (window.screenBack), иначе — на главную */
+function headerBack() {
+    const back = window.screenBack;
+    window.screenBack = null;
+    if (typeof back === "function") return back();
+    goHome();
+}
+
+/* «Главная» (нижняя панель) */
 function goHome() {
+    window.screenBack = null;
     document.querySelectorAll(".modal-overlay").forEach(el => el.remove());
     if (currentUser && String(currentUser.role || "").trim().toLowerCase() === "logistics") {
         openScreen("logistic");
@@ -539,6 +548,7 @@ async function doLogin() {
     showMenu();
 
     initPushPermission().catch(() => null);
+    if (typeof supportAfterLogin === "function") supportAfterLogin();
 }
 
 async function validateToken(jwt) {
@@ -573,6 +583,7 @@ if (role === "logistics") {
 }
 
 initPushPermission().catch(() => null);
+if (typeof supportAfterLogin === "function") supportAfterLogin();
 }
 
 
@@ -892,6 +903,7 @@ function menuToggleGroup(key) {
 function showMenu() {
 
     window.currentScreen = "menu";
+    window.screenBack = null;
     setBrandTitle();
     setNavActive("navHome");
 
@@ -1074,7 +1086,10 @@ if (id === "createOrder") {
 
 function openScreen(name) {
 
+    // последний «рабочий» экран — для обращения в поддержку («с какого экрана пишут»)
+    if (window.currentScreen && !/^(help|support)/.test(window.currentScreen)) window.lastWorkScreen = window.currentScreen;
     window.currentScreen = name;      // экран может уточнить сам; нужно шапке (кнопка «?»)
+    window.screenBack = null;         // свой шаг «назад» экран задаёт сам
 
     if (SCREENS[name]) {
         SCREENS[name]();
@@ -1103,6 +1118,7 @@ function openScreen(name) {
 async function openAdminPanel() {
 
     window.currentScreen = "admin";
+    window.screenBack = null;
     title.innerText = "Администрирование";
 
     const jwt = localStorage.getItem("jwt");
@@ -1353,6 +1369,25 @@ async function openAdminPanel() {
 
         <div class="admin-panel">
 
+            <div class="menu-list admin-tools">
+                <button type="button" class="menu-card" onclick="openScreen('support_admin')">
+                    <span class="menu-card-icon">${iconSvg("M21 15a4 4 0 0 1-4 4H8l-5 3V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z M8 9h8 M8 13h5")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Обращения в поддержку <span class="count-badge" data-support-count="admin" hidden></span></span>
+                        <span class="menu-card-sub">Переписка с пользователями</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+                <button type="button" class="menu-card" onclick="openScreen('task_queue')">
+                    <span class="menu-card-icon">${iconSvg("M4 6h16 M4 12h16 M4 18h10 M18 16l2 2 4-4")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Очередь задач 1С</span>
+                        <span class="menu-card-sub">Обмен с 1С: что ждёт, что зависло</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+            </div>
+
             ${usersHtml}
 
 
@@ -1451,6 +1486,8 @@ async function openAdminPanel() {
         </div>
 
     `;
+
+    if (typeof supportRefreshUnread === "function") supportRefreshUnread();
 }
 
 /* Значение для вызова в атрибуте onclick: onclick="fn(${jsArg(x)})".
@@ -1727,71 +1764,12 @@ async function createUser() {
 
     openAdminPanel();
 }
-/* ================= SUPPORT ================= */
-
-async function openSupport() {
-    const jwt = localStorage.getItem("jwt");
-
-    if (!jwt) {
-        alert("Не выполнен вход");
-        return;
-    }
-
-    closeSupport();
-
-    const overlay = document.createElement("div");
-    overlay.className = "modal-overlay";
-    overlay.id = "supportOverlay";
-    overlay.innerHTML = `
-        <div class="modal-window">
-            <h3>Поддержка</h3>
-            <label for="supportMessage">Сообщение</label>
-            <textarea id="supportMessage" rows="5" placeholder="Опишите вопрос или проблему"></textarea>
-            <label for="supportContact">Как с вами связаться (необязательно)</label>
-            <input type="text" id="supportContact" placeholder="Телефон или почта">
-            <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeSupport()">Отмена</button>
-                <button type="button" class="btn-primary-wide" onclick="sendSupport()">Отправить</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-}
-
-function closeSupport() {
-    const overlay = document.getElementById("supportOverlay");
-    if (overlay) overlay.remove();
-}
-
-async function sendSupport() {
-
-    const message = document.getElementById("supportMessage").value.trim();
-    const contact = document.getElementById("supportContact").value.trim();
-
-    if (!message) return alert("Введите сообщение");
-
-    const jwt = localStorage.getItem("jwt");
-
-    const response = await fetch("/api/support", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + jwt
-        },
-        body: JSON.stringify({ message, contact })
-    });
-
-    closeSupport();
-
-    if (response.ok) alert("Сообщение отправлено");
-    else alert("Ошибка отправки");
-}
-
 /* ================= FILES ================= */
 
 async function showFiles() {
 
     window.currentScreen = "files";
+    window.screenBack = null;
     title.innerText = "Файлы";
 
     const jwt = localStorage.getItem("jwt");
@@ -2733,6 +2711,7 @@ async function runBackup() {
 async function showMessages() {
 
     window.currentScreen = "messages";
+    window.screenBack = null;
     title.innerText = "Сообщения";
 
     const jwt = localStorage.getItem("jwt");
