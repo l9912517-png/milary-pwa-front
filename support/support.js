@@ -436,7 +436,10 @@ async function supportSendNew() {
 let supportPollTimer = null;
 let supportOpenId = null;
 
+let supportOpenAdmin = false;
+
 async function openSupportTicket(id, admin) {
+    supportOpenAdmin = Boolean(admin);
     window.currentScreen = "support_ticket";
     window.screenBack = () => (admin ? openScreen("support_admin") : openScreen("support"));
     supportOpenId = Number(id);
@@ -452,7 +455,7 @@ async function openSupportTicket(id, admin) {
     }, 15000);
 }
 
-let supportShownCount = -1;
+let supportShownCount = "";
 
 async function supportLoadTicket(admin, first) {
     const id = supportOpenId;
@@ -466,14 +469,17 @@ async function supportLoadTicket(admin, first) {
     if (window.currentScreen !== "support_ticket" || supportOpenId !== id) return;
     const viewerIsAdmin = admin && d.ticket.user_id !== (currentUser && currentUser.user_id);
 
-    // при опросе перерисовываем только если пришло новое
-    if (!first && d.messages.length === supportShownCount) return;
-    supportShownCount = d.messages.length;
-    supportRenderTicket(d, viewerIsAdmin, first);
+    // при опросе перерисовываем только если пришло новое или сменился статус
+    const sig = d.messages.length + ":" + d.ticket.status;
+    if (!first && sig === supportShownCount) return;
+    supportShownCount = sig;
+    supportRenderTicket(d, viewerIsAdmin, first, admin);
     supportApi("/tickets/" + id + "/read", { method: "POST" }).then(supportRefreshUnread).catch(() => null);
 }
 
-function supportRenderTicket(d, viewerIsAdmin, first) {
+/* viewerIsAdmin — админ в чужом обращении (его сообщения — «ответ поддержки»);
+   adminView — открыто из «Обращений в поддержку»: сведения об устройстве и «Закрыть» — даже в своём */
+function supportRenderTicket(d, viewerIsAdmin, first, adminView) {
     const t = d.ticket;
     const mineSide = viewerIsAdmin ? "admin" : "user";
     const draft = document.getElementById("stText") ? document.getElementById("stText").value : "";
@@ -494,7 +500,7 @@ function supportRenderTicket(d, viewerIsAdmin, first) {
     const deviceRows = Object.entries(t.device || {})
         .map(([k, v]) => `<div><span>${escapeHtml(k)}</span><b>${escapeHtml(Array.isArray(v) ? v.join("\n") : v)}</b></div>`).join("");
 
-    const head = viewerIsAdmin ? `
+    const head = adminView ? `
         <div class="support-ticket-head">
             <div class="support-ticket-user">${escapeHtml(t.user_name || t.user_id)}${t.user_role ? ` <span>${escapeHtml(t.user_role)}</span>` : ""}</div>
             <div class="support-ticket-subject">${escapeHtml(t.subject)}</div>
@@ -513,13 +519,14 @@ function supportRenderTicket(d, viewerIsAdmin, first) {
         <div class="support-ticket-head">
             <div class="support-ticket-subject">${escapeHtml(t.subject)}</div>
             <div class="support-ticket-meta"><span class="support-chip ${t.status === "closed" ? "closed" : "open"}">${SUPPORT_STATUS[t.status] || ""}</span></div>
+            ${t.status === "closed" ? "" : `<button type="button" class="btn-secondary" onclick="supportCloseMine()">${iconSvg("M5 12l5 5 9-10", "btn-ico")}Вопрос решён — закрыть</button>`}
         </div>`;
 
     container.innerHTML = `
         <div class="support-page support-chat-page">
             ${head}
             <div class="support-msgs" id="supportMsgs">${msgs}</div>
-            ${t.status === "closed" && !viewerIsAdmin ? `<div class="support-note">Обращение закрыто. Если вопрос остался — напишите, и оно откроется снова.</div>` : ""}
+            ${t.status === "closed" && !adminView ? `<div class="support-note">Обращение закрыто. Если вопрос остался — напишите, и оно откроется снова.</div>` : ""}
             <div class="support-compose">
                 <textarea id="stText" rows="2" maxlength="4000" placeholder="${viewerIsAdmin ? "Ответ пользователю" : "Сообщение в поддержку"}"></textarea>
                 ${supportAttachBlock(null, "st")}
@@ -549,19 +556,25 @@ async function supportSendMessage(viewerIsAdmin) {
         const d = await supportApi("/tickets/" + supportOpenId + "/messages", { json: { text, attachments: ids } });
         input.value = "";
         supportClearFiles("st");
-        supportShownCount = d.messages.length;
-        supportRenderTicket(d, viewerIsAdmin, false);
+        supportShownCount = d.messages.length + ":" + d.ticket.status;
+        supportRenderTicket(d, viewerIsAdmin, false, supportOpenAdmin);
     } catch (e) {
         err.textContent = e.message;
         btn.disabled = false;
     }
 }
 
+/* пользователь сам закрывает своё обращение */
+function supportCloseMine() {
+    if (!confirm("Закрыть обращение? Если вопрос вернётся — просто напишите в него, и оно откроется снова.")) return;
+    supportSetStatus("closed", false);
+}
+
 async function supportSetStatus(status, admin) {
     try {
         await supportApi("/tickets/" + supportOpenId + "/status", { json: { status } });
-        supportShownCount = -1;
-        await supportLoadTicket(admin, true);
+        supportShownCount = "";
+        await supportLoadTicket(supportOpenAdmin, true);
     } catch (e) {
         alert(e.message);
     }
