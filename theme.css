@@ -779,3 +779,66 @@ button.ord-danger { background: var(--card); color: #FF8FB3; border: 1px solid r
 .ost-day-ok { background: var(--accent); }
 .ost-mini { background: var(--card); }
 .ost-mini span { background: var(--accent); }
+
+/* ================= ИНСТРУКЦИИ К ЭКРАНАМ (help/help.js) ================= */
+
+.header-help { display: none; flex: none; }
+.app-header.is-inner.has-help .header-help { display: flex; }
+.app-header.is-inner.has-help .header-grapes-inner { display: none; }
+
+.help-window { max-height: 94vh; }
+.help-video-box {
+    align-self: center;
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 390 / 700;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg);
+    border: 1px solid var(--card-border);
+}
+.help-video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.help-steps {
+    margin: 0;
+    padding-left: 22px;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 15px; line-height: 1.45;
+    color: var(--muted);
+}
+.help-steps li::marker { color: var(--accent); font-weight: 700; }
+@media (max-height: 700px) {
+    .help-video-box { max-width: 220px; }
+}
+
+/* ================= ОЖИДАНИЕ ОТЧЁТА ================= */
+
+.report-overlay {
+    position: fixed; inset: 0;
+    z-index: 99999;
+    background: rgba(10, 4, 16, 0.66);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.report-overlay-box {
+    width: 280px; max-width: 100%;
+    padding: 22px 20px 18px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid rgba(181, 224, 138, 0.35);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.report-spinner {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba(181, 224, 138, 0.2);
+    border-top-color: var(--accent);
+    animation: report-spin 0.9s linear infinite;
+    margin-bottom: 6px;
+}
+@keyframes report-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .report-spinner { animation-duration: 2.5s; } }
+.report-overlay-text { font-size: 16px; font-weight: 600; }
+.report-overlay-status { font-size: 13px; color: var(--muted); min-height: 18px; }
+.report-overlay-box .btn-secondary { width: 100%; margin-top: 8px; }

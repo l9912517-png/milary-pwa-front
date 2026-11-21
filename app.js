@@ -400,6 +400,9 @@ function syncHeaderMode() {
     const home = Boolean(title.querySelector(".brand-logo"));
     appHeader.classList.toggle("is-home", home);
     appHeader.classList.toggle("is-inner", !home);
+    // кнопка «?» — только на экранах, для которых есть инструкция (help/help.js)
+    const hasHelp = !home && typeof helpTopic === "function" && Boolean(helpTopic(window.currentScreen));
+    appHeader.classList.toggle("has-help", hasHelp);
 }
 
 if (appHeader) {
@@ -1057,6 +1060,8 @@ if (id === "createOrder") {
 
 function openScreen(name) {
 
+    window.currentScreen = name;      // экран может уточнить сам; нужно шапке (кнопка «?»)
+
     if (SCREENS[name]) {
         SCREENS[name]();
         return;
@@ -1083,6 +1088,7 @@ function openScreen(name) {
 
 async function openAdminPanel() {
 
+    window.currentScreen = "admin";
     title.innerText = "Администрирование";
 
     const jwt = localStorage.getItem("jwt");
@@ -1771,6 +1777,7 @@ async function sendSupport() {
 
 async function showFiles() {
 
+    window.currentScreen = "files";
     title.innerText = "Файлы";
 
     const jwt = localStorage.getItem("jwt");
@@ -2269,28 +2276,12 @@ function showLoadingOverlay(text) {
         overlay = document.createElement("div");
         overlay.id = "loadingOverlay";
 
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.background = "rgba(0,0,0,0.6)";
-        overlay.style.display = "flex";
-        overlay.style.justifyContent = "center";
-        overlay.style.alignItems = "center";
-        overlay.style.zIndex = "99999";
+        overlay.className = "report-overlay";
 
         overlay.innerHTML = `
-            <div style="
-                background:var(--card);
-                padding:20px;
-                border-radius:12px;
-                text-align:center;
-                font-size:16px;
-                max-width:280px;
-            ">
-                ⏳<br><br>
-                <div id="loadingText"></div>
+            <div class="report-overlay-box" role="status">
+                <div class="report-spinner" aria-hidden="true"></div>
+                <div id="loadingText" class="report-overlay-text"></div>
             </div>
         `;
 
@@ -2727,6 +2718,7 @@ async function runBackup() {
 
 async function showMessages() {
 
+    window.currentScreen = "messages";
     title.innerText = "Сообщения";
 
     const jwt = localStorage.getItem("jwt");
@@ -3440,27 +3432,14 @@ function showReportOverlay(text, statusText, onCancel) {
     const overlay = document.createElement("div");
     overlay.id = "reportOverlay";
 
-    overlay.style.cssText =
-        "position:fixed;inset:0;background:rgba(0,0,0,0.6);" +
-        "display:flex;justify-content:center;align-items:center;z-index:99999;";
+    overlay.className = "report-overlay";
 
     overlay.innerHTML = `
-        <div style="
-            background:var(--card);
-            padding:20px;
-            border-radius:12px;
-            text-align:center;
-            font-size:16px;
-            width:260px;
-            max-width:85%;
-        ">
-            <div style="font-size:28px;">⏳</div>
-            <div id="reportOverlayText" style="margin-top:10px;font-weight:600;"></div>
-            <div id="reportOverlayStatus" style="margin-top:6px;font-size:13px;color:var(--muted);"></div>
-            <button id="reportOverlayCancel"
-                    style="margin-top:16px;width:100%;background:rgba(255,255,255,0.10);color:var(--text);">
-                Отменить
-            </button>
+        <div class="report-overlay-box" role="status">
+            <div class="report-spinner" aria-hidden="true"></div>
+            <div id="reportOverlayText" class="report-overlay-text"></div>
+            <div id="reportOverlayStatus" class="report-overlay-status"></div>
+            <button id="reportOverlayCancel" type="button" class="btn-secondary">Отменить</button>
         </div>
     `;
 
