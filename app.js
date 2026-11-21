@@ -238,6 +238,18 @@ function showUpdateNotice() {
 const PUSH_PROMPT_KEY = "push_prompt_dismissed";      // когда нажали «Не сейчас»
 const PUSH_PROMPT_PAUSE = 7 * 86400000;               // снова предложим через 7 дней
 
+/* карточки над меню — по одной: сначала установка, после неё (или «Не сейчас») — уведомления.
+   На iPhone без установки и во встроенном браузере мессенджера уведомления не работают — там их не предлагаем. */
+function homePromptsHtml() {
+    const install = typeof installPromptHtml === "function" ? installPromptHtml() : "";
+    if (install) return install;
+    if (typeof installPlatform === "function") {
+        const p = installPlatform();
+        if (p.inApp || (p.ios && !installIsStandalone())) return "";
+    }
+    return pushPromptHtml();
+}
+
 function pushSupported() {
     return "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
 }
@@ -910,9 +922,9 @@ function showMenu() {
     const menuItems = buildMenuByRole(currentUser.role);
 
     if (currentUser.role === "director" || currentUser.role === "admin") {
-        container.innerHTML = pushPromptHtml() + menuGroupsHtml(menuItems, currentUser.role);   // разделы, сворачиваются; сверху — часто используемые
+        container.innerHTML = homePromptsHtml() + menuGroupsHtml(menuItems, currentUser.role);   // разделы, сворачиваются; сверху — часто используемые
     } else {
-        container.innerHTML = pushPromptHtml() + `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
+        container.innerHTML = homePromptsHtml() + `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
     }
 
     if (typeof initDevButton === 'function') {

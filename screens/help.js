@@ -11,6 +11,8 @@ registerScreen("help", function () {
                 Поддержка <span class="count-badge dark" data-support-count="user" hidden></span>
             </button>
 
+            ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
+
             <nav class="help-card help-toc" aria-label="Содержание">
                 <h2>Содержание</h2>
                 <button type="button" onclick="scrollHelp('about')">Что это такое</button>
@@ -33,9 +35,11 @@ registerScreen("help", function () {
 
             <section id="install" class="help-card">
                 <h2>Как установить</h2>
-                <p><b>Android:</b> Chrome → ⋮ → «Добавить на главный экран».</p>
+                <p>Проще всего — кнопка «Установить приложение» вверху этой страницы.</p>
+                <p><b>Android:</b> Chrome → ⋮ → «Установить приложение» или «Добавить на главный экран».</p>
                 <p><b>iPhone:</b> Safari → «Поделиться» → «На экран “Домой”».</p>
-                <p><b>Компьютер:</b> кнопка «Установить» в адресной строке браузера.</p>
+                <p><b>Компьютер:</b> кнопка «Установить» в адресной строке Chrome или Edge.</p>
+                <p>Если ссылка открылась внутри Telegram или WhatsApp — сначала откройте её в браузере.</p>
             </section>
 
             <section id="push" class="help-card">
