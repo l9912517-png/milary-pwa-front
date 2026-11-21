@@ -331,7 +331,7 @@ function supportWhen(iso) {
 }
 
 function supportTicketCard(t, admin) {
-    const unread = admin ? t.admin_unread > 0 : t.user_unread > 0;
+    const unread = admin ? t.admin_unread > 0 && t.status === "open" : t.user_unread > 0;
     const who = admin ? `<span class="support-card-who">${escapeHtml(t.user_name || t.user_id)}${t.user_role ? " · " + escapeHtml(t.user_role) : ""}</span>` : "";
     return `
         <button type="button" class="support-card${unread ? " unread" : ""}" onclick="openSupportTicket(${Number(t.id)}, ${admin ? "true" : "false"})">
