@@ -1,9 +1,10 @@
-const CACHE_NAME = "app-cache-v57";
+const CACHE_NAME = "milary-cache-v1";
 
 const STATIC_ASSETS = [
     "/pwa/index.html",
     "/pwa/styles.css",
-    "/pwa/logo.png",
+    "/pwa/theme.css",
+    "/pwa/icon-192.png",
     "/pwa/notification.mp3"
 ];
 
@@ -87,7 +88,7 @@ self.addEventListener("push", event => {
         self.registration.showNotification(
 
             payload.title ||
-            "MEALFRESH",
+            "MILARY",
 
             {
 
@@ -95,10 +96,10 @@ self.addEventListener("push", event => {
                     payload.body || "",
 
                 icon:
-                    "/pwa/logo.png",
+                    "/pwa/icon-192.png",
 
                 badge:
-                    "/pwa/logo.png",
+                    "/pwa/badge-96.png",
 
                 // Уведомление остаётся на экране,
                 // пока пользователь его не откроет/закроет.
@@ -112,7 +113,7 @@ self.addEventListener("push", event => {
                 // Не объединять разные push
                 // в одно уведомление.
                 tag:
-                    "mealfresh-" +
+                    "milary-" +
                     Date.now(),
 
                 data: {

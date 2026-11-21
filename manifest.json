@@ -1,18 +1,32 @@
 {
-  "name": "MEALFRESH",
-  "short_name": "MEALFRESH",
+  "name": "MILARY",
+  "short_name": "MILARY",
+  "description": "Корпоративный мобильный портал",
+  "lang": "ru",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f0f4c3",
-  "theme_color": "#33691e",
+  "background_color": "#1C0E2B",
+  "theme_color": "#3D1D5C",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

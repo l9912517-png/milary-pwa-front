@@ -314,58 +314,138 @@ document.addEventListener("DOMContentLoaded", async () => {
     initPushPermission().catch(e => console.log("Push init error", e));
 });
 
-/* ================= TOP BAR ================= */
+/* ================= ШАПКА ================= */
 
-function showTopBar() {
-    userName.innerText = currentUser.name + " (" + currentUser.role + ")";
-    topBar.classList.remove("hidden");
-}
-
-function hideTopBar() {
-    topBar.classList.add("hidden");
-}
-
-function logout() {
-    localStorage.clear();
-    showLogin();
-}
+const appHeader = document.getElementById("app-header");
 
 function setBrandTitle() {
     title.innerHTML =
-        '<span class="brand-meal">MEAL</span>' +
-        '<span class="brand-fresh">FRESH</span>';
+        '<span class="brand-logo">' +
+        '<span class="brand-name">Milary</span>' +
+        '<span class="brand-tagline">Корпоративный<br>мобильный портал</span>' +
+        '</span>';
 }
 
+/* Главная — логотип и кнопки «Справка»/«Выход»; любой другой экран — «назад» и название.
+   Экраны сами пишут название в title, поэтому режим шапки определяем по содержимому. */
+function syncHeaderMode() {
+    if (!appHeader) return;
+    const home = Boolean(title.querySelector(".brand-logo"));
+    appHeader.classList.toggle("is-home", home);
+    appHeader.classList.toggle("is-inner", !home);
+}
+
+if (appHeader) {
+    new MutationObserver(syncHeaderMode).observe(title, { childList: true, characterData: true, subtree: true });
+}
+
+function setNavActive(id) {
+    document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.toggle("active", btn.id === id));
+}
+
+/* «Главная» и кнопка «назад» в шапке */
+function goHome() {
+    document.querySelectorAll(".modal-overlay").forEach(el => el.remove());
+    if (currentUser && String(currentUser.role || "").trim().toLowerCase() === "logistics") {
+        openScreen("logistic");
+    } else {
+        showMenu();
+    }
+    setNavActive("navHome");
+}
+
+const GRAPES_SVG = `
+<svg class="login-grapes" width="84" height="101" viewBox="0 0 100 120" aria-hidden="true">
+<g fill="#B5E08A"><path d="M50 32 C 44 15, 28 10, 17 16 C 25 25, 37 31, 50 32 Z"/><path d="M50 32 C 52 15, 64 7, 78 10 C 72 21, 62 29, 50 32 Z"/></g>
+<path d="M68 22 C 76 17, 88 19, 88 28 C 88 35, 79 35, 80 29" fill="none" stroke="#B5E08A" stroke-width="4" stroke-linecap="round"/>
+<g fill="#FFFFFF" stroke="#3D1D5C" stroke-width="4"><circle cx="50" cy="98" r="14"/><circle cx="34" cy="72" r="15"/><circle cx="66" cy="72" r="15"/><circle cx="38" cy="47" r="13"/><circle cx="62" cy="47" r="13"/></g>
+</svg>`;
+
+const SWOOSH_SVG = `
+<svg class="header-swoosh" viewBox="0 0 390 26" preserveAspectRatio="none" aria-hidden="true">
+<defs><linearGradient id="swLogin" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#B5E08A" stop-opacity="0"/><stop offset="0.5" stop-color="#B5E08A"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0.9"/></linearGradient></defs>
+<path d="M0 22 C 120 4, 260 2, 390 12" fill="none" stroke="url(#swLogin)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+<path d="M30 25 C 150 10, 280 8, 390 18" fill="none" stroke="url(#swLogin)" stroke-width="1.2" stroke-opacity="0.6" vector-effect="non-scaling-stroke"/>
+</svg>`;
+
+/* иконки 24×24, только контур */
+function iconSvg(d, cls) {
+    return `<svg${cls ? ` class="${cls}"` : ""} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+}
+
+const ICON_EYE = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0";
+const ICON_CHEVRON = "M9 6l6 6-6 6";
 
 
 /* ================= LOGIN ================= */
 
 function showLogin() {
     hideTopBar();
-   setBrandTitle();
+    document.body.classList.add("is-login");
+    setBrandTitle();
 
     container.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:16px;">
-            <input id="accessToken" placeholder="Введите токен входа"
-                style="padding:12px;border-radius:12px;border:1px solid #ccc;" />
-            <button onclick="doLogin()">Войти</button>
+        <div class="login-hero">
+            ${GRAPES_SVG}
+            <span class="brand-name">Milary</span>
+            <span class="brand-tagline">Корпоративный мобильный портал</span>
+            ${SWOOSH_SVG}
         </div>
+        <form class="login-form" onsubmit="event.preventDefault(); doLogin();" autocomplete="off">
+            <div>
+                <div class="login-title">Вход</div>
+                <div class="login-hint">Введите токен, который выдал администратор</div>
+            </div>
+            <label class="field">
+                <span class="field-label">Токен входа</span>
+                <span class="login-field">
+                    <input id="accessToken" type="password" placeholder="Введите токен входа"
+                           autocapitalize="off" autocorrect="off" spellcheck="false">
+                    <button type="button" class="icon-btn" aria-label="Показать токен"
+                            onclick="toggleTokenVisibility(this)">${iconSvg(ICON_EYE)}</button>
+                </span>
+            </label>
+            <div id="loginError" class="login-error" role="alert"></div>
+            <button type="submit" class="login-submit">Войти</button>
+            <div class="login-foot">Нет токена? Обратитесь к администратору</div>
+        </form>
     `;
+}
+
+function toggleTokenVisibility(btn) {
+    const input = document.getElementById("accessToken");
+    if (!input) return;
+    const show = input.type === "password";
+    input.type = show ? "text" : "password";
+    btn.setAttribute("aria-label", show ? "Скрыть токен" : "Показать токен");
+}
+
+function showLoginError(text) {
+    const el = document.getElementById("loginError");
+    if (el) el.textContent = text;
+    else alert(text);
 }
 
 async function doLogin() {
 
     const access_token = document.getElementById("accessToken").value.trim();
-    if (!access_token) return alert("Введите токен");
+    if (!access_token) return showLoginError("Введите токен");
 
-    const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ access_token })
-    });
+    showLoginError("");
 
-    const data = await response.json();
-    if (!data.success) return alert("Неверный токен");
+    let data = null;
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ access_token })
+        });
+        data = await response.json();
+    } catch (e) {
+        return showLoginError("Нет связи с сервером. Попробуйте ещё раз");
+    }
+
+    if (!data || !data.success) return showLoginError("Неверный токен");
 
     localStorage.setItem("jwt", data.jwt);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -416,7 +496,9 @@ await initPushPermission();
 
 function showTopBar() {
     userName.innerText = currentUser.name + " (" + currentUser.role + ")";
+    topBar.title = userName.innerText;
     topBar.classList.remove("hidden");
+    document.body.classList.remove("is-login");
 }
 
 function hideTopBar() {
@@ -444,9 +526,45 @@ const MENU_MANAGER_BASE = [
     { id: "upd", icon: "📄", title: "УПД" },
     { id: "pricelist", icon: "📋", title: "Прайс" },
     { id: "prices", icon: "💲", title: "Цены" },
-    { id: "pricefix", icon: "✏️", title: "Фиксации" },
-    { id: "developments", icon: "📋", title: "Разработки" }
+    { id: "pricefix", icon: "✏️", title: "Фиксации" }
 ];
+
+/* «Разработки» и «Передать заказ» в меню не показываем (экраны остаются, вход — из 1С). */
+
+/* подписи и иконки пунктов меню */
+const MENU_META = {
+    orders:        { sub: "Список и статусы заказов",  d: "M3 7l9-4 9 4v10l-9 4-9-4z M3 7l9 4 9-4 M12 11v10" },
+    sales:         { sub: "Аналитика и отчёты",        d: "M4 20V10 M10 20V4 M16 20v-7 M3 20h18" },
+    rating:        { sub: "Результаты менеджеров",     d: "M8 4h8v5a4 4 0 0 1-8 0z M8 6H4v1a3 3 0 0 0 4 3 M16 6h4v1a3 3 0 0 1-4 3 M12 13v4 M8 21h8" },
+    notshipped:    { sub: "Контроль отгрузок",         d: "M12 7v5l3 2 M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0" },
+    returns:       { sub: "Заявки и обработка",        d: "M9 14L4 9l5-5 M4 9h11a5 5 0 0 1 0 10h-3" },
+    drivers:       { sub: "Сведения по водителям",     d: "M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0 M14 12a2 2 0 1 1-4 0a2 2 0 0 1 4 0 M3 11h7 M14 11h7 M12 14v7" },
+    bank:          { sub: "Платежи и выписки",         d: "M3 10l9-6 9 6 M5 10v8 M10 10v8 M14 10v8 M19 10v8 M3 21h18" },
+    debt:          { sub: "Задолженность клиентов",    d: "M3 7h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3z M3 7l12-3v3 M16 13h2" },
+    bills:         { sub: "Выставленные счета",        d: "M6 3h12v18l-3-2-3 2-3-2-3 2z M9 8h6 M9 12h6" },
+    act:           { sub: "Сверка с клиентом",         d: "M14 3H6v18h12V7z M14 3v4h4 M9 14l2 2 4-4" },
+    upd:           { sub: "Передаточные документы",    d: "M14 3H6v18h12V7z M14 3v4h4 M9 12h6 M9 16h6" },
+    pricelist:     { sub: "Актуальный прайс-лист",     d: "M8 6h13 M8 12h13 M8 18h13 M3 6h1 M3 12h1 M3 18h1" },
+    prices:        { sub: "Цены по номенклатуре",      d: "M3 12V3h9l9 9-9 9z M7.5 7.5h.01" },
+    pricefix:      { sub: "Зафиксированные цены",      d: "M6 11h12v10H6z M8 11V7a4 4 0 0 1 8 0v4" },
+    payments:      { sub: "Оплаты клиентов",           d: "M3 6h18v12H3z M3 10h18 M7 15h3" },
+    dir_sales:     { sub: "Сравнение менеджеров",      d: "M9 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8z M2 21c0-4 3-6 7-6s7 2 7 6 M16 3.5a4 4 0 0 1 0 7 M22 21c0-3-1.5-5-4-5.6" },
+    ordersCount:   { sub: "Динамика заказов",          d: "M4 9h16 M4 15h16 M10 3L8 21 M16 3l-2 18" },
+    cashState:     { sub: "Остатки денежных средств",  d: "M12 8c4.4 0 8-1.3 8-3s-3.6-3-8-3-8 1.3-8 3 3.6 3 8 3z M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5 M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" },
+    financeReport: { sub: "Финансовые показатели",     d: "M21 12A9 9 0 1 1 12 3v9z M15 3.5A9 9 0 0 1 20.5 9H15z" },
+    writeoffs:     { sub: "Списанные товары",          d: "M4 7h16 M9 7V4h6v3 M6 7l1 14h10l1-14 M10 11v6 M14 11v6" },
+    grossprofit:   { sub: "Маржа и прибыль",           d: "M3 17l6-6 4 4 8-8 M15 7h6v6" },
+    receipts:      { sub: "Поступление товаров",       d: "M12 3v12 M7 10l5 5 5-5 M4 17v4h16v-4" },
+    logistics:     { sub: "Транспорт и рейсы",         d: "M3 6h11v10H3z M14 10h4l3 3v3h-7 M7 19a2 2 0 1 0 0-4a2 2 0 0 0 0 4z M17 19a2 2 0 1 0 0-4a2 2 0 0 0 0 4z" },
+    developments_control: { sub: "Разработки менеджеров", d: "M9 4h6v3H9z M7 5H5v16h14V5h-2 M9 14l2 2 4-4" },
+    block:         { sub: "Блокировки клиентов",       d: "M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0 M5.6 5.6l12.8 12.8" },
+    control:       { sub: "Контроль показателей",      d: ICON_EYE },
+    checksJournal: { sub: "Журнал проверок по ИНН",    d: "M11 18a7 7 0 1 0 0-14a7 7 0 0 0 0 14z M21 21l-5-5" },
+    ordInfo:       { sub: "Проверка и статистика",     d: "M14 3H6v18h12V7z M14 3v4h4 M9 17v-3 M12 17v-5 M15 17v-2" },
+    ordReview:     { sub: "Заказы на проверку",        d: "M4 4h16v16H4z M8 12l3 3 5-6" },
+    createOrder:   { sub: "Новый заказ",               d: "M12 5v14 M5 12h14" },
+    adminPanel:    { sub: "Пользователи и доступ",     d: "M4 6h9 M17 6h3 M4 12h3 M11 12h9 M4 18h11 M19 18h1 M15 4v4 M9 10v4 M17 16v4" }
+};
 
 
 
@@ -510,8 +628,7 @@ function buildMenuByRole(role) {
             .concat(MENU_DIRECTOR_EXTRA)
             .concat(MENU_SPECIAL)
             .concat(MENU_CHECKS_JOURNAL)
-            .concat(MENU_ORDER_INFO)
-            .concat(MENU_ORDER_TEXT);     // «Передать заказ» — рядом с «Информацией по заказам»
+            .concat(MENU_ORDER_INFO);
     }
 
     // оператор — только проверка заказов
@@ -524,7 +641,6 @@ function buildMenuByRole(role) {
 
         return menu
             .concat(MENU_ORDER_INFO)
-            .concat(MENU_ORDER_TEXT)      // «Передать заказ» — рядом с «Информацией по заказам»
             .concat(MENU_SPECIAL)
             .concat(MENU_CHECKS_JOURNAL)
             .concat(MENU_DIRECTOR_EXTRA)
@@ -539,8 +655,6 @@ function buildMenuByRole(role) {
             menu = menu.concat(MENU_SPECIAL).concat(MENU_ORDER_INFO);   // статистика заказов своих менеджеров
         }
 
-        menu = menu.concat(MENU_ORDER_TEXT);   // «Передать заказ» — последним и у менеджера, и у РОПа
-
         return menu;
     }
 
@@ -552,14 +666,14 @@ function buildMenuByRole(role) {
 /* ================= МЕНЮ ДИРЕКТОРА И АДМИНА: РАЗДЕЛЫ ================= */
 
 const MENU_GROUPS = [
-    { key: "orders", icon: "📦", title: "Заказы", color: "#e8f3e1", ids: ["ordMy", "ordInfo", "orders", "notshipped", "returns"] },
-    { key: "finance", icon: "💰", title: "Финансы", color: "#e4eef9", ids: ["payments", "receipts", "bank", "debt", "cashState", "financeReport", "grossprofit", "writeoffs"] },
-    { key: "sales", icon: "📈", title: "Продажи и аналитика", color: "#efe7fa", ids: ["sales", "dir_sales", "ordersCount", "rating"] },
-    { key: "clients", icon: "👥", title: "Клиенты", color: "#fbe9dc", ids: ["developments", "developments_control", "checksJournal", "block", "control"] },
-    { key: "docs", icon: "📄", title: "Документы", color: "#eef0ec", ids: ["bills", "act", "upd", "pricelist"] },
-    { key: "prices", icon: "💲", title: "Цены", color: "#fff4dc", ids: ["prices", "pricefix"] },
-    { key: "logistics", icon: "🚚", title: "Логистика", color: "#e1f3f2", ids: ["logistics", "drivers"] },
-    { key: "admin", single: true, ids: ["adminPanel"] }      // одна кнопка — без плитки, просто кнопкой внизу
+    { key: "orders", d: MENU_META.orders.d, title: "Заказы", ids: ["ordInfo", "orders", "notshipped", "returns"] },
+    { key: "finance", d: MENU_META.bank.d, title: "Финансы", ids: ["payments", "receipts", "bank", "debt", "cashState", "financeReport", "grossprofit", "writeoffs"] },
+    { key: "sales", d: MENU_META.sales.d, title: "Продажи и аналитика", ids: ["sales", "dir_sales", "ordersCount", "rating"] },
+    { key: "clients", d: MENU_META.dir_sales.d, title: "Клиенты", ids: ["developments_control", "checksJournal", "block", "control"] },
+    { key: "docs", d: MENU_META.upd.d, title: "Документы", ids: ["bills", "act", "upd", "pricelist"] },
+    { key: "prices", d: MENU_META.prices.d, title: "Цены", ids: ["prices", "pricefix"] },
+    { key: "logistics", d: MENU_META.logistics.d, title: "Логистика", ids: ["logistics", "drivers"] },
+    { key: "admin", single: true, ids: ["adminPanel"] }      // одна кнопка — без раздела, просто карточкой внизу
 ];
 
 const MENU_USAGE_KEY = "menu_usage";        // { id: [время нажатия, …] } за 14 дней — «часто используемые»
@@ -589,15 +703,19 @@ function menuGroupOpen(key) {
 }
 
 function menuItemHtml(item) {
-    let extra = "";
-    if (item.id === "block" && window.hasBlockMessages) {
-        extra = `<span style="color:red;margin-left:6px;">●</span>`;
-    }
+    const meta = MENU_META[item.id] || {};
+    const dot = (item.id === "block" && window.hasBlockMessages)
+        ? `<span class="menu-card-dot" aria-label="есть сообщения"></span>` : "";
+    const icon = meta.d ? iconSvg(meta.d) : escapeHtml(item.icon || "");
     return `
-            <div class="menu-item" onclick="handleMenuClick('${item.id}')">
-                <span class="icon">${item.icon}</span>
-                <span>${item.title} ${extra}</span>
-            </div>`;
+            <button type="button" class="menu-card" onclick="handleMenuClick('${item.id}')">
+                <span class="menu-card-icon">${icon}</span>
+                <span class="menu-card-text">
+                    <span class="menu-card-title">${escapeHtml(item.title)}${dot}</span>
+                    ${meta.sub ? `<span class="menu-card-sub">${escapeHtml(meta.sub)}</span>` : ""}
+                </span>
+                ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+            </button>`;
 }
 
 /* Разделы-плитки: цветная плитка, у свёрнутой — состав мелким текстом, нажатие — открыть/свернуть */
@@ -622,8 +740,8 @@ function menuGroupsHtml(menuItems) {
         return Object.assign({}, g, { items });
     });
     const rest = menuItems.filter(i => !used[i.id]);              // пункт без раздела — не теряем
-    if (rest.length) groups.push({ key: "other", icon: "📁", title: "Прочее", color: "#f0f0ec", items: rest });
-    if (top.length) groups.unshift({ key: "fav", icon: "⭐", title: "Часто используемые", color: "#fff6d6", items: top });
+    if (rest.length) groups.push({ key: "other", d: "M3 6h6l2 2h10v10H3z", title: "Прочее", items: rest });
+    if (top.length) groups.unshift({ key: "fav", d: "M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z", title: "Часто используемые", items: top });
 
     const tile = g => {
         if (!g.items.length) return "";
@@ -632,13 +750,13 @@ function menuGroupsHtml(menuItems) {
         let sub = g.items.map(i => i.title).join(", ");
         if (sub.length > 80) sub = sub.slice(0, 78).replace(/,?\s*\S*$/, "") + "…";
         return `
-        <section class="menu-tile ${open ? "open" : ""}" data-group="${g.key}" style="--tile:${g.color}">
-            <button type="button" class="menu-tile-head" onclick="menuToggleGroup('${g.key}')">
-                <span class="menu-tile-icon">${g.icon}</span>
+        <section class="menu-tile ${open ? "open" : ""}" data-group="${g.key}">
+            <button type="button" class="menu-tile-head" aria-expanded="${open}" onclick="menuToggleGroup('${g.key}')">
+                <span class="menu-tile-icon">${iconSvg(g.d)}</span>
                 <span class="menu-tile-title">${g.title}</span>
                 <span class="menu-tile-arrow"></span>
             </button>
-            <div class="menu-tile-sub">${sub}</div>
+            <div class="menu-tile-sub">${escapeHtml(sub)}</div>
             <div class="menu-tile-items">${g.items.map(menuItemHtml).join("")}</div>
         </section>`;
     };
@@ -652,47 +770,30 @@ function menuToggleGroup(key) {
     st[key] = open;
     menuStoreSet(MENU_OPEN_KEY, st);
     const el = document.querySelector('.menu-tile[data-group="' + key + '"]');
-    if (el) el.classList.toggle("open", open);
+    if (el) {
+        el.classList.toggle("open", open);
+        const head = el.querySelector(".menu-tile-head");
+        if (head) head.setAttribute("aria-expanded", String(open));
+    }
 }
 
 function showMenu() {
 
-   setBrandTitle();
+    window.currentScreen = "menu";
+    setBrandTitle();
+    setNavActive("navHome");
 
     const menuItems = buildMenuByRole(currentUser.role);
-
-    const menuHtml = menuItems.map(item => {
-
-        let extra = "";
-
-        // 🔥 правильный ID
-        if (item.id === "block" && window.hasBlockMessages) {
-            extra = `<span style="color:red;margin-left:6px;">●</span>`;
-        }
-
-        return `
-            <div class="menu-item" onclick="handleMenuClick('${item.id}')">
-                <span class="icon">${item.icon}</span>
-                <span>${item.title} ${extra}</span>
-            </div>
-        `;
-
-    }).join("");
-
-    const columns = (currentUser.role === "director" || currentUser.role === "admin") ? 2 : 1;
 
     if (currentUser.role === "director" || currentUser.role === "admin") {
         container.innerHTML = menuGroupsHtml(menuItems);       // разделы, сворачиваются; сверху — часто используемые
     } else {
-        container.innerHTML = `
-    <div class="menu-grid" style="grid-template-columns: repeat(${columns}, 1fr);">
-        ${menuHtml}
-    </div>
-    `;
+        container.innerHTML = `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
     }
+
     if (typeof initDevButton === 'function') {
-    initDevButton();
-}
+        initDevButton();
+    }
 }
 
 function handleMenuClick(id) {
@@ -1538,8 +1639,8 @@ async function openSupport() {
             <label for="supportContact">Как с вами связаться (необязательно)</label>
             <input type="text" id="supportContact" placeholder="Телефон или почта">
             <div class="modal-actions">
-                <button onclick="sendSupport()">Отправить</button>
-                <button onclick="closeSupport()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeSupport()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="sendSupport()">Отправить</button>
             </div>
         </div>
     `;
@@ -2882,37 +2983,6 @@ window.hasBlockMessages = all.some(m =>
 );
 
 updateMessagesBadge(result.unread);
-}
-
-/* ================= SALES REPORT ================= */
-
-function openSalesReport() {
-
-    title.innerText = "Продажи";
-
-    container.innerHTML = `
-    
-    <div class="report-screen">
-
-        <div class="report-toolbar">
-            <button onclick="requestSalesReport()">Получить</button>
-            <button onclick="loadSalesReport()">Обновить</button>
-        </div>
-
-        <div id="salesReportHeader" class="report-header">
-            Отчет не получен
-        </div>
-
-        <div id="salesReportContainer" class="report-table">
-        </div>
-
-        <button onclick="showMenu()" class="back-button">
-            Назад
-        </button>
-
-    </div>
-
-    `;
 }
 
 function setActive(button){
