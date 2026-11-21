@@ -13,7 +13,7 @@ registerScreen("help", function () {
 
             ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
 
-            ${typeof transferHelpButtonHtml === "function" ? transferHelpButtonHtml() : ""}
+            ${typeof devicesHelpButtonHtml === "function" ? devicesHelpButtonHtml() : ""}
 
             <nav class="help-card help-toc" aria-label="Содержание">
                 <h2>Содержание</h2>

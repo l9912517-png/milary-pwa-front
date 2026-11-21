@@ -731,6 +731,7 @@ if (role === "logistics") {
 
 initPushPermission().catch(() => null);
 if (typeof supportAfterLogin === "function") supportAfterLogin();
+if (typeof clientReport === "function") setTimeout(clientReport, 1500);
 }
 
 
@@ -748,6 +749,7 @@ function hideTopBar() {
 }
 
 function logout() {
+    if (typeof devicesRevokeCurrent === "function") devicesRevokeCurrent();
     localStorage.clear();
     NAV.entries = []; NAV.cur = -1; NAV.modal = false;
     showLogin();
@@ -1492,6 +1494,13 @@ async function openAdminPanel() {
 
 
                         <button
+                            onclick="event.stopPropagation(); adminRevokeUserSessions(${u.id}, ${jsArg(u.name)})"
+                        >
+                            ${iconSvg("M9 21H5V3h4 M16 17l5-5-5-5 M21 12H9", "btn-ico")} Выйти везде
+                        </button>
+
+
+                        <button
                             onclick="event.stopPropagation(); regenerateToken(${u.id})"
                         >
                             ${iconSvg("M15 7a4 4 0 1 1-3.5 6L4 20.5V17h3v-3h3l1.5-1.5", "btn-ico")} Новый токен
@@ -1545,6 +1554,30 @@ async function openAdminPanel() {
                     <span class="menu-card-text">
                         <span class="menu-card-title">Очередь задач 1С</span>
                         <span class="menu-card-sub">Обмен с 1С: что ждёт, что зависло</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+                <button type="button" class="menu-card" onclick="openScreen('admin_announce')">
+                    <span class="menu-card-icon">${iconSvg("M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z M15 9a4 4 0 0 1 0 6 M18 6a8 8 0 0 1 0 12")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Объявления</span>
+                        <span class="menu-card-sub">Сообщение всем или по ролям, с уведомлением</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+                <button type="button" class="menu-card" onclick="openScreen('admin_devices')">
+                    <span class="menu-card-icon">${iconSvg("M7 2h10v20H7z M11 18h2")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Устройства и версии</span>
+                        <span class="menu-card-sub">Кто где вошёл, установка, уведомления</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+                <button type="button" class="menu-card" onclick="openScreen('admin_errors')">
+                    <span class="menu-card-icon">${iconSvg("M12 3l10 18H2z M12 10v4 M12 17h.01")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Ошибки приложения <span class="count-badge" data-errors-count hidden></span></span>
+                        <span class="menu-card-sub">Что ломается у пользователей</span>
                     </span>
                     ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
                 </button>
@@ -1855,7 +1888,7 @@ async function toggleUser(id) {
 
 async function regenerateToken(id) {
 
-    if (!confirm("Сгенерировать новый токен?")) return;
+    if (!confirm("Сгенерировать новый токен? Старый перестанет работать, и пользователь выйдет на всех устройствах.")) return;
 
     const jwt = localStorage.getItem("jwt");
 
