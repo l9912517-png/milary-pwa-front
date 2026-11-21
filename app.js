@@ -1683,6 +1683,7 @@ async function openAdminPanel() {
     `;
 
     if (typeof supportRefreshUnread === "function") supportRefreshUnread();
+    if (typeof errorsRefreshBadge === "function") errorsRefreshBadge();
 }
 
 /* Значение для вызова в атрибуте onclick: onclick="fn(${jsArg(x)})".
