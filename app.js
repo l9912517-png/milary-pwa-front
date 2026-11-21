@@ -1,3 +1,43 @@
+/* Файлы хранилища (/files/…) сервер отдаёт только после входа. Ко всем запросам этого сайта на /files/
+   добавляем Authorization: Bearer <jwt>, если заголовка нет (нужно и во встроенном окне 1С, где cookie может не передаваться). */
+(function () {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = function (input, init) {
+        try {
+            const raw = typeof input === "string" ? input : (input && input.url) || "";
+            const url = new URL(raw, window.location.href);
+            const jwt = localStorage.getItem("jwt");
+            if (jwt && url.origin === window.location.origin && url.pathname.startsWith("/files/")) {
+                init = Object.assign({}, init);
+                const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined));
+                if (!headers.has("Authorization")) headers.set("Authorization", "Bearer " + jwt);
+                init.headers = headers;
+            }
+        } catch (e) { /* неразборчивый адрес — запрос как есть */ }
+        return originalFetch(input, init);
+    };
+})();
+
+/* Файл хранилища как blob (с токеном) */
+async function fetchFileBlob(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    return response.blob();
+}
+
+/* Скачать файл хранилища: fetch → blob → <a download> */
+async function downloadStorageFile(url, fileName) {
+    const blob = await fetchFileBlob(url);
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+}
+
 
 
 
@@ -1629,11 +1669,15 @@ ${!selectionMode ? `
             const icon = getFileIcon(ext);
 
             html += `
-                <div class="menu-item" onclick="fileClick('${file}','${basePath}${file}','${ext}')">
-                    ${selectionMode ? `<input type="checkbox" ${selectedFiles.has(file) ? "checked" : ""} onclick="toggleSelect(event,'${file}')">` : ""}
+                <div class="menu-item"
+                     data-file="${escapeHtml(file)}"
+                     data-url="${escapeHtml(basePath + encodeURIComponent(file))}"
+                     data-ext="${escapeHtml(ext)}"
+                     onclick="fileClick(this.dataset.file, this.dataset.url, this.dataset.ext)">
+                    ${selectionMode ? `<input type="checkbox" data-file="${escapeHtml(file)}" ${selectedFiles.has(file) ? "checked" : ""} onclick="toggleSelect(event, this.dataset.file)">` : ""}
                     <span class="icon">${icon}</span>
                     <div style="display:flex;flex-direction:column;">
-                        <span style="word-break:break-all;">${file}</span>
+                        <span style="word-break:break-all;">${escapeHtml(file)}</span>
                         <span style="font-size:12px;color:#888;">
                             ${formatDate(fileObj.mtime)}
                         </span>
@@ -1742,7 +1786,7 @@ async function sendSelected() {
 
         for (const fileName of selectedFiles) {
 
-            const response = await fetch(basePath + fileName);
+            const response = await fetch(basePath + encodeURIComponent(fileName));
 
             if (!response.ok) {
                 alert("Ошибка загрузки: " + fileName);
@@ -2312,14 +2356,16 @@ function downloadSelected() {
     const user = JSON.parse(localStorage.getItem("user"));
     const basePath = "/files/" + user.user_id + "/";
 
-    selectedFiles.forEach(file => {
-        const link = document.createElement("a");
-        link.href = basePath + file;
-        link.download = file;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
+    (async () => {
+        for (const file of selectedFiles) {
+            try {
+                await downloadStorageFile(basePath + encodeURIComponent(file), file);
+            } catch (e) {
+                console.error("DOWNLOAD ERROR:", e);
+                alert("Ошибка загрузки: " + file);
+            }
+        }
+    })();
 
 }
 
@@ -2363,7 +2409,7 @@ function fileClick(file, url, ext) {
 
     if (selectionMode) {
 
-        const checkbox = document.querySelector(`input[type="checkbox"][onclick*="'${file}'"]`);
+        const checkbox = document.querySelector('input[type="checkbox"][data-file="' + CSS.escape(file) + '"]');
 
         if (selectedFiles.has(file)) {
             selectedFiles.delete(file);
@@ -2403,12 +2449,26 @@ function getFileIcon(ext) {
         '</svg>';
 }
 
-function openFile(url, ext) {
+async function openFile(url, ext) {
     if (["jpg","jpeg","png","webp"].includes(ext)) {
         openImagePreview(url);
         return;
     }
-    window.open(url, "_blank");
+    try {
+        const blob = await fetchFileBlob(url);
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = objectUrl;
+        link.target = "_blank";
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+    } catch (e) {
+        console.error("OPEN FILE ERROR:", e);
+        alert("Не удалось открыть файл");
+    }
 }
 
 function openImagePreview(url) {
@@ -2425,11 +2485,26 @@ function openImagePreview(url) {
     overlay.style.alignItems = "center";
     overlay.style.zIndex = "9999";
 
-    overlay.innerHTML = `
-        <img src="${url}" style="max-width:95%; max-height:95%; border-radius:12px;">
-    `;
+    const img = document.createElement("img");
+    img.style.maxWidth = "95%";
+    img.style.maxHeight = "95%";
+    img.style.borderRadius = "12px";
+    overlay.appendChild(img);
 
-    overlay.onclick = () => overlay.remove();
+    let objectUrl = null;
+    fetchFileBlob(url).then(blob => {
+        objectUrl = URL.createObjectURL(blob);
+        img.src = objectUrl;
+    }).catch(e => {
+        console.error("IMAGE PREVIEW ERROR:", e);
+        overlay.remove();
+        alert("Не удалось открыть изображение");
+    });
+
+    overlay.onclick = () => {
+        overlay.remove();
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
 
     document.body.appendChild(overlay);
 }
@@ -2529,7 +2604,7 @@ async function showMessages() {
                 line-height:1.4;
                 word-break:break-word;
             ">
-                ${formatMessageText(m.body, m.type === "idf")}
+                ${formatMessageText(m.body)}
             </div>
 
             <div style="
@@ -2569,9 +2644,9 @@ async function showMessages() {
     `;
 }
 
-// Сообщения IDF сервер уже экранирует при записи в базу, остальные экранируем здесь
+// Заголовок сообщения — всегда экранируем
 function messageTitleHtml(m) {
-    return m.type === "idf" ? String(m.title ?? "") : escapeHtml(m.title);
+    return escapeHtml(m.title);
 }
 
 // Текст сообщения: экранирование, затем переносы строк в <br>

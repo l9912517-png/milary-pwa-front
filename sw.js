@@ -1,4 +1,4 @@
-const CACHE_NAME = "app-cache-v56";
+const CACHE_NAME = "app-cache-v57";
 
 const STATIC_ASSETS = [
     "/pwa/index.html",
@@ -39,7 +39,9 @@ self.addEventListener("activate", event => {
 /* ===== FETCH ===== */
 self.addEventListener("fetch", event => {
 
-    if (event.request.url.includes("/api/")) {
+    // API и файлы пользователей (/files/) — всегда напрямую в сеть, мимо service worker и кэша
+    const reqPath = new URL(event.request.url).pathname;
+    if (reqPath.startsWith("/api/") || reqPath.startsWith("/files/")) {
         return;
     }
 
