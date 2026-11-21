@@ -382,6 +382,8 @@ function urlBase64ToUint8Array(base64String) {
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+    if (typeof inviteHandleStartup === "function" && await inviteHandleStartup()) return;
+
     const jwt = localStorage.getItem("jwt");
 
     if (!jwt) {
@@ -612,12 +614,12 @@ function showLogin() {
         <form class="login-form" onsubmit="event.preventDefault(); doLogin();" autocomplete="off">
             <div>
                 <div class="login-title">Вход</div>
-                <div class="login-hint">Введите токен, который выдал администратор</div>
+                <div class="login-hint">Откройте ссылку-приглашение или введите код из 6 цифр либо токен от администратора</div>
             </div>
             <label class="field">
-                <span class="field-label">Токен входа</span>
+                <span class="field-label">Код или токен</span>
                 <span class="login-field">
-                    <input id="accessToken" type="password" placeholder="Введите токен входа"
+                    <input id="accessToken" type="password" placeholder="Код или токен"
                            autocapitalize="off" autocorrect="off" spellcheck="false">
                     <button type="button" class="icon-btn" aria-label="Показать токен"
                             onclick="toggleTokenVisibility(this)">${iconSvg(ICON_EYE)}</button>
@@ -625,7 +627,7 @@ function showLogin() {
             </label>
             <div id="loginError" class="login-error" role="alert"></div>
             <button type="submit" class="login-submit">Войти</button>
-            <div class="login-foot">Нет токена? Обратитесь к администратору</div>
+            <div class="login-foot">Нет ни ссылки, ни кода? Обратитесь к администратору</div>
         </form>
     `;
 }
@@ -647,33 +649,53 @@ function showLoginError(text) {
 async function doLogin() {
 
     const access_token = document.getElementById("accessToken").value.trim();
-    if (!access_token) return showLoginError("Введите токен");
+    if (!access_token) return showLoginError("Введите код или токен");
 
     showLoginError("");
 
+    /* 6 цифр — код с другого устройства (см. invite/invite.js), иначе токен */
+    const isCode = /^\d{3}\s?\d{3}$/.test(access_token);
+
     let data = null;
     try {
-        const response = await fetch("/api/login", {
+        const response = await fetch(isCode ? "/api/login/code" : "/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ access_token })
+            body: JSON.stringify(isCode
+                ? { code: access_token, device: typeof inviteDeviceText === "function" ? inviteDeviceText() : "" }
+                : { access_token })
         });
         data = await response.json();
     } catch (e) {
         return showLoginError("Нет связи с сервером. Попробуйте ещё раз");
     }
 
-    if (!data || !data.success) return showLoginError("Неверный токен");
+    if (!data || !data.success) return showLoginError((data && data.message) || (isCode ? "Код неверный или устарел" : "Неверный токен"));
 
     localStorage.setItem("jwt", data.jwt);
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    currentUser = data.user;
-    showTopBar();
-    showMenu();
+    await validateToken(data.jwt);
+}
 
-    initPushPermission().catch(() => null);
-    if (typeof supportAfterLogin === "function") supportAfterLogin();
+/* копирование в буфер; запасной путь — для старых браузеров и не-HTTPS */
+async function copyText(text, done) {
+    const value = String(text ?? "");
+    let ok = false;
+    try {
+        await navigator.clipboard.writeText(value);
+        ok = true;
+    } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = value;
+        ta.setAttribute("readonly", "");
+        ta.style.cssText = "position:fixed;top:-1000px;opacity:0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { ok = document.execCommand("copy"); } catch (_) { ok = false; }
+        ta.remove();
+    }
+    alert(ok ? (done || "Скопировано") : "Не удалось скопировать — выделите текст и скопируйте вручную");
 }
 
 async function validateToken(jwt) {
@@ -1459,6 +1481,13 @@ async function openAdminPanel() {
                                 ? "🔴 Отключить"
                                 : "🟢 Активировать"
                             }
+                        </button>
+
+
+                        <button
+                            onclick="event.stopPropagation(); inviteUser(${u.id}, ${jsArg(u.name)})"
+                        >
+                            ${iconSvg("M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 18h2v2h-2z M18 14h2 M14 18v2", "btn-ico")} Пригласить
                         </button>
 
 

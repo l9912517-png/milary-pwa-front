@@ -13,6 +13,8 @@ registerScreen("help", function () {
 
             ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
 
+            ${typeof transferHelpButtonHtml === "function" ? transferHelpButtonHtml() : ""}
+
             <nav class="help-card help-toc" aria-label="Содержание">
                 <h2>Содержание</h2>
                 <button type="button" onclick="scrollHelp('about')">Что это такое</button>
