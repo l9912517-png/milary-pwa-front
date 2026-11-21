@@ -1,0 +1,101 @@
+/* Проверка контрагента по ИНН: экраны counterparty_check (менеджер) и checks_journal (директор, админ). */
+
+.chk-page {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 760px;
+    margin: 0 auto;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+
+.chk-card {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #dfe5df);
+    border-radius: var(--radius, 14px);
+    box-shadow: var(--shadow, 0 2px 8px rgba(22,38,22,.07));
+    padding: 12px 14px;
+}
+
+.chk-row { display: flex; gap: 8px; align-items: stretch; }
+.chk-row > * + * { margin-left: 0; }
+
+.chk-input, .chk-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid var(--border-strong, #cfd8cf);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text, #182018);
+    font-size: 16px;
+    font-family: inherit;
+}
+.chk-row .chk-input { flex: 1; min-width: 0; letter-spacing: .5px; }
+
+.chk-btn {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.chk-btn:disabled { opacity: .6; cursor: default; }
+.chk-btn.secondary { background: #e0e0e0; color: #222; }
+.chk-btn.wide { width: 100%; }
+
+.chk-hint { font-size: 13px; color: var(--text-secondary, #667066); margin-top: 8px; line-height: 1.4; }
+.chk-quota { font-size: 14px; margin-top: 8px; font-weight: 600; }
+.chk-quota.none { color: #c62828; }
+.chk-warn { padding: 10px; border-radius: 10px; background: #fff4dc; color: #7a5200; font-size: 14px; }
+.chk-error { padding: 10px; border-radius: 10px; background: #fde8e8; color: #a00000; font-size: 14px; }
+
+/* светофор */
+.chk-verdict { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 17px; }
+.chk-verdict.green { background: #e6f4e6; color: #1b5e20; }
+.chk-verdict.yellow { background: #fff4d6; color: #7a5200; }
+.chk-verdict.red { background: #fde3e1; color: #a31515; }
+
+.chk-name { font-size: 17px; font-weight: 700; margin: 10px 0 4px; }
+.chk-meta { font-size: 13px; color: var(--text-secondary, #667066); line-height: 1.5; }
+.chk-meta b { color: var(--text, #182018); font-weight: 600; }
+
+.chk-reasons { list-style: none; padding: 0; margin: 10px 0 0; }
+.chk-reasons li { display: flex; gap: 8px; padding: 5px 0; font-size: 14px; line-height: 1.4; border-top: 1px solid #f0f0f0; }
+.chk-reasons li:first-child { border-top: 0; }
+
+.chk-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px; margin-top: 5px; }
+.chk-dot.green { background: #43a047; }
+.chk-dot.yellow { background: #f9a825; }
+.chk-dot.red { background: #e53935; }
+.chk-dot.big { width: 22px; height: 22px; flex-basis: 22px; margin-top: 0; }
+#cjInfo .chk-dot { margin: 0 2px -1px; }
+
+.chk-sec-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+.chk-sec-sub { font-size: 14px; margin-bottom: 6px; }
+.chk-item { padding: 8px 0; border-top: 1px solid #f0f0f0; font-size: 14px; line-height: 1.4; }
+.chk-item:first-of-type { border-top: 0; }
+.chk-item-top { display: flex; justify-content: space-between; gap: 8px; }
+.chk-item-sum { font-weight: 600; white-space: nowrap; }
+.chk-item-sub { color: var(--text-secondary, #667066); font-size: 13px; }
+.chk-item a { color: #1565c0; }
+
+/* списки проверок */
+.chk-list-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid #f0f0f0; cursor: pointer; }
+.chk-list-row:first-child { border-top: 0; }
+.chk-list-main { flex: 1; min-width: 0; }
+.chk-list-name { font-weight: 600; font-size: 15px; overflow: hidden; text-overflow: ellipsis; }
+.chk-list-sub { font-size: 13px; color: var(--text-secondary, #667066); margin-top: 2px; }
+.chk-tag { display: inline-block; padding: 1px 6px; border-radius: 6px; background: #eceff1; color: #546e7a; font-size: 12px; margin-left: 4px; }
+
+.chk-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chk-filters .full { grid-column: 1 / -1; }
+.chk-filters label { display: block; font-size: 12px; color: var(--text-secondary, #667066); margin-bottom: 3px; }
+
+.chk-item summary { cursor: pointer; }
+.chk-raw summary { cursor: pointer; font-size: 13px; color: var(--text-secondary, #667066); }
+.chk-raw pre { max-height: 420px; overflow: auto; font-size: 11px; line-height: 1.35; background: #f6f7f6; padding: 8px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; }

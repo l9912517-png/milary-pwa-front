@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEALFRESH ®</title>
+
+<link rel="icon" href="/logo.png">
+<link rel="manifest" href="/pwa/manifest.json">
+
+<link rel="stylesheet" href="/pwa/styles.css?v=2">
+<link rel="stylesheet" href="/pwa/menu-groups.css?v=4">
+<link rel="stylesheet" href="/pwa/messenger/styles.css">
+<link rel="stylesheet" href="/pwa/idf/idf.css?v=6">
+<link rel="stylesheet" href="/pwa/ord/ord.css?v=21">
+<link rel="stylesheet" href="/pwa/chk/chk.css?v=3">
+
+<link rel="apple-touch-icon" href="/logo.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#33691e">
+</head>
+
+<body>
+
+<div id="app" class="app-wrapper">
+
+    <!-- TOP BAR -->
+    <div id="top-bar" class="top-bar hidden">
+
+        <div class="top-bar-left">
+            <span id="user-name" class="user-name"></span>
+        </div>
+
+        <div class="top-bar-actions">
+
+            <!-- ❓ HELP -->
+            <button onclick="openScreen('help')" class="btn-primary">
+                <span class="btn-icon">❓</span>
+                Справка
+            </button>
+
+            <!-- 📩 SUPPORT -->
+            <button onclick="openSupport()" class="btn-primary">
+                <span class="btn-icon">📩</span>
+                Поддержка
+            </button>
+
+            <!-- 🚪 LOGOUT -->
+            <button onclick="logout()" class="btn-secondary">
+                Выход
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+
+            <img src="logo.png" class="logo-img">
+
+            <h1 id="screen-title" class="brand-title">
+                <span class="brand-meal">MEAL</span><span class="brand-fresh">FRESH</span>
+            </h1>
+
+        </div>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main id="screen-container" class="screen-container"></main>
+
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+        <!-- ================= ФАЙЛЫ ================= -->
+        <button
+            onclick="showFiles();setActive(this)"
+            class="bottom-btn"
+            style="width:20%;flex:0 0 20%;">
+
+            <svg class="nav-svg" viewBox="0 0 24 24">
+                <path
+                    d="M3 6h6l2 2h10v10H3z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+
+            <span>Файлы</span>
+
+        </button>
+
+
+        <!-- ================= СООБЩЕНИЯ ================= -->
+        <button
+            onclick="showMessages();setActive(this)"
+            class="bottom-btn"
+            style="width:20%;flex:0 0 20%;">
+
+            <div class="icon-wrapper">
+
+                <!-- ОСТАВЛЯЕМ ИКОНКУ СООБЩЕНИЙ -->
+                <svg class="nav-svg" viewBox="0 0 24 24">
+                    <path
+                        d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"/>
+                </svg>
+
+                <span
+                    id="messagesBadge"
+                    class="badge hidden">
+                </span>
+
+            </div>
+
+            <span>Сообщения</span>
+
+        </button>
+
+<!-- ================= ГЛАВНАЯ ================= -->
+<button
+    onclick="
+        if (currentUser && String(currentUser.role || '').trim().toLowerCase() === 'logistics') {
+            openScreen('logistic');
+        } else {
+            showMenu();
+        }
+        setActive(this);
+    "
+    class="bottom-btn center-btn"
+>
+    <svg class="nav-svg nav-center" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"/>
+    </svg>
+</button>
+
+
+        <!-- ================= IDF ================= -->
+        <button
+            onclick="openIDF();setActive(this)"
+            class="bottom-btn"
+            style="width:20%;flex:0 0 20%;">
+
+            <!-- ДОКУМЕНТ -->
+            <svg
+                class="nav-svg"
+                viewBox="0 0 24 24">
+
+                <path
+                    d="M6 3h9l4 4v14H6z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"/>
+
+                <path
+                    d="M15 3v5h4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"/>
+
+                <path
+                    d="M9 12h6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+
+                <path
+                    d="M9 16h6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+
+            </svg>
+
+            <span>IDF</span>
+
+        </button>
+
+
+        <!-- ================= ЧАТЫ ================= -->
+        <button
+            onclick="openScreen('messenger');setActive(this)"
+            class="bottom-btn"
+            style="width:20%;flex:0 0 20%;">
+
+            <div class="icon-wrapper">
+
+                <!-- ДВА ПОЛЬЗОВАТЕЛЯ -->
+                <svg
+                    class="nav-svg"
+                    viewBox="0 0 24 24">
+
+                    <!-- Первый пользователь -->
+                    <circle
+                        cx="9"
+                        cy="8"
+                        r="3"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"/>
+
+                    <path
+                        d="M3.5 19c0-3.2 2.4-5 5.5-5s5.5 1.8 5.5 5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"/>
+
+                    <!-- Второй пользователь -->
+                    <circle
+                        cx="17"
+                        cy="9"
+                        r="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"/>
+
+                    <path
+                        d="M14.5 15c2.8 0 5 1.5 5 4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"/>
+
+                </svg>
+
+                <span
+                    id="messengerBadge"
+                    class="badge hidden">
+                </span>
+
+            </div>
+
+            <span>Чаты</span>
+
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- Демо-режим (плашка и сообщения; для обычных пользователей ничего не меняет) -->
+<script src="/pwa/demo.js?v=1"></script>
+
+<!-- APP -->
+<script src="/pwa/app.js?v=41"></script>
+
+<!-- MESSENGER -->
+<script src="/pwa/messenger/client.js?v=4"></script>
+
+
+<!-- IDF (модуль заданий, каталог /pwa/idf/) -->
+<script src="/pwa/idf/core.js?v=3"></script>
+<script src="/pwa/idf/idf.js?v=7"></script>
+<script src="/pwa/idf/objects.js?v=1"></script>
+<script src="/pwa/idf/pwa.js?v=4"></script>
+
+
+<!-- Заказ текстом (каталог /pwa/ord/, экраны screens/ord_*.js) -->
+<script src="/pwa/ord/ord.js?v=23"></script>
+<script src="/pwa/chk/chk.js?v=4"></script>
+
+
+<!-- SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}
+</script>
+
+</body>
+</html>

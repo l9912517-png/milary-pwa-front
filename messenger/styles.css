@@ -1,0 +1,1207 @@
+/* Portable MEALFRESH Messenger styles. No host CSS changes required. */
+.mf-messenger{padding:10px;max-width:760px;margin:0 auto;height:calc(100vh - 150px);display:flex;flex-direction:column;min-height:0}
+.mf-messenger-toolbar{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 10px}
+.mf-icon-button{width:38px;height:38px;border-radius:50%;border:0;background:#33691e;color:#fff;font-size:26px;line-height:1}
+.mf-chat-list{display:flex;flex-direction:column;gap:8px;overflow:auto;padding-bottom:8px}
+.mf-chat-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-radius:12px;background:#fff;padding:11px;box-shadow:0 2px 6px rgba(0,0,0,.08);cursor:pointer}
+.mf-chat-avatar{flex:0 0 42px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#dcedc8;color:#33691e;font-weight:700}
+.mf-chat-main{min-width:0;display:flex;flex:1;flex-direction:column;gap:3px}
+.mf-chat-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mf-chat-preview{font-size:13px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mf-chat-meta{display:flex;align-items:flex-end;flex-direction:column;gap:5px;font-size:10px;color:#888}
+.mf-chat-meta b{background:#33691e;color:#fff;border-radius:12px;padding:2px 6px;font-size:10px}
+.mf-empty,.mf-messenger-loading,.mf-messenger-error{text-align:center;padding:30px;color:#777}
+.mf-chat-screen{padding-bottom:4px}
+.mf-chat-header{display:flex;align-items:center;gap:8px;padding:4px 0 10px}
+.mf-chat-header button{border:0;background:transparent;font-size:30px;line-height:1;padding:0 8px;color:#33691e}
+.mf-chat-messages{flex:1;overflow-y:auto;padding:4px 2px 12px;display:flex;flex-direction:column;gap:7px}
+.mf-message{display:flex;width:100%}
+.mf-message.mine{justify-content:flex-end}
+.mf-message.theirs{justify-content:flex-start}
+.mf-message-bubble{max-width:82%;padding:8px 10px;border-radius:14px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);word-break:break-word;overflow-wrap:anywhere}
+.mf-message.mine .mf-message-bubble{background:#dcedc8}
+.mf-message-author{font-size:11px;font-weight:700;color:#33691e;margin-bottom:3px}
+.mf-message-bubble time{display:block;text-align:right;font-size:9px;color:#888;margin-top:4px}
+.mf-chat-compose{display:flex;gap:7px;align-items:flex-end;padding-top:6px;border-top:1px solid #ddd}
+.mf-chat-compose textarea{flex:1;resize:none;min-height:42px;max-height:110px;padding:10px;border:1px solid #ccc;border-radius:12px;font-size:14px;outline:none}
+.mf-chat-compose button{width:46px;height:42px;border:0;border-radius:12px;background:#33691e;color:#fff;font-size:20px}
+.mf-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:2500;display:flex;align-items:center;justify-content:center;padding:15px}
+.mf-modal{background:#fff;border-radius:14px;padding:16px;width:94%;max-width:430px;max-height:80vh;display:flex;flex-direction:column;gap:10px}
+.mf-user-list{display:flex;flex-direction:column;gap:6px;overflow:auto}
+.mf-user-list button{display:flex;flex-direction:column;text-align:left;border:0;background:#f5f5f5;border-radius:10px;padding:10px}
+.mf-user-list small{color:#777;margin-top:2px}
+.mf-cancel{border:0;border-radius:9px;padding:10px;background:#ddd}
+.mf-nav-icon-wrap{position:relative}
+#messengerBadge{position:absolute;top:-5px;right:-8px}
+
+.bottom-nav.mf-has-messenger .bottom-btn{width:25%}
+/* =========================================================
+   MEALFRESH MESSENGER
+   PRIVATE CHAT — FINAL UI
+   ========================================================= */
+
+
+/* =========================================================
+   CHAT SCREEN
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen {
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    background: #f5f8ef;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CHAT HEADER
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-header {
+
+    position: relative;
+
+    z-index: 5;
+
+    flex: 0 0 62px;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 7px 10px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e1e6dc;
+
+    box-shadow:
+        0 1px 4px rgba(0,0,0,.06);
+}
+
+
+/* Назад */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-back {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #33691e;
+
+    cursor: pointer;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-back svg {
+
+    width: 23px;
+    height: 23px;
+
+    display: block;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-back:active {
+
+    background: #edf4e8;
+}
+
+
+/* Пользователь */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-user {
+
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    margin-left: 5px;
+}
+
+
+/* Аватар */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-avatar {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e1f0d9;
+
+    color: #33691e;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    box-sizing: border-box;
+}
+
+
+/* Имя + роль */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-user-info {
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    margin-left: 10px;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-user-name {
+
+    max-width: 250px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color: #20251f;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 19px;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-user-role {
+
+    margin-top: 1px;
+
+    color: #7b8177;
+
+    font-size: 11px;
+
+    line-height: 15px;
+}
+
+
+/* =========================================================
+   MESSAGE AREA
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-messages {
+
+    position: relative;
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    width: 100%;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding:
+        14px
+        10px
+        100px;
+
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #f5f8ef 0%,
+            #f4f8e9 100%
+        );
+
+    overscroll-behavior: contain;
+
+    scrollbar-width: thin;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-message {
+
+    display: flex;
+
+    width: 100%;
+
+    margin: 0 0 8px;
+
+    box-sizing: border-box;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-message.mine {
+
+    justify-content: flex-end;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-message.theirs {
+
+    justify-content: flex-start;
+}
+
+
+/* =========================================================
+   BUBBLE
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-message-bubble {
+
+    max-width: min(78%, 340px);
+
+    padding:
+        8px
+        11px
+        6px;
+
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+}
+
+
+/* Чужое */
+
+.mf-messenger.mf-chat-screen
+.mf-message.theirs
+.mf-message-bubble {
+
+    background: #ffffff;
+
+    color: #20251f;
+
+    border-bottom-left-radius: 5px;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.07);
+}
+
+
+/* Моё */
+
+.mf-messenger.mf-chat-screen
+.mf-message.mine
+.mf-message-bubble {
+
+    background: #dff0d5;
+
+    color: #20301c;
+
+    border-bottom-right-radius: 5px;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.05);
+}
+
+
+/* Автор */
+
+.mf-messenger.mf-chat-screen
+.mf-message-author {
+
+    margin-bottom: 3px;
+
+    color: #33691e;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-message.mine
+.mf-message-author {
+
+    color: #33691e;
+}
+
+
+/* Время */
+
+.mf-messenger.mf-chat-screen
+.mf-message-bubble time {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8a9086;
+
+    text-align: right;
+
+    font-size: 9px;
+
+    line-height: 10px;
+}
+
+
+/* =========================================================
+   INPUT — ПРЯМО НАД НИЖНИМ BAR
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose {
+
+    position: fixed;
+
+    left: 50%;
+    bottom: 64px;
+
+    transform: translateX(-50%);
+
+    z-index: 1001;
+
+    width: min(100%, 600px);
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: flex-end;
+
+    gap: 7px;
+
+    padding:
+        7px
+        9px
+        8px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-top: 1px solid #dfe5da;
+
+    box-shadow:
+        0 -2px 7px rgba(0,0,0,.06);
+}
+
+
+/* Поле */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose textarea {
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    width: 100%;
+
+    min-height: 42px;
+    max-height: 110px;
+
+    margin: 0;
+
+    padding:
+        10px
+        13px;
+
+    box-sizing: border-box;
+
+    resize: none;
+
+    overflow-y: auto;
+
+    border:
+        1px solid #d7ded2;
+
+    border-radius: 21px;
+
+    outline: none;
+
+    background: #f6f8f5;
+
+    color: #20251f;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    line-height: 20px;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose textarea::placeholder {
+
+    color: #9a9f96;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose textarea:focus {
+
+    background: #ffffff;
+
+    border-color: #5aa52a;
+
+    box-shadow:
+        0 0 0 2px rgba(51,105,30,.08);
+}
+
+
+/* =========================================================
+   SEND
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-send {
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #33691e;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 5px rgba(51,105,30,.20);
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-send svg {
+
+    width: 20px;
+    height: 20px;
+
+    display: block;
+}
+
+
+.mf-messenger.mf-chat-screen
+.mf-chat-send:active {
+
+    transform: scale(.94);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .mf-messenger.mf-chat-screen
+    .mf-chat-header {
+
+        flex-basis: 58px;
+
+        padding:
+            6px
+            8px;
+    }
+
+
+    .mf-messenger.mf-chat-screen
+    .mf-chat-avatar {
+
+        width: 38px;
+        height: 38px;
+
+        flex-basis: 38px;
+
+        font-size: 15px;
+    }
+
+
+    .mf-messenger.mf-chat-screen
+    .mf-chat-user-name {
+
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+
+    .mf-messenger.mf-chat-screen
+    .mf-chat-messages {
+
+        padding:
+            10px
+            8px
+            100px;
+    }
+
+
+    .mf-messenger.mf-chat-screen
+    .mf-message-bubble {
+
+        max-width: 84%;
+    }
+
+
+    .mf-messenger.mf-chat-screen
+    .mf-chat-compose {
+
+        padding:
+            6px
+            8px
+            7px;
+    }
+
+}
+
+
+/* =========================================================
+   MESSENGER — ATTACHMENTS / READ / DELETE
+   ========================================================= */
+
+/* Предпросмотр выбранного файла ДО отправки */
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose {
+    flex-wrap: wrap;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attachment-preview {
+    display: none;
+    flex: 0 0 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 2px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attachment-preview.visible {
+    display: block;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 46px;
+    padding: 5px 7px;
+    box-sizing: border-box;
+    border: 1px solid #d7ded2;
+    border-radius: 12px;
+    background: #f6f8f5;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file-image {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #e8eee3;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #e8eee3;
+    font-size: 20px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file-info {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file-info strong {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 17px;
+    color: #263021;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-selected-file-info small {
+    color: #7b8177;
+    font-size: 10px;
+    line-height: 13px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose
+.mf-chat-selected-file-remove {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px;
+    flex: 0 0 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #e3e8df;
+    color: #53604d;
+    font-size: 22px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-compose
+.mf-chat-selected-file-remove:active {
+    transform: scale(.94);
+}
+
+
+/* Картинка в сообщении — никогда не занимает весь экран */
+
+.mf-messenger.mf-chat-screen
+.mf-message-image {
+    display: block;
+    width: auto;
+    max-width: min(240px, 100%);
+    max-height: 300px;
+    margin: 4px 0 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #e8eee3;
+    cursor: pointer;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-image img {
+    display: block;
+    width: auto;
+    max-width: 240px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+
+/* Обычный файл */
+
+.mf-messenger.mf-chat-screen
+.mf-message-file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 280px;
+    margin: 4px 0 2px;
+    padding: 8px 9px;
+    box-sizing: border-box;
+    border: 1px solid #d6dfd0;
+    border-radius: 10px;
+    background: rgba(255,255,255,.55);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-file-icon {
+    flex: 0 0 auto;
+    font-size: 19px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-file-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-file-info strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-file-info small {
+    color: #7b8177;
+    font-size: 10px;
+}
+
+
+/* Нижняя строка сообщения: время + прочитано + удаление */
+
+.mf-messenger.mf-chat-screen
+.mf-message-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    min-height: 13px;
+    margin-top: 3px;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-footer time {
+    margin-top: 0;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-read {
+    color: #9a9f96;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 11px;
+    letter-spacing: -1px;
+    white-space: nowrap;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-read.is-read {
+    color: #2f8b25;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-delete {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin: 0 0 0 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #9a9f96;
+    font-size: 16px;
+    line-height: 18px;
+    cursor: pointer;
+    opacity: .75;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-delete:hover {
+    background: #e8eee3;
+    color: #8a3b3b;
+    opacity: 1;
+}
+
+
+/* Постоянное удалённое сообщение */
+
+.mf-messenger.mf-chat-screen
+.mf-message.deleted
+.mf-message-bubble {
+    background: #eef1ec;
+    color: #8a9086;
+    box-shadow: none;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-message-deleted {
+    font-style: italic;
+    color: #8a9086;
+}
+
+@media (max-width: 480px) {
+
+    .mf-messenger.mf-chat-screen
+    .mf-message-image {
+        max-width: min(220px, 100%);
+        max-height: 280px;
+    }
+
+    .mf-messenger.mf-chat-screen
+    .mf-message-image img {
+        max-width: 220px;
+        max-height: 280px;
+    }
+
+}
+
+/* =========================================================
+   V4 FIX — CHAT SCROLL + ATTACHMENT MENU
+   ========================================================= */
+
+/*
+ * screen-container в основном приложении не задаёт высоту.
+ * Поэтому чат получает собственную реальную высоту viewport,
+ * а список сообщений становится отдельной прокручиваемой областью.
+ */
+.mf-messenger.mf-chat-screen {
+    height: calc(100dvh - 230px);
+    max-height: calc(100dvh - 230px);
+    min-height: 0;
+    overflow: hidden;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-messages {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    scrollbar-width: auto;
+    padding-bottom: 110px;
+}
+
+/* Меню вложений не должно занимать место в строке ввода. */
+.mf-messenger.mf-chat-screen
+.mf-chat-compose {
+    position: fixed;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attach-menu {
+    display: none;
+    position: absolute;
+    left: 9px;
+    bottom: 58px;
+    z-index: 1100;
+    width: 150px;
+    padding: 6px;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid #d7ded2;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 5px 18px rgba(0,0,0,.16);
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attach-menu.visible {
+    display: flex;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attach-menu button {
+    width: 100%;
+    height: 40px;
+    min-width: 0;
+    flex: 0 0 40px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 9px;
+    background: #f1f5ee;
+    color: #263021;
+    font-size: 14px;
+    line-height: 40px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mf-messenger.mf-chat-screen
+.mf-chat-attach-menu button:active {
+    background: #e1eddc;
+}
+
+/* Кнопка скрепки остаётся единственной кнопкой вложения в строке. */
+.mf-messenger.mf-chat-screen
+.mf-chat-attach {
+    position: relative;
+    z-index: 1101;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    flex: 0 0 42px;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: #33691e;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 42px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Выбранный файл всегда виден над полем ввода. */
+.mf-messenger.mf-chat-screen
+.mf-chat-attachment-preview {
+    flex: 0 0 100%;
+    order: -1;
+}
+
+/* На маленьком экране чат использует всю доступную область между
+   верхней панелью приложения и нижней навигацией. */
+@media (max-width: 480px) {
+    .mf-messenger.mf-chat-screen {
+        height: calc(100dvh - 230px);
+        max-height: calc(100dvh - 230px);
+    }
+}
+
+
+/* =========================================================
+   V5 FIX — STABLE CHAT / ATTACHMENT BUTTONS / THUMBNAILS
+   ========================================================= */
+
+/* Поле текста + кнопки: кнопки всегда справа от поля. */
+.mf-messenger.mf-chat-screen .mf-chat-compose {
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-compose textarea {
+    order: 1;
+    flex: 1 1 auto;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-attach {
+    order: 2;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-send {
+    order: 3;
+}
+
+/* Меню появляется над кнопкой скрепки, а не слева от поля. */
+.mf-messenger.mf-chat-screen .mf-chat-attach-menu {
+    left: auto;
+    right: 58px;
+    bottom: 58px;
+}
+
+/*
+ * Все изображения имеют одинаковую область миниатюры.
+ * Само изображение не обрезаем: object-fit: contain.
+ */
+.mf-messenger.mf-chat-screen .mf-message-image {
+    width: 180px;
+    height: 180px;
+    max-width: 180px;
+    max-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.mf-messenger.mf-chat-screen .mf-message-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+@media (max-width: 480px) {
+    .mf-messenger.mf-chat-screen .mf-message-image {
+        width: 160px;
+        height: 160px;
+        max-width: 160px;
+        max-height: 160px;
+    }
+}
+
+/*
+ * Никаких CSS-анимаций для сообщений и вложений:
+ * polling не должен создавать визуального мигания.
+ */
+.mf-messenger.mf-chat-screen .mf-message,
+.mf-messenger.mf-chat-screen .mf-message-bubble,
+.mf-messenger.mf-chat-screen .mf-message-image,
+.mf-messenger.mf-chat-screen .mf-message-image img {
+    animation: none !important;
+}
+
+/* =========================================================
+   V6 FIX — РАЗМЕТКА ПОЛЯ ВВОДА
+   ========================================================= */
+
+.mf-messenger.mf-chat-screen .mf-chat-compose {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42px 42px;
+    align-items: end;
+    column-gap: 7px;
+    row-gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-compose textarea {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    min-width: 0;
+    flex: none;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-attach {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-send {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+/* Превью выбранного файла — отдельной строкой над вводом. */
+.mf-messenger.mf-chat-screen .mf-chat-attachment-preview {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-attachment-preview.visible ~ textarea,
+.mf-messenger.mf-chat-screen .mf-chat-attachment-preview.visible ~ .mf-chat-attach,
+.mf-messenger.mf-chat-screen .mf-chat-attachment-preview.visible ~ .mf-chat-attach-menu,
+.mf-messenger.mf-chat-screen .mf-chat-attachment-preview.visible ~ .mf-chat-send {
+    grid-row: 2;
+}
+
+.mf-messenger.mf-chat-screen .mf-chat-attach-menu {
+    grid-column: 2;
+    left: auto;
+    right: 58px;
+    bottom: 58px;
+}
+
+/* Все миниатюры одинакового размера. Само фото заполняет превью. */
+.mf-messenger.mf-chat-screen .mf-message-image img {
+    object-fit: cover;
+}
+
+
+/* === Per-chat notification switch === */
+.mf-chat-header { width: 100%; }
+.mf-chat-settings {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: 0 0 auto;
+}
+.mf-chat-mute-label {
+    font-size: 11px;
+    color: #6f786c;
+    white-space: nowrap;
+}
+.mf-chat-mute-toggle {
+    position: relative;
+    width: 42px !important;
+    height: 24px !important;
+    min-width: 42px;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #cfd8cc !important;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+    cursor: pointer;
+    transition: background .16s ease;
+}
+.mf-chat-mute-toggle.is-on { background: #33691e !important; }
+.mf-chat-mute-toggle:disabled { opacity: .55; cursor: wait; }
+.mf-chat-mute-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    transition: transform .16s ease;
+}
+.mf-chat-mute-toggle.is-on .mf-chat-mute-knob { transform: translateX(18px); }
+@media (max-width: 520px) {
+    .mf-chat-mute-label { display: none; }
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказы</title>
+<link rel="stylesheet" href="/pwa/ord/ord.css?v=21">
+<link rel="stylesheet" href="/pwa/ord/embed/shell.css?v=4">
+</head>
+<body class="ord-v8">
+<div id="ord-shell">
+    <div id="ord-head">
+        <span id="ord-title">Проверка заказов</span>
+        <span id="ord-user"></span>
+    </div>
+    <main id="ord-root"><div class="ord-empty">Подключение…</div></main>
+</div>
+
+<!-- Рабочее место оператора в 1С (обработка PWA_РабочееМестоОператора). Тот же экран, что «Проверка заказов» в PWA. -->
+<script src="/pwa/ord/embed/shell.js?v=3"></script>
+<script src="/pwa/ord/ord.js?v=23"></script>
+<script src="/pwa/screens/ord_review.js?v=25"></script>
+<script src="/pwa/screens/ord_new.js?v=6"></script>
+<script>ordShellStart();</script>
+</body>
+</html>

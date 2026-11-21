@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Справка</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+.wrapper {
+    padding: 12px;
+}
+
+.menu, .block {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.menu {
+    padding: 10px;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.menu a:last-child {
+    border-bottom: none;
+}
+
+.header {
+    padding: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.content {
+    display: none;
+    padding: 0 14px 14px 14px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.block.active .content {
+    display: block;
+}
+
+.note {
+    margin-top: 10px;
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.warn {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8d7da;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.good {
+    margin-top: 10px;
+    padding: 10px;
+    background: #d4edda;
+    border-radius: 10px;
+    font-size: 13px;
+}
+</style>
+
+<script>
+function toggleBlock(el) {
+    el.parentElement.classList.toggle("active");
+}
+
+function go(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: "smooth" });
+    el.classList.add("active");
+}
+</script>
+
+</head>
+<body>
+
+<div class="wrapper">
+
+<!-- ===== СОДЕРЖАНИЕ ===== -->
+<div class="menu">
+    <b>Содержание</b>
+
+    <a onclick="go('about')">Что это такое</a>
+    <a onclick="go('install')">Как установить</a>
+    <a onclick="go('android')">Android</a>
+    <a onclick="go('iphone')">iPhone</a>
+    <a onclick="go('pc')">Компьютер</a>
+    <a onclick="go('push')">Уведомления</a>
+    <a onclick="go('usage')">Как пользоваться</a>
+    <a onclick="go('problems')">Проблемы</a>
+</div>
+
+<!-- ===== ЧТО ЭТО ===== -->
+<div id="about" class="block">
+    <div class="header" onclick="toggleBlock(this)">Что это такое</div>
+    <div class="content">
+
+        <b>PWA (Progressive Web App)</b> — это приложение, которое работает через браузер,
+        но выглядит как обычное приложение.
+
+        <br><br>
+        Возможности:
+        <br>• установка на телефон
+        <br>• отдельная иконка
+        <br>• push-уведомления
+        <br>• работа как приложение
+
+        <div class="good">
+            Ничего скачивать из App Store или Google Play не нужно
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== УСТАНОВКА ===== -->
+<div id="install" class="block">
+    <div class="header" onclick="toggleBlock(this)">Как установить</div>
+    <div class="content">
+
+        Установка занимает 10–20 секунд и делается через браузер.
+
+        <div class="note">
+            После установки приложение появляется на рабочем столе
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== ANDROID ===== -->
+<div id="android" class="block">
+    <div class="header" onclick="toggleBlock(this)">Android</div>
+    <div class="content">
+
+        1. Откройте сайт в Chrome  
+        2. Нажмите ⋮  
+        3. Выберите "Добавить на главный экран"  
+        4. Подтвердите  
+
+        <div class="good">
+            После установки открывается как обычное приложение
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== IPHONE ===== -->
+<div id="iphone" class="block">
+    <div class="header" onclick="toggleBlock(this)">iPhone</div>
+    <div class="content">
+
+        1. Откройте сайт в Safari  
+        2. Нажмите "Поделиться"  
+        3. Выберите "На экран Домой"  
+        4. Подтвердите  
+
+        <div class="warn">
+            Важно: через Chrome на iPhone не работает
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== ПК ===== -->
+<div id="pc" class="block">
+    <div class="header" onclick="toggleBlock(this)">Компьютер</div>
+    <div class="content">
+
+        1. Откройте сайт в Chrome / Edge  
+        2. В адресной строке нажмите "Установить"  
+
+    </div>
+</div>
+
+<!-- ===== PUSH ===== -->
+<div id="push" class="block">
+    <div class="header" onclick="toggleBlock(this)">Уведомления</div>
+    <div class="content">
+
+        При первом входе обязательно нажмите "Разрешить"
+
+        <div class="warn">
+            Если нажали "Запретить" — уведомления больше не спросятся
+        </div>
+
+        <br>
+
+        <b>Как включить вручную:</b>
+
+        <br><br>
+
+        Android  
+        → Настройки → Уведомления → включить для сайта  
+
+        <br><br>
+
+        iPhone  
+        → Настройки → Уведомления → выбрать приложение  
+
+        <div class="note">
+            На iPhone уведомления работают только если приложение установлено на экран
+        </div>
+
+        <br>
+
+        Компьютер  
+        → значок замка в браузере → разрешить уведомления  
+
+    </div>
+</div>
+
+<!-- ===== USAGE ===== -->
+<div id="usage" class="block">
+    <div class="header" onclick="toggleBlock(this)">Как пользоваться</div>
+    <div class="content">
+
+        • Файлы — готовые отчёты  
+        <br><br>
+        • Сообщения — уведомления  
+        <br><br>
+        • Отчёты — формирование данных  
+
+        <div class="note">
+            Если отчет не появился — он ещё формируется
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== ПРОБЛЕМЫ ===== -->
+<div id="problems" class="block">
+    <div class="header" onclick="toggleBlock(this)">Частые проблемы</div>
+    <div class="content">
+
+        <b>Нет уведомлений</b><br>
+        Проверьте разрешения  
+
+        <br><br>
+
+        <b>Не открывается</b><br>
+        Обновите страницу или переустановите  
+
+        <br><br>
+
+        <b>Нет данных</b><br>
+        Подождите — отчет формируется  
+
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

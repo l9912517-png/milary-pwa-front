@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDF — проверка браузера</title>
+<style>
+    body { font-family: Arial, sans-serif; font-size: 14px; margin: 0; padding: 16px; background: #f4f6f8; color: #222; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    .muted { color: #777; font-size: 12px; }
+    .cols { display: table; width: 100%; }
+    .col { display: table-cell; vertical-align: top; width: 50%; padding-right: 16px; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    td { border-bottom: 1px solid #eee; padding: 4px 8px; vertical-align: top; }
+    td.n { width: 45%; }
+    .ok { color: #1b7f2a; font-weight: bold; }
+    .no { color: #b30000; font-weight: bold; }
+    .box { background: #fff; padding: 10px; margin-bottom: 10px; border-radius: 6px; }
+    button { padding: 6px 10px; margin: 0 6px 6px 0; cursor: pointer; }
+    #drop, #paste { border: 2px dashed #aaa; padding: 14px; text-align: center; margin-top: 6px; background: #fafafa; }
+    #log { width: 100%; height: 120px; font-family: monospace; font-size: 12px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+
+<h1>Проверка возможностей браузера для IDF</h1>
+<div class="muted" id="ua"></div>
+
+<div class="cols">
+    <div class="col">
+        <h3>Автоматические проверки</h3>
+        <table id="auto"></table>
+    </div>
+
+    <div class="col">
+        <h3>Ручные проверки (нажмите каждую кнопку)</h3>
+
+        <div class="box">
+            <button onclick="tAlert()">alert</button>
+            <button onclick="tConfirm()">confirm</button>
+            <button onclick="tPrompt()">prompt</button>
+        </div>
+
+        <div class="box">
+            <button onclick="tDownload()">Скачать файл (blob)</button>
+            <button onclick="tOpen()">window.open</button>
+            <a href="https://pwa.mealfresh.ru/pwa/idf/embed/compat-test.html?blank=1" target="_blank" onclick="note('Ссылка target=_blank', 'нажата (посмотрите, что открылось)')">Ссылка target=_blank</a>
+        </div>
+
+        <div class="box">
+            Фото: сжатие на клиенте<br>
+            <input type="file" accept="image/*" onchange="tImage(this)">
+        </div>
+
+        <div class="box">
+            <div id="paste" tabindex="0">Щёлкните сюда и нажмите Ctrl+V с картинкой (скриншотом) в буфере</div>
+            <div id="drop">Перетащите сюда файл мышью</div>
+        </div>
+
+        <h3>Ручные результаты</h3>
+        <table id="manual"></table>
+    </div>
+</div>
+
+<div class="box" style="margin-top:12px;">
+    <button onclick="sendResults()">Отправить результаты на сервер</button>
+    <span id="sent" class="muted"></span>
+    <textarea id="log" readonly></textarea>
+</div>
+
+<script>
+var results = {};
+
+function row(tableId, name, ok, info) {
+    var t = document.getElementById(tableId);
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+    td1.className = 'n';
+    td1.appendChild(document.createTextNode(name));
+    var s = document.createElement('span');
+    s.className = ok ? 'ok' : 'no';
+    s.appendChild(document.createTextNode(ok ? 'да' : 'нет'));
+    td2.appendChild(s);
+    if (info) td2.appendChild(document.createTextNode(' ' + info));
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    t.appendChild(tr);
+    results[name] = (ok ? 'OK' : 'NO') + (info ? ' ' + info : '');
+    refreshLog();
+}
+
+function note(name, info) {
+    var t = document.getElementById('manual');
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+    td1.className = 'n';
+    td1.appendChild(document.createTextNode(name));
+    td2.appendChild(document.createTextNode(info));
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    t.appendChild(tr);
+    results['ручн: ' + name] = info;
+    refreshLog();
+}
+
+function refreshLog() {
+    var lines = [];
+    for (var k in results) lines.push(k + ': ' + results[k]);
+    document.getElementById('log').value = lines.join('\n');
+}
+
+/* Синтаксис проверяем через new Function: если браузер его не знает,
+   ошибка будет только в этой строке, а не во всей странице. */
+function syntax(name, code) {
+    try {
+        new Function(code);
+        row('auto', name, true);
+    } catch (e) {
+        row('auto', name, false, e && e.message ? e.message : String(e));
+    }
+}
+
+function has(name, fn) {
+    var ok = false, info = '';
+    try { ok = !!fn(); } catch (e) { ok = false; info = e && e.message ? e.message : String(e); }
+    row('auto', name, ok, info);
+}
+
+function cssSupports(prop, value) {
+    if (window.CSS && CSS.supports) return CSS.supports(prop, value);
+    var el = document.createElement('div');
+    el.style[prop] = value;
+    return !!el.style[prop];
+}
+
+document.getElementById('ua').appendChild(document.createTextNode(
+    navigator.userAgent + ' | окно ' + window.innerWidth + '×' + window.innerHeight +
+    ' | DPR ' + (window.devicePixelRatio || 1)
+));
+results['userAgent'] = navigator.userAgent;
+results['окно'] = window.innerWidth + 'x' + window.innerHeight;
+
+/* ---------- синтаксис ---------- */
+syntax('?. (optional chaining)', 'var a = null; return a?.b;');
+syntax('?? (nullish)', 'var a = null; return a ?? 1;');
+syntax('{...a} (spread объектов)', 'var a = {x:1}; return {...a, y:2};');
+syntax('[...a] (spread массивов)', 'var a = [1]; return [...a, 2];');
+syntax('async/await', 'return (async function(){ await 1; })();');
+syntax('class', 'class A { m(){ return 1; } } return new A().m();');
+syntax('деструктуризация', 'var {a, b} = {a:1, b:2}; var [c] = [3]; return a + b + c;');
+syntax('параметры по умолчанию', 'function f(a = 1){ return a; } return f();');
+syntax('for...of', 'for (const x of [1,2]) {}');
+syntax('catch без параметра', 'try { x(); } catch { }');
+syntax('** (степень)', 'return 2 ** 3;');
+syntax('поля класса', 'class A { x = 1; } return new A().x;');
+
+/* ---------- API ---------- */
+has('fetch', function () { return typeof window.fetch === 'function'; });
+has('XMLHttpRequest', function () { return typeof XMLHttpRequest === 'function' || typeof XMLHttpRequest === 'object'; });
+has('Promise', function () { return typeof Promise === 'function'; });
+has('Promise.prototype.finally', function () { return typeof Promise.prototype.finally === 'function'; });
+has('Promise.allSettled', function () { return typeof Promise.allSettled === 'function'; });
+has('Object.assign', function () { return typeof Object.assign === 'function'; });
+has('Object.entries', function () { return typeof Object.entries === 'function'; });
+has('Object.fromEntries', function () { return typeof Object.fromEntries === 'function'; });
+has('Array.prototype.includes', function () { return [1].includes(1); });
+has('Array.from', function () { return typeof Array.from === 'function'; });
+has('String.prototype.padStart', function () { return 'a'.padStart(2) === ' a'; });
+has('Set / Map', function () { return typeof Set === 'function' && typeof Map === 'function'; });
+has('FormData', function () { return typeof FormData === 'function'; });
+has('Blob', function () { return typeof Blob === 'function' && new Blob(['a']).size === 1; });
+has('File', function () { return typeof File === 'function'; });
+has('FileReader', function () { return typeof FileReader === 'function'; });
+has('URL.createObjectURL', function () { return window.URL && typeof URL.createObjectURL === 'function'; });
+has('URLSearchParams', function () { return typeof URLSearchParams === 'function'; });
+has('AbortController', function () { return typeof AbortController === 'function'; });
+has('CustomEvent', function () { return typeof CustomEvent === 'function'; });
+has('Element.closest', function () { return typeof document.body.closest === 'function'; });
+has('classList', function () { return !!document.body.classList; });
+has('dataset', function () { return !!document.body.dataset; });
+has('matchMedia', function () { return typeof window.matchMedia === 'function'; });
+has('requestAnimationFrame', function () { return typeof window.requestAnimationFrame === 'function'; });
+has('MutationObserver', function () { return typeof MutationObserver === 'function'; });
+has('canvas.toBlob', function () { return typeof document.createElement('canvas').toBlob === 'function'; });
+has('sessionStorage', function () { sessionStorage.setItem('t', '1'); return sessionStorage.getItem('t') === '1'; });
+has('Intl ru-RU', function () { return new Date(2026, 0, 2).toLocaleDateString('ru-RU').indexOf('02.01.2026') >= 0; });
+has('Notification API', function () { return typeof window.Notification === 'function'; });
+has('navigator.clipboard', function () { return !!navigator.clipboard; });
+
+/* ---------- CSS ---------- */
+has('CSS flex', function () { return cssSupports('display', 'flex'); });
+has('CSS grid', function () { return cssSupports('display', 'grid'); });
+has('CSS gap для flex', function () { return cssSupports('gap', '8px'); });
+has('CSS переменные', function () { return cssSupports('--x', '1px') || (window.CSS && CSS.supports && CSS.supports('color', 'var(--x)')); });
+has('CSS position: sticky', function () { return cssSupports('position', 'sticky') || cssSupports('position', '-webkit-sticky'); });
+
+/* ---------- localStorage между сеансами ---------- */
+(function () {
+    try {
+        var prev = localStorage.getItem('idf_compat_last');
+        localStorage.setItem('idf_compat_last', new Date().toLocaleString('ru-RU'));
+        row('auto', 'localStorage: запись', true);
+        row('auto', 'localStorage: сохранилось с прошлого открытия', !!prev,
+            prev ? '(записано ' + prev + ')' : '(первое открытие — закройте форму 1С и откройте снова)');
+    } catch (e) {
+        row('auto', 'localStorage', false, e.message);
+    }
+})();
+
+/* ---------- можно ли загрузить клиент мессенджера как есть ---------- */
+(function () {
+    var name = 'Чаты: messenger/client.js разбирается';
+    try {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/pwa/messenger/client.js?t=' + Date.now(), true);
+        xhr.onload = function () {
+            if (xhr.status !== 200) { row('auto', name, false, 'HTTP ' + xhr.status); return; }
+            try {
+                new Function(xhr.responseText);
+                row('auto', name, true);
+            } catch (e) {
+                row('auto', name, false, e && e.message ? e.message : String(e));
+            }
+        };
+        xhr.onerror = function () { row('auto', name, false, 'ошибка сети'); };
+        xhr.send();
+    } catch (e) {
+        row('auto', name, false, e.message);
+    }
+})();
+
+/* ---------- ручные проверки ---------- */
+function tAlert() {
+    try { alert('Проверка alert'); note('alert', 'вызван без ошибки (было ли окно?)'); }
+    catch (e) { note('alert', 'ошибка: ' + e.message); }
+}
+
+function tConfirm() {
+    try { var r = confirm('Нажмите OK'); note('confirm', 'вернул ' + r); }
+    catch (e) { note('confirm', 'ошибка: ' + e.message); }
+}
+
+function tPrompt() {
+    try { var r = prompt('Введите 123', ''); note('prompt', 'вернул ' + JSON.stringify(r)); }
+    catch (e) { note('prompt', 'ошибка: ' + e.message); }
+}
+
+function tDownload() {
+    try {
+        var blob = new Blob(['Проверка скачивания IDF'], { type: 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'idf-test.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        note('Скачивание blob', 'вызвано без ошибки (появилось ли окно сохранения?)');
+    } catch (e) {
+        note('Скачивание blob', 'ошибка: ' + e.message);
+    }
+}
+
+function tOpen() {
+    try {
+        var w = window.open('https://pwa.mealfresh.ru/pwa/idf/embed/compat-test.html?popup=1', '_blank');
+        note('window.open', w ? 'вернул окно (что открылось?)' : 'вернул null');
+    } catch (e) {
+        note('window.open', 'ошибка: ' + e.message);
+    }
+}
+
+function compressImage(file, done) {
+    var reader = new FileReader();
+    reader.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+            var max = 1600;
+            var k = Math.min(1, max / Math.max(img.width, img.height));
+            var c = document.createElement('canvas');
+            c.width = Math.round(img.width * k);
+            c.height = Math.round(img.height * k);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            c.toBlob(function (b) {
+                done(null, img.width + '×' + img.height + ', ' + Math.round(file.size / 1024) +
+                    ' КБ → ' + c.width + '×' + c.height + ', ' + Math.round(b.size / 1024) + ' КБ');
+            }, 'image/jpeg', 0.8);
+        };
+        img.onerror = function () { done('картинка не открылась'); };
+        img.src = reader.result;
+    };
+    reader.onerror = function () { done('FileReader: ошибка'); };
+    reader.readAsDataURL(file);
+}
+
+function tImage(input) {
+    var f = input.files && input.files[0];
+    if (!f) { note('Выбор фото', 'файл не выбран'); return; }
+    compressImage(f, function (err, info) { note('Сжатие фото', err ? 'ошибка: ' + err : info); });
+}
+
+document.getElementById('paste').addEventListener('paste', function (e) {
+    var items = e.clipboardData && e.clipboardData.items;
+    if (!items) { note('Вставка Ctrl+V', 'clipboardData недоступен'); return; }
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') === 0) {
+            var f = items[i].getAsFile();
+            compressImage(f, function (err, info) { note('Вставка картинки Ctrl+V', err ? 'ошибка: ' + err : info); });
+            e.preventDefault();
+            return;
+        }
+    }
+    note('Вставка Ctrl+V', 'в буфере нет картинки (типы: ' + Array.prototype.map.call(items, function (x) { return x.type; }).join(', ') + ')');
+});
+
+var drop = document.getElementById('drop');
+drop.addEventListener('dragover', function (e) { e.preventDefault(); });
+drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    note('Перетаскивание файла', f ? 'получен ' + f.name + ', ' + Math.round(f.size / 1024) + ' КБ' : 'файл не получен');
+});
+
+/* ---------- отправка результатов в лог сервера ---------- */
+function sendResults() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/sw-log', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        document.getElementById('sent').innerHTML = '';
+        document.getElementById('sent').appendChild(document.createTextNode(
+            xhr.status === 200 ? 'Отправлено.' : 'Ошибка HTTP ' + xhr.status));
+    };
+    xhr.onerror = function () { document.getElementById('sent').appendChild(document.createTextNode('Ошибка сети')); };
+    xhr.send(JSON.stringify({ source: 'idf-compat-test', results: results }));
+}
+</script>
+</body>
+</html>

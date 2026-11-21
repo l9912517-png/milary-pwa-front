@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка входа из 1С</title>
+<style>
+    body { font-family: Arial, sans-serif; font-size: 14px; margin: 12px; background: #f4f6f8; color: #111; }
+    h2 { margin: 0 0 12px 0; font-size: 18px; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    td { border: 1px solid #dbe2ea; padding: 6px 8px; vertical-align: top; }
+    td.name { width: 40%; color: #374151; }
+    .ok { color: #166534; font-weight: bold; }
+    .bad { color: #991b1b; font-weight: bold; }
+    .info { color: #1d4ed8; }
+</style>
+</head>
+<body>
+
+<h2>Проверка входа из 1С</h2>
+<table><tbody id="rows"></tbody></table>
+
+<script>
+/* fetch в поле HTML 1С нет — делаем свою обёртку над XMLHttpRequest */
+
+let jwtToken = null;   // держим только в памяти страницы
+
+function api(method, url, body) {
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        if (jwtToken) {
+            xhr.setRequestHeader("Authorization", "Bearer " + jwtToken);
+        }
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== 4) return;
+            let data = null;
+            try { data = JSON.parse(xhr.responseText); } catch (e) {}
+            resolve({ status: xhr.status, data });
+        };
+        xhr.send(body ? JSON.stringify(body) : null);
+    });
+}
+
+function row(name, value, cls) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="name"></td><td class="${cls || "info"}"></td>`;
+    tr.children[0].textContent = name;
+    tr.children[1].textContent = String(value);
+    document.getElementById("rows").appendChild(tr);
+}
+
+async function run() {
+
+    const code = new URLSearchParams(location.search).get("code");
+
+    if (!code) {
+        row("Код входа", "в адресе нет ?code=...", "bad");
+        return;
+    }
+
+    row("Код входа", code.slice(0, 8) + "…");
+
+    // 1. Обмен одноразового кода на JWT
+    const ex = await api("POST", "/api/embed/exchange", { code });
+
+    if (ex.status !== 200 || !ex.data || !ex.data.jwt) {
+        row("Обмен кода на токен", "ошибка, статус " + ex.status, "bad");
+        return;
+    }
+
+    jwtToken = ex.data.jwt;
+    row("Обмен кода на токен", "успешно", "ok");
+    row("Пользователь", ex.data.user.name, "ok");
+    row("Роль", ex.data.user.role, "ok");
+
+    // 2. Убираем код из адресной строки
+    history.replaceState(null, "", location.pathname);
+
+    // 3. Запрос к защищённому API уже с токеном
+    const msg = await api("GET", "/api/messages?t=" + Date.now());
+
+    if (msg.status === 200) {
+        row("Запрос к API с токеном", "работает", "ok");
+        row("Непрочитанных сообщений", msg.data.unread);
+    } else {
+        row("Запрос к API с токеном", "ошибка, статус " + msg.status, "bad");
+    }
+
+    // 4. Повторное использование кода должно быть запрещено
+    const again = await api("POST", "/api/embed/exchange", { code });
+
+    if (again.status === 401) {
+        row("Повторный вход по тому же коду", "запрещён (так и должно быть)", "ok");
+    } else {
+        row("Повторный вход по тому же коду", "РАЗРЕШЁН — это ошибка, статус " + again.status, "bad");
+    }
+}
+
+run();
+</script>
+
+</body>
+</html>

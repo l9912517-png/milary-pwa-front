@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка встраивания в 1С</title>
+<style>
+    body { font-family: Arial, sans-serif; font-size: 14px; margin: 12px; background: #f4f6f8; color: #111; }
+    h2 { margin: 0 0 12px 0; font-size: 18px; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    td { border: 1px solid #dbe2ea; padding: 6px 8px; vertical-align: top; }
+    td.name { width: 40%; color: #374151; }
+    .ok { color: #166534; font-weight: bold; }
+    .bad { color: #991b1b; font-weight: bold; }
+    .info { color: #1d4ed8; }
+    .block { background: #fff; border: 1px solid #dbe2ea; padding: 10px; margin-top: 12px; }
+    textarea { width: 100%; height: 160px; font-family: Consolas, monospace; font-size: 12px; box-sizing: border-box; }
+    a.test { display: inline-block; padding: 8px 12px; background: #2563eb; color: #fff; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<h2>Проверка поля HTML в 1С</h2>
+
+<table id="results"><tbody id="rows"></tbody></table>
+
+<div class="block">
+    <b>Проверка перехвата ссылок 1С</b><br><br>
+    <a class="test" href="v8:РеализацияТоваровУслуг/00000000-0000-0000-0000-000000000000">Нажми меня (ссылка v8:)</a>
+    <br><br>
+    Если 1С покажет сообщение с текстом ссылки — перехват работает.
+</div>
+
+<div class="block">
+    <b>Результат для отправки</b> (выделить всё, Ctrl+C):<br>
+    <textarea id="report" readonly></textarea>
+</div>
+
+<script>
+/* Весь код намеренно на ES5, чтобы отработать даже в старом движке IE */
+
+var lines = [];
+
+function addRow(name, value, cls) {
+    var tbody = document.getElementById("rows");
+    var tr = document.createElement("tr");
+    var td1 = document.createElement("td");
+    var td2 = document.createElement("td");
+    td1.className = "name";
+    td1.appendChild(document.createTextNode(name));
+    td2.className = cls || "info";
+    td2.appendChild(document.createTextNode(String(value)));
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+    lines.push(name + ": " + value);
+    document.getElementById("report").value = lines.join("\n");
+}
+
+function yesNo(name, flag) {
+    addRow(name, flag ? "ДА" : "НЕТ", flag ? "ok" : "bad");
+}
+
+function canCompile(code) {
+    try {
+        new Function(code);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+/* ===== ДВИЖОК ===== */
+
+var ua = navigator.userAgent || "";
+addRow("User-Agent", ua);
+
+var engine = "неизвестно";
+if (ua.indexOf("Trident") >= 0 || ua.indexOf("MSIE") >= 0) {
+    engine = "Internet Explorer (Trident)";
+} else if (ua.indexOf("Edg/") >= 0) {
+    engine = "Edge (Chromium)";
+} else if (ua.indexOf("Chrome") >= 0) {
+    engine = "Chromium";
+} else if (ua.indexOf("AppleWebKit") >= 0) {
+    engine = "WebKit";
+}
+addRow("Движок", engine, engine.indexOf("Internet Explorer") === 0 ? "bad" : "ok");
+
+if (document.documentMode) {
+    addRow("Режим документа IE", document.documentMode, document.documentMode >= 11 ? "ok" : "bad");
+}
+
+/* ===== ЯЗЫК JS ===== */
+
+yesNo("Стрелочные функции (ES6)", canCompile("var f = () => 1;"));
+yesNo("let / const", canCompile("let a = 1; const b = 2;"));
+yesNo("Шаблонные строки", canCompile("var s = `x${1}`;"));
+yesNo("Классы", canCompile("class A {}"));
+yesNo("async / await", canCompile("async function f(){ await 1; }"));
+yesNo("Promise", typeof window.Promise !== "undefined");
+yesNo("fetch", typeof window.fetch !== "undefined");
+
+/* ===== ХРАНИЛИЩЕ И ФАЙЛЫ ===== */
+
+var ls = false;
+try {
+    window.localStorage.setItem("embed_test", "1");
+    ls = window.localStorage.getItem("embed_test") === "1";
+    window.localStorage.removeItem("embed_test");
+} catch (e) {
+    ls = false;
+}
+yesNo("localStorage", ls);
+
+yesNo("FileReader (чтение файлов)", typeof window.FileReader !== "undefined");
+yesNo("FormData (загрузка файлов)", typeof window.FormData !== "undefined");
+
+var cnv = document.createElement("canvas");
+yesNo("canvas", !!(cnv && cnv.getContext));
+yesNo("canvas.toBlob (сжатие фото)", !!(cnv && cnv.toBlob));
+if (cnv && cnv.msToBlob) {
+    addRow("canvas.msToBlob (вариант IE)", "ДА", "ok");
+}
+
+addRow("Размер окна", (window.innerWidth || document.documentElement.clientWidth) + " x " +
+    (window.innerHeight || document.documentElement.clientHeight));
+
+/* ===== СЕТЬ: запрос к API ===== */
+/* Без токена сервер должен ответить 401 — это значит, что запросы из поля доходят до API */
+
+try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/messages?t=" + new Date().getTime(), true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 401) {
+            addRow("Запрос к API (/api/messages)", "работает (ответ 401, как и ожидалось без токена)", "ok");
+        } else if (xhr.status === 0) {
+            addRow("Запрос к API (/api/messages)", "НЕ дошёл (статус 0 — блокировка или сеть)", "bad");
+        } else {
+            addRow("Запрос к API (/api/messages)", "ответ " + xhr.status, "info");
+        }
+        addRow("Итог", "проверка завершена");
+    };
+    xhr.send(null);
+} catch (e) {
+    addRow("Запрос к API (/api/messages)", "ошибка: " + e.message, "bad");
+}
+</script>
+
+</body>
+</html>

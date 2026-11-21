@@ -1,0 +1,70 @@
+/* Рабочее место офис-менеджера в 1С: широкое окно, мышь. В браузере 1С нет CSS gap у flex —
+   отступы заданы полями. Цвета текста заданы явно. */
+
+html, body { margin: 0; padding: 0; background: #f4f6f8; color: #182018; font-family: Arial, Helvetica, sans-serif; font-size: 13px; }
+#dv-shell { padding: 8px 12px 16px; box-sizing: border-box; }
+#dv-head { margin-bottom: 8px; overflow: hidden; }
+#dv-title { font-size: 16px; font-weight: 700; color: #182018; }
+#dv-user { float: right; color: #667066; }
+
+.dv-empty { padding: 24px; text-align: center; color: #667066; }
+.dv-empty.dv-bad { color: #b00020; }
+
+button { border: none; padding: 7px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; background: #2f6f2b; color: #ffffff; }
+button[disabled] { opacity: .55; cursor: default; }
+.dv-btn-sec { background: #ffffff; color: #344034; border: 1px solid #cfd8cf; }
+.dv-btn-link { background: #1565c0; color: #ffffff; }
+
+.dv-search { background: #ffffff; border: 1px solid #dfe5df; border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+.dv-search-row { overflow: hidden; }
+.dv-search-row input { box-sizing: border-box; width: 70%; padding: 8px 10px; font-size: 14px; border: 1px solid #bbbbbb; border-radius: 8px; background: #ffffff; color: #182018; float: left; margin-right: 8px; }
+.dv-search-row button { float: left; padding: 8px 14px; }
+.dv-chips { margin-top: 8px; }
+.dv-chip { display: inline-block; margin: 0 6px 4px 0; padding: 5px 10px; border-radius: 14px; border: 1px solid #cfd8cf; background: #ffffff; color: #344034; font-size: 12px; cursor: pointer; }
+.dv-chip.on { background: #2f6f2b; color: #ffffff; border-color: #2f6f2b; }
+.dv-hint { margin-top: 6px; color: #667066; font-size: 12px; }
+
+.dv-card { background: #ffffff; border: 1px solid #dfe5df; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(22, 38, 22, .06); cursor: pointer; }
+.dv-card.open { border-color: #2f6f2b; }
+.dv-card-top { overflow: hidden; }
+.dv-name { font-size: 14px; font-weight: 700; color: #182018; float: left; max-width: 65%; }
+.dv-badge { float: right; padding: 3px 9px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #ffffff; }
+.dv-st-active { background: #2e7d32; }
+.dv-st-contract_request { background: #ef6c00; }
+.dv-st-converted { background: #1565c0; }
+.dv-st-closed { background: #757575; }
+.dv-st-expired { background: #8d6e63; }
+.dv-line { clear: both; margin-top: 4px; color: #344034; }
+.dv-line b { color: #182018; }
+.dv-muted { color: #667066; }
+
+.dv-details { margin-top: 8px; padding-top: 8px; border-top: 1px solid #e4e9e4; cursor: default; }
+.dv-details .dv-row { margin-bottom: 3px; color: #344034; }
+.dv-details .dv-row span { color: #667066; display: inline-block; min-width: 150px; }
+.dv-hist { margin-top: 8px; }
+.dv-hist-title { font-weight: 700; margin-bottom: 4px; color: #182018; }
+.dv-hist-item { padding: 3px 0; color: #344034; border-bottom: 1px dotted #e4e9e4; }
+.dv-actions { margin-top: 10px; }
+
+.dv-linked { margin-top: 6px; padding: 6px 8px; border-radius: 8px; background: #e3f0fb; color: #0d47a1; }
+
+/* модальное окно */
+#dv-modal-back { position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .45); z-index: 1000; }
+#dv-modal { position: fixed; left: 50%; top: 5%; margin-left: -320px; width: 640px; max-width: 96%; max-height: 88%; overflow: auto; box-sizing: border-box; background: #ffffff; color: #182018; border-radius: 12px; padding: 14px 16px; z-index: 1001; }
+#dv-modal h3 { margin: 0 0 4px; font-size: 15px; color: #182018; }
+.dv-modal-sub { color: #667066; margin-bottom: 8px; }
+.dv-modal-search { overflow: hidden; margin-bottom: 8px; }
+.dv-modal-search input { box-sizing: border-box; width: 72%; padding: 8px 10px; font-size: 14px; border: 1px solid #bbbbbb; border-radius: 8px; background: #ffffff; color: #182018; float: left; margin-right: 8px; }
+.dv-pick { border: 1px solid #d0d0d0; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa; }
+.dv-pick b { color: #182018; }
+.dv-warn { color: #b00020; font-weight: 700; margin-top: 4px; }
+.dv-confirm { margin-top: 10px; padding: 10px; border-radius: 10px; background: #fff7e0; color: #5a4300; border: 1px solid #f0d98a; }
+.dv-confirm button { margin-right: 8px; margin-top: 8px; }
+
+#dv-toast { position: fixed; left: 50%; bottom: 20px; margin-left: -160px; width: 320px; text-align: center; padding: 10px 14px; border-radius: 10px; background: #2e7d32; color: #ffffff; z-index: 1100; box-sizing: border-box; }
+#dv-toast.bad { background: #b00020; }
+#dv-error { position: fixed; left: 0; right: 0; bottom: 0; background: #b00020; color: #ffffff; padding: 6px 10px; z-index: 1200; }
+
+.dv-section { margin: 14px 0 6px; font-size: 13px; font-weight: 700; color: #344034; }
+.dv-card.dv-cp { cursor: default; border-left: 4px solid #1565c0; }
+.dv-st-cp { background: #455a64; }

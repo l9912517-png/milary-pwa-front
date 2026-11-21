@@ -1,0 +1,3025 @@
+:root{
+--primary:#33691e;
+--bg:#f0f4c3;
+--card:#ffffff;
+--text:#222;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow-x:hidden;
+}
+
+/* ================= TOP BAR ================= */
+
+.top-bar {
+
+position: fixed;
+
+top: 0;
+
+left: 0;
+
+width: 100%;
+
+height: 48px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+background:#f0f4c3;
+
+padding:0 12px;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+
+z-index:1000;
+
+}
+
+.user-name {
+
+font-weight:600;
+
+font-size:14px;
+
+color:#333;
+
+}
+
+.top-bar-actions{
+display:flex;
+gap:8px;
+}
+
+.hidden{
+display:none;
+}
+
+/* ================= HEADER ================= */
+
+.app-header {
+
+position: fixed;
+
+top: 48px;
+
+left: 0;
+
+width: 100%;
+
+height: 64px;
+
+background:#33691e;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+box-shadow:0 2px 10px rgba(0,0,0,0.15);
+
+z-index:999;
+
+}
+
+/* ??????? ?????? */
+
+.header-content{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+/* ??????? */
+
+.logo-img{
+
+width:28px;
+
+height:28px;
+
+object-fit:contain;
+
+}
+
+/* ????????? */
+
+.app-header h1{
+
+font-size:17px;
+
+font-weight:600;
+
+color:white;
+
+letter-spacing:0.3px;
+
+}
+
+
+
+/* ================= MAIN ================= */
+
+main{
+
+padding:140px 12px 90px 12px;
+
+max-width:600px;
+
+margin:auto;
+
+width:100%;
+}
+
+/* ================= MENU ================= */
+
+.menu-grid{
+
+max-width:500px;
+
+margin:0 auto;
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+}
+
+/* ???????? ?????? */
+
+.menu-item{
+
+background:#fffdf2;
+
+border-radius:14px;
+
+padding:16px 18px;
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+font-size:16px;
+
+font-weight:500;
+
+box-shadow:0 3px 8px rgba(0,0,0,0.08);
+
+cursor:pointer;
+
+transition:all 0.15s ease;
+
+}
+
+/* ?????? */
+
+.menu-item .icon{
+
+font-size:22px;
+
+width:28px;
+
+text-align:center;
+
+}
+
+/* ??????? ?????? */
+
+.menu-item::after{
+
+content:"";
+
+margin-left:auto;
+
+width:10px;
+
+height:10px;
+
+border-right:2px solid #777;
+
+border-top:2px solid #777;
+
+transform:rotate(45deg);
+
+}
+
+/* hover */
+
+.menu-item:hover{
+
+background:#f7f5e6;
+
+}
+
+/* ??????? */
+
+.menu-item:active{
+
+transform:scale(0.98);
+
+}
+
+/* ================= BUTTONS ================= */
+
+button{
+
+background:var(--primary);
+
+border:none;
+
+color:white;
+
+padding:7px 12px;
+
+border-radius:8px;
+
+font-size:13px;
+
+cursor:pointer;
+
+transition:.15s;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.btn-secondary{
+
+background:#e0e0e0;
+
+color:black;
+}
+
+/* ================= REPORT TABLE ================= */
+
+.report-table{
+
+margin-top:10px;
+
+background:white;
+
+border-radius:10px;
+
+overflow:hidden;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.report-head{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:8px;
+
+background:#e8f5e9;
+
+font-weight:600;
+
+font-size:13px;
+}
+
+.report-row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:8px;
+
+border-bottom:1px solid #eee;
+
+font-size:13px;
+}
+
+.report-row.manager{
+
+background:#f4fbe9;
+
+font-weight:700;
+}
+
+.report-row.child{
+
+padding-left:18px;
+}
+
+.report-sum{
+
+min-width:80px;
+
+text-align:right;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+width:100%;
+
+height:64px;
+
+background:var(--primary);
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+z-index:1000;
+}
+
+.bottom-btn{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+gap:3px;
+
+width:33%;
+
+font-size:11px;
+
+color:#e8f5e9;
+
+background:none;
+
+border:none;
+
+transition:.15s;
+}
+
+.bottom-btn:active{
+transform:scale(.9);
+}
+
+.bottom-btn svg{
+
+width:22px;
+
+height:22px;
+
+stroke:#e8f5e9;
+}
+
+/* ================= ACTIVE BUTTON ================= */
+
+.bottom-btn.active{
+
+color:white;
+
+font-weight:600;
+}
+
+.bottom-btn.active svg{
+
+stroke:white;
+}
+
+/* ================= BADGE ================= */
+
+.badge{
+
+position:absolute;
+
+top:10px;
+
+right:32%;
+
+background:#ff3b30;
+
+color:white;
+
+font-size:10px;
+
+border-radius:10px;
+
+padding:2px 5px;
+
+font-weight:600;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.4);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+z-index:2000;
+}
+
+.modal-window{
+
+background:white;
+
+border-radius:12px;
+
+padding:18px;
+
+width:92%;
+max-width:420px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-window input,
+.modal-window select{
+
+padding:10px;
+
+border-radius:8px;
+
+border:1px solid #ccc;
+
+font-size:14px;
+}
+
+/* ================= PERIOD BUTTONS ================= */
+
+.period-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.period-btn {
+    flex: 1;
+
+    background: #ffffff;          /* ?????? ??? */
+    color: #333333;               /* ???????? ????? */
+
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+
+    padding: 8px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+/* hover (??? ??) */
+.period-btn:hover {
+    background: #f5f5f5;
+}
+
+/* ???????? ?????? */
+.period-btn.active {
+    background: #33691e;          /* ???? ???????? ??????? */
+    color: #ffffff;
+    border-color: #33691e;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ??????? */
+.period-btn:active {
+    transform: scale(0.96);
+}
+
+/* ================= ICON FIX (????????? ????) ================= */
+
+.menu-item .icon {
+    width: 28px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== BADGE FIX (?????? ?????????) ===== */
+
+.icon-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.icon-wrapper .nav-svg {
+    width: 24px;
+    height: 24px;
+}
+
+.badge {
+    position: absolute;
+
+    top: -6px;
+    right: -8px;
+
+    min-width: 18px;
+    height: 18px;
+
+    padding: 0 5px;
+
+    background: #ff3b30;
+    color: white;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    border-radius: 10px;
+
+    display: none; /* ?? ???? flex */
+    align-items: center;
+    justify-content: center;
+}
+
+.badge:not(.hidden) {
+    display: flex;
+}
+
+/* ===== ORDERS ===== */
+
+.order-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+}
+
+.order-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.order-row .label {
+    color: #777;
+}
+
+.order-row .value {
+    font-weight: 600;
+    text-align: right;
+}
+
+/* ===== ?????? ===== */
+
+.order-line {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid #4CAF50;
+}
+
+.order-line-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.order-line-row .label {
+    color: #888;
+}
+
+.order-line-row .value {
+    font-weight: 500;
+    text-align: right;
+}
+
+/* ===== REAL TABLE (ORDERS) ===== */
+
+.table-scroll {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-scroll > .table-grid {
+    min-width: max-content;
+}
+.table-scroll {
+    background: white;
+    border-radius: 10px;
+}
+
+.table-grid {
+    display: grid;
+    background: transparent;
+    grid-template-columns:
+        200px  /* ????? */
+        80px   /* ???????? */
+        60px   /* ?? */
+        80px   /* ???? */
+        180px  /* ??????????? */
+        70px   /* ???-?? */
+        60px   /* ?? */
+        100px; /* ????? */
+
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+.table-head {
+    background: #e8f5e9;
+    font-weight: 600;
+}
+
+.table-grid div {
+    padding: 8px;
+    font-size: 13px;
+    border-right: 1px solid #eee;
+
+    white-space: normal;
+    word-break: break-word;
+}
+
+.table-grid div:last-child {
+    border-right: none;
+}
+
+/* ===== RATING ===== */
+
+.rating-block {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+}
+
+.rating-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #33691e;
+}
+
+.rating-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 70px;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+
+    font-size: 14px;
+}
+
+.rating-row:last-child {
+    border-bottom: none;
+}
+
+.rating-pos {
+    font-weight: 700;
+    text-align: center;
+}
+
+.rating-name {
+    font-weight: 500;
+}
+
+.rating-value {
+    text-align: right;
+    font-weight: 600;
+}
+
+/* ===== ??? 3 ===== */
+
+.rating-row.top {
+    border-radius: 10px;
+    margin-bottom: 6px;
+}
+
+.rating-row.top:nth-child(2) {
+    background: linear-gradient(90deg, #fff8e1, #ffecb3);
+}
+
+.rating-row.top:nth-child(3) {
+    background: linear-gradient(90deg, #eceff1, #cfd8dc);
+}
+
+.rating-row.top:nth-child(4) {
+    background: linear-gradient(90deg, #fff3e0, #ffe0b2);
+}
+
+/* ===== ???? ????????? ===== */
+
+..report-row.manager-total {
+    font-weight: 600;
+    background: #eef2f7;     /* ???????? ????-??????? */
+    border-top: 1px solid #d0d7de;
+}
+/* ????? ???? ??????? ???????? ????? */
+.report-row.manager-total {
+    font-weight: 600;        /* ???? 800 */
+    background: #f1f3f5;     /* ?????? ????? ?????? ???????? */
+    font-size: 13px;         /* ???? ?????? ?????? */
+}
+
+#settingsBtn {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 6px 10px;
+}
+#settingsBtn {
+    margin-left: auto; /* ?? ???????? */
+    cursor: pointer;
+    font-size: 18px;
+    padding: 6px 10px;
+}
+
+#menuSettingsBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    padding: 6px 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+#menuSettingsBtn:hover {
+    opacity: 1;
+}
+
+.menu-grid {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.btn-top {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 16px;
+    margin-left: 6px;
+}
+
+.btn-top:active {
+    opacity: 0.8;
+}
+
+.top-icon-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-icon-btn svg {
+    width: 22px;
+    height: 22px;
+
+    stroke: #2e7d32; /* ???? ??????? */
+}
+
+.top-icon-btn:active {
+    opacity: 0.6;
+}
+
+.top-icon-btn:active {
+    opacity: 0.6;
+}
+
+/* ?? ? ????????? ??? ???? */
+.top-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+/* ?? PWA / ????????? */
+@media (max-width: 768px) {
+    .top-btn {
+        padding: 4px 6px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .top-btn .btn-icon {
+        font-size: 13px;
+        margin-right: 3px;
+    }
+}
+
+.top-bar-actions .top-btn {
+    width: auto;
+    flex: none;
+}
+.top-bar-actions .top-btn {
+    width: auto;
+    flex: none;
+    padding: 4px 8px;
+    font-size: 13px;
+}
+.top-bar-actions {
+    gap: 6px;
+}
+/* ===== FIX TOP BAR BUTTONS ===== */
+
+.top-bar-actions button {
+    height: 28px !important;
+    padding: 2px 6px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+}
+
+.order-details {
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 12px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+}
+
+.preview {
+    width: 100%;
+    height: 80px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.file-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex: 1;
+    overflow: hidden;
+}
+
+.file-name {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.open {
+    background: #ddd;
+    color: #000;
+}
+
+.download {
+    background: #007bff;
+    color: #fff;
+}
+
+.file-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 12px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.file-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.icon {
+    font-size: 22px;
+}
+
+.file-name {
+    font-size: 14px;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.open {
+    background: #e0e0e0;
+    color: #000;
+}
+
+.download {
+    background: #1976d2;
+    color: #fff;
+}
+
+
+/* =========================================================
+   DEVELOPMENTS CONTROL SCREEN
+   Scoped only to developments_control.
+   ========================================================= */
+
+.developments-control-page {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.developments-control-page > .page {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.developments-control-page .page-header {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.developments-control-page .page-header h1 {
+    margin: 8px 0 0;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.developments-control-page .back-button {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+}
+
+.developments-control-page .menu-list {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.developments-control-page .development-manager-block {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 0 18px !important;
+    box-sizing: border-box !important;
+}
+
+.developments-control-page .development-manager-header {
+    display: flex;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 15px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.developments-control-page .development-manager-main {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.developments-control-page .development-manager-name {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.developments-control-page .development-manager-meta {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.developments-control-page .development-manager-content {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-status-group {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 0 9px !important;
+    box-sizing: border-box !important;
+}
+
+.developments-control-page .development-status-group-header {
+    display: flex;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 50px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-status-group-content {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-control-card {
+    position: relative;
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin: 0 0 9px !important;
+}
+
+.developments-control-page .development-control-title {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-control-row {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-control-row strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.developments-control-page .development-control-details {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-control-actions {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.developments-control-page .development-extend-button {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    main:has(.developments-control-page) {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .developments-control-page .page-header h1 {
+        font-size: 30px;
+    }
+
+    .developments-control-page .development-manager-header {
+        min-height: 68px;
+        padding: 13px 14px;
+    }
+
+    .developments-control-page .development-manager-name {
+        font-size: 18px;
+    }
+
+    .developments-control-page .development-manager-meta {
+        font-size: 12px;
+    }
+
+    .developments-control-page .development-status-group-header {
+        min-height: 50px;
+        padding: 10px 13px;
+    }
+
+    .developments-control-page .development-control-card {
+        padding: 14px 42px 14px 15px;
+    }
+}
+
+/* =========================================================
+   MEALFRESH — VISUAL REDESIGN V2
+   Focus: contrast, hierarchy, separation and readability.
+   Business logic untouched.
+   ========================================================= */
+
+:root{
+    --primary:#2f6f2b;
+    --primary-dark:#245922;
+    --primary-soft:#eaf3e8;
+    --bg:#f5f3df;
+    --surface:#ffffff;
+    --surface-muted:#faf9ef;
+    --text:#182018;
+    --text-secondary:#667066;
+    --border:#dfe5df;
+    --border-strong:#cfd8cf;
+    --shadow:0 2px 8px rgba(22,38,22,.07);
+    --shadow-hover:0 6px 16px rgba(22,38,22,.11);
+    --radius:14px;
+}
+
+html{
+    background:var(--bg);
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+}
+
+/* ---------- TOP BAR ---------- */
+.top-bar{
+    height:50px;
+    background:#ffffff;
+    border-bottom:1px solid var(--border);
+    box-shadow:0 1px 4px rgba(20,35,20,.05);
+    padding:0 14px;
+}
+
+.user-name{
+    color:var(--text);
+    font-size:14px;
+    font-weight:650;
+}
+
+.top-bar-actions{
+    gap:6px;
+}
+
+.top-bar-actions button,
+.top-bar-actions .top-btn{
+    background:#fff;
+    color:#405040;
+    border:1px solid var(--border);
+    box-shadow:none;
+}
+
+.top-bar-actions button:hover,
+.top-bar-actions .top-btn:hover{
+    background:var(--surface-muted);
+    opacity:1;
+}
+
+/* ---------- GREEN BRAND HEADER ---------- */
+.app-header{
+    top:50px;
+    height:62px;
+    background:var(--primary);
+    box-shadow:0 2px 8px rgba(20,45,20,.18);
+}
+
+.app-header h1{
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:.4px;
+}
+
+/* ---------- MAIN ---------- */
+main{
+    padding:132px 14px 94px;
+    max-width:640px;
+}
+
+/* ---------- MENU ---------- */
+.menu-grid{
+    max-width:560px;
+    gap:10px;
+}
+
+.menu-item{
+    position:relative;
+    min-height:66px;
+    padding:12px 14px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    color:var(--text);
+    gap:13px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.menu-item:hover{
+    background:#fff;
+    border-color:var(--border-strong);
+    box-shadow:var(--shadow-hover);
+    transform:translateY(-1px);
+}
+
+.menu-item:active{
+    transform:translateY(0) scale(.99);
+    box-shadow:var(--shadow);
+}
+
+.menu-item .icon{
+    flex:0 0 40px;
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    background:var(--primary-soft);
+    color:var(--primary-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.menu-item::after{
+    width:8px;
+    height:8px;
+    border-right:2px solid #9aa39a;
+    border-top:2px solid #9aa39a;
+    margin-left:auto;
+}
+
+/* ---------- BUTTONS ---------- */
+button,
+.btn{
+    border-radius:10px;
+    font-weight:600;
+}
+
+button{
+    background:var(--primary);
+    box-shadow:none;
+}
+
+button:hover{
+    background:var(--primary-dark);
+    opacity:1;
+}
+
+.btn-secondary{
+    background:#fff;
+    color:#344034;
+    border:1px solid var(--border-strong);
+}
+
+.btn-secondary:hover{
+    background:var(--surface-muted);
+}
+
+/* ---------- PERIOD / FILTER CONTROLS ---------- */
+.period-buttons{
+    gap:7px;
+}
+
+.period-btn{
+    background:#fff;
+    color:#465046;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.period-btn:hover{
+    background:var(--surface-muted);
+}
+
+.period-btn.active{
+    background:var(--primary);
+    color:#fff;
+    border-color:var(--primary);
+    box-shadow:0 2px 5px rgba(47,111,43,.18);
+}
+
+/* ---------- REPORTS ---------- */
+.report-table,
+.table-scroll,
+.order-card,
+.rating-block{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+}
+
+.report-table{
+    overflow:hidden;
+}
+
+.report-head{
+    background:#f1f4e8;
+    color:#253225;
+    border-bottom:1px solid var(--border);
+    padding:10px;
+}
+
+.report-row{
+    background:#fff;
+    border-bottom:1px solid #edf0ed;
+    color:#263026;
+    padding:9px 10px;
+}
+
+.report-row.manager{
+    background:#f6f7ef;
+}
+
+.report-row.manager-total{
+    background:#eaf3e8;
+}
+
+/* ---------- ORDERS / CONTENT CARDS ---------- */
+.order-card{
+    padding:14px;
+    margin-bottom:10px;
+}
+
+.order-row .label{
+    color:var(--text-secondary);
+}
+
+.order-row .value{
+    color:var(--text);
+}
+
+.order-line{
+    background:#fff;
+    border:1px solid var(--border);
+    border-left:4px solid #4d9148;
+    box-shadow:0 1px 4px rgba(22,38,22,.04);
+}
+
+/* ---------- TABLES ---------- */
+.table-scroll{
+    overflow:auto;
+}
+
+.table-grid{
+    background:#fff;
+}
+
+.table-head{
+    background:#f1f4e8;
+    color:#253225;
+    border-bottom:1px solid var(--border);
+}
+
+.table-grid div{
+    border-bottom:1px solid #edf0ed;
+}
+
+/* ---------- RATING ---------- */
+.rating-block{
+    padding:12px;
+}
+
+.rating-title{
+    color:var(--text);
+}
+
+.rating-row{
+    border-bottom:1px solid #edf0ed;
+}
+
+.rating-row.top{
+    background:#f6f7ef;
+}
+
+.rating-name{
+    color:var(--text);
+}
+
+.rating-value{
+    color:var(--primary-dark);
+    font-weight:700;
+}
+
+/* ---------- MODALS ---------- */
+.modal-overlay{
+    background:rgba(16,24,16,.48);
+    backdrop-filter:blur(2px);
+}
+
+.modal-window{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 18px 45px rgba(10,20,10,.22);
+    padding:20px;
+}
+
+.modal-window input,
+.modal-window select,
+.modal-window textarea{
+    background:#fff;
+    color:var(--text);
+    border:1px solid var(--border-strong);
+    border-radius:10px;
+    outline:none;
+}
+
+.modal-window input:focus,
+.modal-window select:focus,
+.modal-window textarea:focus{
+    border-color:#6d9c69;
+    box-shadow:0 0 0 3px rgba(47,111,43,.11);
+}
+
+/* ---------- BOTTOM NAV ---------- */
+.bottom-nav{
+    height:66px;
+    background:#ffffff;
+    border-top:1px solid var(--border);
+    box-shadow:0 -3px 12px rgba(20,35,20,.08);
+    padding-bottom:env(safe-area-inset-bottom);
+}
+
+.bottom-btn{
+    color:#707970;
+    background:transparent;
+    font-weight:500;
+}
+
+.bottom-btn svg{
+    stroke:#707970;
+}
+
+.bottom-btn.active{
+    color:var(--primary);
+    font-weight:700;
+}
+
+.bottom-btn.active svg{
+    stroke:var(--primary);
+}
+
+.bottom-btn:hover{
+    background:#f5f7f4;
+}
+
+/* ---------- BADGE ---------- */
+.badge{
+    background:#d93636;
+    box-shadow:0 0 0 2px #fff;
+}
+
+/* ---------- FOCUS ---------- */
+button:focus-visible,
+.menu-item:focus-visible,
+.bottom-btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+    outline:3px solid rgba(47,111,43,.20);
+    outline-offset:2px;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width:600px){
+    main{
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    .menu-grid{
+        gap:9px;
+    }
+
+    .menu-item{
+        min-height:64px;
+        padding:11px 13px;
+    }
+}
+
+@media (min-width:700px){
+    main{
+        max-width:760px;
+    }
+}
+.brand-title {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.brand-meal {
+    color: #ffffff;
+}
+
+.brand-fresh {
+    color: #b8ef38;
+}
+
+/* =========================================================
+   MEALFRESH — GREEN / YELLOW PALETTE
+   ========================================================= */
+
+:root {
+    --primary: #33691e;
+    --primary-dark: #245b18;
+    --primary-soft: #eaf3e8;
+    --bg: #f0f4c3;
+    --surface: #fffdf2;
+}
+
+/* Основной фон */
+html,
+body {
+    background: #f0f4c3;
+}
+
+/* Верхняя панель */
+.top-bar {
+    background: #f0f4c3;
+}
+
+/* Зелёный брендовый header */
+.app-header {
+    background: #33691e;
+}
+
+/* Карточки меню */
+.menu-item {
+    background: #fffdf2;
+}
+
+.menu-item:hover {
+    background: #f7f5e6;
+}
+
+/* Нижняя навигация */
+.bottom-nav {
+    background: #33691e;
+    border-top: none;
+    box-shadow: 0 -3px 12px rgba(20,35,20,.15);
+}
+
+/* Кнопки нижней навигации */
+.bottom-btn {
+    color: #e8f5e9;
+    background: transparent;
+}
+
+.bottom-btn svg {
+    stroke: #e8f5e9;
+}
+
+/* Активная кнопка */
+.bottom-btn.active {
+    color: #ffffff;
+}
+
+.bottom-btn.active svg {
+    stroke: #ffffff;
+}
+
+/* Hover нижней навигации */
+.bottom-btn:hover {
+    background: rgba(255,255,255,.08);
+}
+
+/* Центральная кнопка меню */
+.bottom-btn:nth-child(2) {
+    background: #f3f5ef;
+    color: #33691e;
+    border-radius: 10px;
+}
+
+.bottom-btn:nth-child(2) svg {
+    stroke: #33691e;
+}
+
+/* =========================================================
+   MEALFRESH — ОКРУГЛЕННЫЕ ЗЕЛЕНЫЕ БАРЫ
+   ========================================================= */
+
+/* ---------- ВЕРХНИЙ БАР ---------- */
+
+.app-header {
+    position: fixed;
+
+    top: 50px;
+    left: 12px;
+
+    width: calc(100% - 24px);
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Зеленый градиент */
+    background: linear-gradient(
+        135deg,
+        #4caf20 0%,
+        #398d1d 45%,
+        #245f17 100%
+    );
+
+    /* Полностью округленные углы */
+    border-radius: 22px;
+
+    /* Тень */
+    box-shadow:
+        0 5px 16px rgba(35, 90, 25, 0.25);
+
+    z-index: 999;
+}
+
+
+/* ---------- НИЖНИЙ БАР ---------- */
+
+.bottom-nav {
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 66px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    /* Зеленый градиент */
+    background: linear-gradient(
+        135deg,
+        #4caf20 0%,
+        #398d1d 45%,
+        #245f17 100%
+    );
+
+    /* Только верхние углы */
+    border-radius: 22px 22px 0 0;
+
+    border: none;
+
+    /* Тень вверх */
+    box-shadow:
+        0 -5px 16px rgba(35, 90, 25, 0.25);
+
+    padding: 0;
+
+    z-index: 1000;
+}
+
+
+/* ---------- КНОПКИ НИЖНЕГО БАРА ---------- */
+
+.bottom-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    width: 33%;
+    height: 100%;
+
+    color: #e8f5e9;
+
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+
+/* Иконки */
+
+.bottom-btn svg {
+    width: 22px;
+    height: 22px;
+
+    stroke: #e8f5e9;
+}
+
+
+/* Активная кнопка */
+
+.bottom-btn.active {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.bottom-btn.active svg {
+    stroke: #ffffff;
+}
+
+
+/* ---------- ЦЕНТРАЛЬНАЯ КНОПКА ---------- */
+
+.bottom-btn:nth-child(2) {
+    width: 46px;
+    height: 46px;
+
+    margin: 0 auto;
+
+    background: #f7f8f3;
+    color: #33691e;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.bottom-btn:nth-child(2) svg {
+    stroke: #33691e;
+}
+
+
+/* ---------- НАЖАТИЕ ---------- */
+
+.bottom-btn:active {
+    transform: scale(0.94);
+}
+
+
+/* ---------- HOVER ---------- */
+
+.bottom-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.bottom-btn:nth-child(2):hover {
+    background: #ffffff;
+}
+
+
+/* ---------- ОСНОВНОЙ КОНТЕНТ ---------- */
+
+/*
+   Нижний бар не должен закрывать последнюю карточку.
+*/
+
+main {
+    padding-bottom: 94px;
+}
+
+
+/* ---------- МОБИЛЬНЫЕ ---------- */
+
+@media (max-width: 600px) {
+
+    .app-header {
+        left: 10px;
+        width: calc(100% - 20px);
+        height: 62px;
+
+        border-radius: 20px;
+    }
+
+    .bottom-nav {
+        height: 66px;
+
+        border-radius: 20px 20px 0 0;
+    }
+
+    main {
+        padding-bottom: 94px;
+    }
+}
+/* =========================================================
+   MEALFRESH BOTTOM NAV — 5 BUTTONS
+   ========================================================= */
+
+.bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bottom-nav .bottom-btn {
+    width: 20% !important;
+    flex: 0 0 20% !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    height: 64px;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+    border: none;
+
+    color: #e8f5e9;
+    font-size: 11px;
+    font-weight: 400;
+
+    position: relative;
+
+    box-shadow: none;
+}
+
+/* Обычные кнопки */
+.bottom-nav .bottom-btn:not(.center-btn) {
+    background: transparent;
+    color: #e8f5e9;
+}
+
+/* Иконки обычных кнопок */
+.bottom-nav .bottom-btn:not(.center-btn) .nav-svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+}
+
+/* =========================================================
+   ЦЕНТРАЛЬНАЯ КНОПКА — ГЛАВНАЯ
+   ========================================================= */
+
+.bottom-nav .center-btn {
+    width: 58px !important;
+    flex: 0 0 58px !important;
+
+    height: 58px;
+
+    margin-top: -14px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #33691e;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0;
+}
+
+/* Домик НЕ нужен — возвращаем три горизонтальные линии */
+.bottom-nav .center-btn .nav-center {
+    width: 25px;
+    height: 25px;
+
+    stroke: #33691e;
+}
+
+/* У Главной НЕТ подписи */
+.bottom-nav .center-btn span {
+    display: none !important;
+}
+
+/* Активность не должна превращать центр в зелёный */
+.bottom-nav .center-btn.active {
+    background: #ffffff;
+    color: #33691e;
+}
+
+.bottom-nav .center-btn.active .nav-center {
+    stroke: #33691e;
+}
+
+/* =========================================================
+   ЗАПРЕЩАЕМ СООБЩЕНИЯМ СТАНОВИТЬСЯ ЦЕНТРАЛЬНОЙ КНОПКОЙ
+   ========================================================= */
+
+.bottom-nav .bottom-btn:nth-child(2) {
+    width: 20% !important;
+    flex: 0 0 20% !important;
+
+    height: 64px;
+    margin-top: 0;
+
+    border-radius: 0;
+
+    background: transparent;
+    color: #e8f5e9;
+
+    box-shadow: none;
+}
+
+/* Сообщения — обычная иконка */
+.bottom-nav .bottom-btn:nth-child(2) .nav-svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+}
+
+/* Сообщения — обычная подпись */
+.bottom-nav .bottom-btn:nth-child(2) span {
+    display: inline;
+}
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.bottom-nav .icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom-nav .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+
+    min-width: 16px;
+    height: 16px;
+
+    padding: 0 4px;
+
+    border-radius: 10px;
+
+    background: #ff3b30;
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom-nav .badge.hidden {
+    display: none;
+}
+
+/* ===== BADGE: окончательно скрывать при отсутствии непрочитанных ===== */
+
+.bottom-nav .badge.hidden,
+.bottom-nav .messenger-badge.hidden {
+    display: none !important;
+}
+
+.bottom-nav .badge:not(.hidden) {
+    display: flex;
+}
+
+/* =========================================================
+   MEALFRESH MESSENGER
+   NEW CHAT MODAL
+   ========================================================= */
+
+.mf-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px;
+
+    background: rgba(20, 30, 15, 0.55);
+
+    box-sizing: border-box;
+}
+
+
+.mf-new-chat-modal {
+    width: 100%;
+    max-width: 390px;
+
+    max-height: min(720px, calc(100vh - 32px));
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 16px 45px rgba(0, 0, 0, 0.25);
+
+    color: #222;
+
+    box-sizing: border-box;
+}
+
+
+/* ================= HEADER ================= */
+
+.mf-modal-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 18px 12px;
+
+    flex: 0 0 auto;
+}
+
+
+.mf-modal-header h3 {
+    margin: 0;
+
+    font-size: 21px;
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #222;
+}
+
+
+.mf-modal-subtitle {
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    color: #7a7a7a;
+}
+
+
+.mf-modal-close {
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #f1f3ef;
+
+    color: #555;
+
+    font-size: 25px;
+    line-height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+
+.mf-modal-close:active {
+    transform: scale(.95);
+}
+
+
+/* ================= SEARCH ================= */
+
+.mf-user-search-wrap {
+    position: relative;
+
+    margin: 0 18px 12px;
+
+    flex: 0 0 auto;
+}
+
+
+.mf-search-icon {
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    width: 19px;
+    height: 19px;
+
+    transform: translateY(-50%);
+
+    color: #7b7b7b;
+
+    pointer-events: none;
+}
+
+
+.mf-user-search {
+    width: 100%;
+    height: 42px;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        12px
+        0
+        40px;
+
+    border:
+        1px solid #dfe3dc;
+
+    border-radius: 12px;
+
+    background: #f6f8f5;
+
+    color: #222;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+
+.mf-user-search::placeholder {
+    color: #999;
+}
+
+
+.mf-user-search:focus {
+    border-color: #5aa52a;
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 2px rgba(51, 105, 30, 0.10);
+}
+
+
+/* ================= USER LIST ================= */
+
+.mf-user-list {
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding:
+        0
+        12px
+        8px;
+
+    scrollbar-width: thin;
+}
+
+
+.mf-user-item {
+    width: 100%;
+
+    min-height: 58px;
+
+    margin: 0 0 6px;
+
+    padding: 8px 10px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background: #f7f8f6;
+
+    color: #222;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .12s ease,
+        transform .08s ease;
+}
+
+
+.mf-user-item:hover {
+    background: #edf4e9;
+}
+
+
+.mf-user-item:active {
+    transform: scale(.985);
+
+    background: #e5efdf;
+}
+
+
+/* ================= AVATAR ================= */
+
+.mf-user-avatar {
+    width: 40px;
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e3f0dc;
+
+    color: #33691e;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* ================= USER INFO ================= */
+
+.mf-user-info {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.mf-user-name {
+    display: block;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color: #222;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.mf-user-role {
+    display: block;
+
+    color: #888;
+
+    font-size: 11px;
+
+    text-transform: lowercase;
+}
+
+
+.mf-user-arrow {
+    flex: 0 0 auto;
+
+    color: #a0a0a0;
+
+    font-size: 24px;
+
+    line-height: 1;
+}
+
+
+/* ================= CANCEL ================= */
+
+.mf-cancel {
+    flex: 0 0 auto;
+
+    width: calc(100% - 24px);
+
+    min-height: 44px;
+
+    margin:
+        4px
+        12px
+        calc(12px + env(safe-area-inset-bottom));
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #eef0ed;
+
+    color: #555;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.mf-cancel:active {
+    background: #e2e5e0;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 480px) {
+
+    .mf-modal-overlay {
+        padding: 10px;
+    }
+
+
+    .mf-new-chat-modal {
+        max-height:
+            calc(100vh - 20px);
+
+        border-radius: 18px;
+    }
+
+
+    .mf-modal-header {
+        padding:
+            16px
+            16px
+            10px;
+    }
+
+
+    .mf-user-search-wrap {
+        margin:
+            0
+            16px
+            10px;
+    }
+
+
+    .mf-user-list {
+        padding:
+            0
+            10px
+            6px;
+    }
+
+
+    .mf-user-item {
+        min-height: 56px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .mf-modal-header h3 {
+        font-size: 19px;
+    }
+
+}
+
+/* =========================================================
+   FIX: USER LIST
+   Переопределяем старый .mf-user-list button
+   ========================================================= */
+
+.mf-user-list .mf-user-item {
+    width: 100% !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    gap: 12px !important;
+
+    min-height: 58px !important;
+
+    margin: 0 0 6px 0 !important;
+    padding: 9px 12px !important;
+
+    box-sizing: border-box !important;
+
+    border: 0 !important;
+    border-radius: 12px !important;
+
+    background: #f5f6f4 !important;
+
+    color: #222 !important;
+
+    text-align: left !important;
+
+    box-shadow: none !important;
+}
+
+
+/* Аватар */
+
+.mf-user-list .mf-user-item .mf-user-avatar {
+    display: flex !important;
+
+    flex: 0 0 40px !important;
+
+    width: 40px !important;
+    height: 40px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    background: #e3f0dc !important;
+
+    color: #33691e !important;
+
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+
+/* Информация */
+
+.mf-user-list .mf-user-item .mf-user-info {
+    display: flex !important;
+
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    gap: 2px !important;
+
+    text-align: left !important;
+}
+
+
+/* Имя */
+
+.mf-user-list .mf-user-item .mf-user-name {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #222 !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    line-height: 18px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+
+/* Роль */
+
+.mf-user-list .mf-user-item .mf-user-role {
+    display: block !important;
+
+    color: #888 !important;
+
+    font-size: 11px !important;
+
+    line-height: 14px !important;
+
+    text-transform: lowercase !important;
+}
+
+
+/* Стрелка */
+
+.mf-user-list .mf-user-item .mf-user-arrow {
+    display: flex !important;
+
+    flex: 0 0 auto !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 18px !important;
+
+    color: #999 !important;
+
+    font-size: 22px !important;
+    line-height: 1 !important;
+}
+/* =========================================================
+   CHAT USER NAME
+   Переопределяем цвет из основного PWA
+   ========================================================= */
+
+.mf-chat-row .mf-chat-title {
+    display: block !important;
+
+    color: #222222 !important;
+
+    font-size: 14px !important;
+    font-weight: 700 !important;
+
+    line-height: 18px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+
+.mf-chat-row .mf-chat-main {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    min-width: 0 !important;
+
+    flex: 1 1 auto !important;
+
+    gap: 3px !important;
+}
+
+
+.mf-chat-row .mf-chat-preview {
+    color: #777777 !important;
+
+    font-size: 13px !important;
+
+    line-height: 17px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* =========================================================
+   ADMIN PANEL — COMPACT USER MANAGEMENT
+   ========================================================= */
+
+.admin-panel {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px 2px 20px;
+}
+
+
+/* =========================
+   ROLE
+   ========================= */
+
+.admin-role-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    min-height: 48px;
+
+    padding: 0 12px;
+    margin-bottom: 4px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border: 1px solid #d8ded2;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    user-select: none;
+}
+
+.admin-role-header:active {
+    transform: scale(0.99);
+}
+
+.admin-role-arrow {
+    width: 18px;
+    text-align: center;
+    color: #33691e;
+    font-size: 15px;
+}
+
+.admin-role-count {
+    margin-left: auto;
+
+    min-width: 28px;
+    height: 24px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 7px;
+
+    box-sizing: border-box;
+
+    background: #e8f5e9;
+    color: #33691e;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   USERS INSIDE ROLE
+   ========================= */
+
+.admin-role-users {
+    margin: 0 0 8px 12px;
+    padding: 4px 0 4px 8px;
+
+    border-left: 2px solid #d8e8d2;
+}
+
+
+/* =========================
+   USER ROW
+   ========================= */
+
+.admin-user-row {
+    display: flex;
+    align-items: center;
+
+    min-height: 48px;
+
+    padding: 6px 10px;
+    margin-bottom: 4px;
+
+    box-sizing: border-box;
+
+    background: #f8faf7;
+
+    border: 1px solid #e1e7df;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.admin-user-row:active {
+    background: #eef5eb;
+}
+
+.admin-user-main {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.admin-user-arrow {
+    width: 18px;
+
+    flex: 0 0 18px;
+
+    text-align: center;
+
+    color: #558b2f;
+    font-size: 13px;
+}
+
+.admin-user-status {
+    margin-top: 2px;
+
+    font-size: 11px;
+    color: #777;
+}
+
+
+/* =========================
+   USER DETAILS
+   ========================= */
+
+.admin-user-details {
+    margin: -1px 0 7px 8px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background: #fffdf3;
+
+    border: 1px solid #e2e3d2;
+    border-radius: 0 0 12px 12px;
+}
+
+.admin-user-details label {
+    display: block;
+
+    margin: 8px 0 4px;
+
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
+.admin-user-details input,
+.admin-user-details select {
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 8px 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d5d9d2;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+}
+
+.admin-user-details input[readonly] {
+    background: #f1f2ef;
+    color: #555;
+}
+
+
+/* =========================
+   USER BUTTONS
+   ========================= */
+
+.admin-user-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 12px;
+}
+
+.admin-user-actions button {
+    min-height: 40px;
+
+    padding: 7px 8px;
+
+    border: 0;
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-user-actions button:active {
+    transform: scale(0.98);
+}
+
+.admin-user-actions .admin-danger {
+    background: #b30000 !important;
+    color: #ffffff;
+}
+
+
+/* =========================
+   CREATE / SYSTEM SECTIONS
+   ========================= */
+
+.admin-section-header {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    min-height: 48px;
+
+    margin-top: 8px;
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #d8ded2;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    user-select: none;
+}
+
+.admin-section-header:active {
+    transform: scale(0.99);
+}
+
+.admin-section-body {
+    margin: 0 0 8px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background: #fffdf3;
+
+    border: 1px solid #e2e3d2;
+    border-top: 0;
+
+    border-radius: 0 0 12px 12px;
+}
+
+.admin-section-body input,
+.admin-section-body select {
+    width: 100%;
+
+    min-height: 40px;
+
+    margin-bottom: 8px;
+    padding: 8px 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d5d9d2;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+}
+
+.admin-section-body button {
+    width: 100%;
+
+    min-height: 40px;
+
+    border: 0;
+    border-radius: 9px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 480px) {
+
+    .admin-role-header {
+        min-height: 46px;
+        padding: 0 10px;
+    }
+
+    .admin-user-row {
+        min-height: 46px;
+        padding: 5px 8px;
+    }
+
+    .admin-user-details {
+        padding: 10px;
+    }
+
+    .admin-user-actions {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .admin-user-actions button {
+        min-height: 38px;
+        font-size: 11px;
+        padding: 6px;
+    }
+
+}
