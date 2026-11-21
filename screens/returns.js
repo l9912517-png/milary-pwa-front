@@ -10,7 +10,7 @@ registerScreen("returns", function () {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openReturnsForm()">Получить возвраты</button>
+                <button type="button" class="btn-wide" onclick="openReturnsForm()">${iconSvg(ICON_REPORT)}Получить возвраты</button>
             </div>
 
             <div id="returnsHeader" style="font-weight:600;"></div>
@@ -30,7 +30,7 @@ async function loadReturns() {
     const header = document.getElementById("returnsHeader");
     const container = document.getElementById("returnsContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -204,8 +204,8 @@ window.openReturnsForm = function () {
                    onclick="openDirectorySelect('managers','returnsManager')">
 
             <div class="modal-actions">
-                <button onclick="requestReturns()">Обновить</button>
-                <button onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestReturns()">Получить</button>
             </div>
 
         </div>
@@ -277,7 +277,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

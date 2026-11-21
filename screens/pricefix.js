@@ -11,8 +11,7 @@ registerScreen("pricefix", function () {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openPriceFixForm()">Фильтр</button>
-                <button onclick="loadPriceFix()">Обновить</button>
+                <button type="button" class="btn-wide" onclick="openPriceFixForm()">${iconSvg(ICON_REPORT)}Получить фиксации</button>${refreshButton("loadPriceFix")}
             </div>
 
             <div id="priceFixContainer"></div>
@@ -30,19 +29,19 @@ function loadPriceFix() {
 
     const container = document.getElementById("priceFixContainer");
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
     fetch(url + "?t=" + Date.now())
     .then(r => {
         if (!r.ok) {
-            container.innerHTML = "Файл не найден";
+            container.innerHTML = reportEmptyHtml("Получить фиксации");
             return null;
         }
         return r.json();
     })
     .then(data => {
-        const updatedHtml = renderUpdatedAt(data.updated_at);
         if (!data) return;
+        const updatedHtml = renderUpdatedAt(data.updated_at);
 
         if (!data.rows) {
             container.innerHTML = "Нет данных";
@@ -230,8 +229,8 @@ window.openPriceFixForm = function () {
                    onclick="openDirectorySelect('managers','priceFixManager')">
 
             <div class="modal-actions">
-                <button onclick="requestPriceFix()">Получить</button>
-                <button onclick="closePriceFixForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closePriceFixForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestPriceFix()">Получить</button>
             </div>
 
         </div>
@@ -279,7 +278,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

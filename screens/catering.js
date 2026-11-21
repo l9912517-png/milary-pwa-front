@@ -480,7 +480,7 @@ registerScreen("catering", async function () {
 
                 <div style="margin-top:10px;">${actionButtons(item)}</div>
 
-                ${open ? `<div id="catDetail-${esc(item.id)}" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--card-border);font-size:13px;color:var(--text);">Загрузка...</div>` : ""}
+                ${open ? `<div id="catDetail-${esc(item.id)}" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--card-border);font-size:13px;color:var(--text);">Загрузка…</div>` : ""}
             </div>
         `;
     }
@@ -492,7 +492,7 @@ registerScreen("catering", async function () {
 
         if (!info || !box) return;
 
-        let infoHtml = loading && !items.length ? "Загрузка..." : "Найдено: " + total;
+        let infoHtml = loading && !items.length ? "Загрузка…" : "Найдено: " + total;
 
         if (!statusReady && state.availability !== "all") {
             infoHtml += `<div style="margin-top:6px;padding:8px;border-radius:8px;background:rgba(255,190,90,0.14);color:#FFC680;">Сверка с клиентами 1С ещё не готова: отметки «свободно» и «занято» могут быть неточными. Попробуйте через минуту.</div>`;
@@ -511,7 +511,7 @@ registerScreen("catering", async function () {
 
         box.innerHTML = items.map(card).join("") + (
             items.length < total
-                ? `<button id="catMore" type="button" style="width:100%;padding:11px;border:1px solid var(--card-border);border-radius:10px;background:var(--card);color:var(--text);cursor:pointer;" ${loading ? "disabled" : ""}>${loading ? "Загрузка..." : "Показать ещё (" + (total - items.length) + ")"}</button>`
+                ? `<button id="catMore" type="button" style="width:100%;padding:11px;border:1px solid var(--card-border);border-radius:10px;background:var(--card);color:var(--text);cursor:pointer;" ${loading ? "disabled" : ""}>${loading ? "Загрузка…" : "Показать ещё (" + (total - items.length) + ")"}</button>`
                 : ""
         );
 

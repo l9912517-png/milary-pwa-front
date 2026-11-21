@@ -32,7 +32,7 @@ function loadOrdersList() {
 
     const container = document.getElementById("ordersListContainer");
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
     fetch(url + "?t=" + Date.now())
     .then(r => {

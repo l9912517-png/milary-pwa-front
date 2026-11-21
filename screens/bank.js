@@ -9,7 +9,7 @@ registerScreen("bank", function() {
     container.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;gap:10px;">
-                <button onclick="openBankForm()">Получить</button>
+                <button type="button" class="btn-wide" onclick="openBankForm()">${iconSvg(ICON_REPORT)}Получить выписку</button>${refreshButton("loadBankReport")}
               
             </div>
             <div id="bankReportHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -27,7 +27,7 @@ function screen_bank() {
     container.innerHTML = `
     <div style="display:flex;flex-direction:column;gap:10px;">
         <div style="display:flex;gap:10px;">
-            <button onclick="event.stopPropagation(); openBankForm()">Получить</button>
+            <button type="button" class="btn-wide" onclick="event.stopPropagation(); openBankForm()">${iconSvg(ICON_REPORT)}Получить выписку</button>
           
         </div>
         <div id="bankReportHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -46,7 +46,7 @@ async function loadBankReport(retry = 0) {
     const header = document.getElementById("bankReportHeader");
     const container = document.getElementById("bankReportContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -228,7 +228,7 @@ window.openBankForm = function() {
     overlay.innerHTML = `
         <div class="modal-window">
 
-            <h3>Параметры отчета</h3>
+            <h3>Параметры отчёта</h3>
 
             <div class="period-buttons">
 
@@ -260,8 +260,8 @@ window.openBankForm = function() {
                    onclick="openDirectorySelect('managers','bankManager')">
 
             <div class="modal-actions">
-                <button onclick="requestBankReport()">Получить</button>
-                <button onclick="closeBankForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeBankForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestBankReport()">Получить</button>
             </div>
 
         </div>
@@ -396,7 +396,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

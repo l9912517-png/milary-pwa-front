@@ -15,13 +15,11 @@ registerScreen("receipts", function() {
             margin-bottom:10px;
         ">
 
-            <button onclick="openReceiptsForm()">
-                Обновить
-            </button>
+            <button type="button" class="btn-wide" onclick="openReceiptsForm()">${iconSvg(ICON_REPORT)}Получить поступления</button>
 
-            <button onclick="togglePriceIncreaseFilter()"
+            <button type="button" class="btn-secondary" onclick="togglePriceIncreaseFilter()"
                     id="priceIncreaseBtn">
-                Только ↑ цены
+                Только рост цен
             </button>
 
         </div>
@@ -56,7 +54,7 @@ async function loadReceiptsReport(retry = 0) {
     const container =
         document.getElementById("receiptsContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -521,7 +519,7 @@ window.openReceiptsForm = function() {
     overlay.innerHTML = `
         <div class="modal-window">
 
-            <h3>Параметры отчета</h3>
+            <h3>Параметры отчёта</h3>
 
             <label>Период с</label>
 
@@ -536,15 +534,8 @@ window.openReceiptsForm = function() {
                    value="${today}">
 
             <div class="modal-actions">
-
-                <button onclick="requestReceiptsReport()">
-                    Получить
-                </button>
-
-                <button onclick="closeReceiptsForm()">
-                    Отмена
-                </button>
-
+                <button type="button" class="btn-secondary" onclick="closeReceiptsForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestReceiptsReport()">Получить</button>
             </div>
 
         </div>

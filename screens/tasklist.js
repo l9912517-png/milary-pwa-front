@@ -15,7 +15,7 @@ registerScreen("tasklist", function () {
 
 
             <div style="display:flex;gap:10px;">
-                <button onclick="requestTaskList()">Обновить</button>
+                <button type="button" class="btn-wide" onclick="requestTaskList()">${iconSvg(ICON_REPORT)}Получить задачи</button>
             </div>
 
 
@@ -43,7 +43,7 @@ function loadTaskList() {
     const container = document.getElementById("taskListContainer");
 
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
 
     fetch(url + "?t=" + Date.now())
@@ -51,7 +51,7 @@ function loadTaskList() {
 
 
         if (!r.ok) {
-            container.innerHTML = "Файл не найден";
+            container.innerHTML = reportEmptyHtml("Получить задачи");
             return null;
         }
 

@@ -12,8 +12,8 @@ registerScreen("orders", function () {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
     <div style="display:flex;gap:10px;">
-    <button onclick="openOrdersForm()">Получить заказы</button>
-    <button onclick="toggleOrdersView()">Сменить вид</button>
+    <button type="button" class="btn-wide" onclick="openOrdersForm()">${iconSvg(ICON_REPORT)}Получить заказы</button>${refreshButton("loadOrders")}
+    <button type="button" class="btn-secondary" onclick="toggleOrdersView()">Сменить вид</button>
     <button onclick="toggleOrdersExpand()" id="ordersExpandBtn" style="display:none;">
         Развернуть
     </button>
@@ -33,12 +33,12 @@ function loadOrders() {
 
     const container = document.getElementById("ordersContainer");
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
     fetch(url + "?t=" + Date.now())
     .then(r => {
         if (!r.ok) {
-            container.innerHTML = "Файл не найден";
+            container.innerHTML = reportEmptyHtml("Получить заказы");
             return null;
         }
         return r.json();
@@ -141,7 +141,7 @@ if (window.ordersExpanded && row.detail) {
         const container = document.getElementById(rowId);
         if (!container) return;
 
-        container.innerHTML = "Загрузка...";
+        container.innerHTML = "Загрузка…";
 
         try {
             const res = await fetch(row.detail + "?t=" + Date.now());
@@ -310,8 +310,8 @@ window.openOrdersForm = function () {
                    onclick="openDirectorySelect('managers','ordersManager')">
 
             <div class="modal-actions">
-                <button onclick="requestOrders()">Получить</button>
-                <button onclick="closeOrdersForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeOrdersForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestOrders()">Получить</button>
             </div>
 
         </div>
@@ -367,7 +367,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
@@ -534,7 +534,7 @@ async function toggleOrderExpand(containerId, url) {
 
     // 🔥 открываем
     container.style.display = "block";
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
     try {
 

@@ -10,7 +10,7 @@ registerScreen("ordersCount", function() {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="requestOrdersCount()">Обновить</button>
+                <button type="button" class="btn-wide" onclick="requestOrdersCount()">${iconSvg(ICON_REPORT)}Получить статистику</button>
             </div>
 
             <div id="ordersCountHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -33,7 +33,7 @@ async function loadOrdersCount(retry = 0) {
     const header = document.getElementById("ordersCountHeader");
     const container = document.getElementById("ordersCountContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {

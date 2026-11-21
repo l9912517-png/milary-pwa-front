@@ -4,13 +4,13 @@ registerScreen("finance_report", function() {
 
     window.currentScreen = "finance";
 
-    title.innerText = "Финансовый отчет";
+    title.innerText = "Финансовый отчёт";
 
     container.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openFinanceReportForm()">Получить</button>
+                <button type="button" class="btn-wide" onclick="openFinanceReportForm()">${iconSvg(ICON_REPORT)}Получить отчёт</button>
             </div>
 
             <div id="financeHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -33,7 +33,7 @@ async function loadFinanceReport(retry = 0) {
     const header = document.getElementById("financeHeader");
     const container = document.getElementById("financeContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -313,8 +313,8 @@ window.openFinanceReportForm = function() {
             <input type="date" id="financeDateFrom">
 
             <div class="modal-actions">
-                <button onclick="requestFinanceReport()">Получить</button>
-                <button onclick="closeFinanceReportForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeFinanceReportForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestFinanceReport()">Получить</button>
             </div>
 
         </div>
@@ -357,7 +357,7 @@ async function requestFinanceReport() {
         },
         file: "finance_report.json",
         screen: "finance",
-        text: "Формирование финансового отчета...",
+        text: "Формирование финансового отчёта...",
         onDone: loadFinanceReport
     });
 }

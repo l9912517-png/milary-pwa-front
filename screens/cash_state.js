@@ -10,7 +10,7 @@ registerScreen("cash_state", function() {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openCashStateForm()">Получить</button>
+                <button type="button" class="btn-wide" onclick="openCashStateForm()">${iconSvg(ICON_REPORT)}Получить остатки</button>
             </div>
 
             <div id="cashHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -33,7 +33,7 @@ async function loadCashState(retry = 0) {
     const header = document.getElementById("cashHeader");
     const container = document.getElementById("cashContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -199,8 +199,8 @@ window.openCashStateForm = function() {
             <input type="date" id="cashDate">
 
             <div class="modal-actions">
-                <button onclick="requestCashState()">Получить</button>
-                <button onclick="closeCashStateForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeCashStateForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestCashState()">Получить</button>
             </div>
 
         </div>

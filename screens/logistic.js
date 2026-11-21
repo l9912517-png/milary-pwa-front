@@ -50,7 +50,7 @@ registerScreen("logistic", function () {
             <div id="logisticContainer">
 
                 <div class="menu-item">
-                    Загрузка...
+                    Загрузка…
                 </div>
 
             </div>
@@ -434,7 +434,7 @@ async function loadLogistic() {
                                 font-weight:700;
                             "
                         >
-                            📡 Запросить
+                            ${iconSvg("M12 20h.01 M8.5 16.5a5 5 0 0 1 7 0 M5 13a10 10 0 0 1 14 0", "btn-ico")} Запросить
                         </button>
 
                         <button
@@ -469,7 +469,7 @@ async function loadLogistic() {
                             ${hasLocation ? "" : "disabled"}
 
                         >
-                            🗺 Карта
+                            ${iconSvg("M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z M9 4v14 M15 6v14", "btn-ico")} Карта
                         </button>
 
                     </div>

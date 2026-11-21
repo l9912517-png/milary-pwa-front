@@ -60,7 +60,7 @@ ${rows}
             }
 
         } else {
-            resultHtml = `<div class="menu-item">Файл не найден</div>`;
+            resultHtml = `<div class="menu-item">Цены ещё не получены. Нажмите «Получить цены».</div>`;
         }
 
     } catch (e) {
@@ -148,7 +148,7 @@ async function openPricesCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="pricesCpSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="pricesCpList" style="max-height:300px;overflow:auto;"></div>

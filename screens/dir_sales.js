@@ -9,7 +9,7 @@ registerScreen("dir_sales", function() {
     container.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;gap:10px;">
-                <button onclick="openDirSalesForm()">Получить</button>
+                <button type="button" class="btn-wide" onclick="openDirSalesForm()">${iconSvg(ICON_REPORT)}Получить продажи</button>
             </div>
 
             <div id="dirSalesHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -31,7 +31,7 @@ async function loadDirSalesReport(retry = 0) {
     const header = document.getElementById("dirSalesHeader");
     const container = document.getElementById("dirSalesContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -189,8 +189,8 @@ window.openDirSalesForm = function() {
             <input type="date" id="dirSalesDateTo">
 
             <div class="modal-actions">
-                <button onclick="requestDirSalesReport()">Получить</button>
-                <button onclick="closeDirSalesForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeDirSalesForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestDirSalesReport()">Получить</button>
             </div>
 
         </div>

@@ -15,7 +15,7 @@ registerScreen("notshipped", function () {
 
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openNotshippedForm()">Обновить отчет</button>
+                <button type="button" class="btn-wide" onclick="openNotshippedForm()">${iconSvg(ICON_REPORT)}Получить неотгруженные</button>${refreshButton("loadNotShipped")}
                
             </div>
 
@@ -44,13 +44,13 @@ function loadNotshipped() {
     const container = document.getElementById("notshippedContainer");
 
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
 
     fetch(url + "?t=" + Date.now())
         .then(r => {
             if (!r.ok) {
-                container.innerHTML = "Нет данных";
+                container.innerHTML = reportEmptyHtml("Получить неотгруженные");
                 return null;
             }
             return r.json();
@@ -138,7 +138,7 @@ window.openNotshippedForm = function () {
         <div class="modal-window">
 
 
-            <h3>Параметры отчета</h3>
+            <h3>Параметры отчёта</h3>
 
 
             <label>Дата</label>
@@ -146,8 +146,8 @@ window.openNotshippedForm = function () {
 
 
             <div class="modal-actions">
-                <button onclick="requestNotshipped()">Получить</button>
-                <button onclick="closeNotshippedForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closeNotshippedForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestNotshipped()">Получить</button>
             </div>
 
 

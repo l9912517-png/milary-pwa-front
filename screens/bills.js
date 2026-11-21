@@ -155,7 +155,7 @@ async function openBillsCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="billsSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="billsList" style="max-height:300px;overflow:auto;"></div>

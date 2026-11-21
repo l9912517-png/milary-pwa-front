@@ -82,8 +82,8 @@ registerScreen("control", async function () {
                     Контроль
                 </button>
 
-                <button onclick="refreshControl()" class="btn-secondary">
-                    Обновить
+                <button type="button" onclick="refreshControl()" class="btn-secondary">
+                    ${iconSvg(ICON_REPORT)} Получить контроль
                 </button>
 
             </div>
@@ -119,7 +119,7 @@ async function openControlCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="controlCpSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="controlCpList" style="max-height:300px;overflow:auto;"></div>

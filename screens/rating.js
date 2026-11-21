@@ -10,7 +10,7 @@ registerScreen("rating", function () {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
 <div style="display:flex;gap:10px;">
-    <button onclick="requestRating()">Обновить рейтинг</button>
+    <button type="button" class="btn-wide" onclick="requestRating()">${iconSvg(ICON_REPORT)}Получить рейтинг</button>${refreshButton("loadRating")}
     
 </div>
 
@@ -31,12 +31,12 @@ function loadRating() {
 
     const container = document.getElementById("ratingContainer");
 
-    container.innerHTML = "Загрузка...";
+    container.innerHTML = "Загрузка…";
 
     fetch(url + "?t=" + Date.now())
         .then(r => {
             if (!r.ok) {
-                container.innerHTML = "Нет данных";
+                container.innerHTML = reportEmptyHtml("Получить рейтинг");
                 return null;
             }
             return r.json();
@@ -137,5 +137,5 @@ async function requestRating() {
         return;
     }
 
-    waitForReport("rating.json", "Формирование отчета...");
+    waitForReport("rating.json", "Формирование отчёта…");
 }

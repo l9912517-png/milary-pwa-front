@@ -121,7 +121,7 @@ registerScreen("pricelist", async function () {
 
                 <button onclick="requestPricelist('pricelist_pdf_files')"
                         style="width:100%;margin-top:6px;background:var(--card);color:var(--accent);border:2px solid var(--accent-line);">
-                    Получить красивый прайс PDF
+                    Получить прайс в PDF
                 </button>
 
             </div>
@@ -161,7 +161,7 @@ async function openPricelistCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="pricelistSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="pricelistList" style="max-height:300px;overflow:auto;"></div>

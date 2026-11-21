@@ -353,7 +353,7 @@
                 class="menu-list"
             >
                 <div class="menu-item">
-                    Загрузка...
+                    Загрузка…
                 </div>
             </div>
 
@@ -1694,7 +1694,7 @@ function bindManagerEvents() {
         async function load(query) {
 
             list.innerHTML =
-                `<div style="padding:14px 0;color:var(--text) !important;">Загрузка...</div>`;
+                `<div style="padding:14px 0;color:var(--text) !important;">Загрузка…</div>`;
 
             try {
                 const result = await api(

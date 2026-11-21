@@ -178,10 +178,10 @@ def sales(s):
 def debt(s):
     s.menu('Дебиторка')
     s.tap('button:has-text("Получить дебиторку")')
-    s.tap('.modal-window button:has-text("Обновить отчет")', after=4200)
-    s.type('#debtSearch, input[placeholder="Поиск..."]', 'лето', after=1500)
-    s.p.locator('input[placeholder="Поиск..."]').first.fill('')
-    s.p.locator('input[placeholder="Поиск..."]').first.dispatch_event('input')
+    s.tap('.modal-window button:has-text("Показать на экране")', after=4200)
+    s.type('#debtSearch', 'лето', after=1500)
+    s.p.locator('#debtSearch').fill('')
+    s.p.locator('#debtSearch').dispatch_event('input')
     s.pause(1500)
 
 

@@ -842,3 +842,9 @@ button.ord-danger { background: var(--card); color: #FF8FB3; border: 1px solid r
 .report-overlay-text { font-size: 16px; font-weight: 600; }
 .report-overlay-status { font-size: 13px; color: var(--muted); min-height: 18px; }
 .report-overlay-box .btn-secondary { width: 100%; margin-top: 8px; }
+
+/* значок внутри кнопки с текстом */
+.btn-ico { width: 18px; height: 18px; flex: none; vertical-align: -3px; margin-right: 4px; }
+button:has(> .btn-ico) { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+button:has(> .btn-ico) .btn-ico { margin-right: 0; }
+.btn-wide { white-space: nowrap; }

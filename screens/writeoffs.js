@@ -10,7 +10,7 @@ registerScreen("writeoffs", function() {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openWriteoffsForm()">Обновить</button>
+                <button type="button" class="btn-wide" onclick="openWriteoffsForm()">${iconSvg(ICON_REPORT)}Получить списания</button>
             </div>
 
             <div id="writeoffsHeader"
@@ -35,7 +35,7 @@ async function loadWriteoffsReport(retry = 0) {
     const header = document.getElementById("writeoffsHeader");
     const container = document.getElementById("writeoffsContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -256,7 +256,7 @@ window.openWriteoffsForm = function() {
     overlay.innerHTML = `
         <div class="modal-window">
 
-            <h3>Параметры отчета</h3>
+            <h3>Параметры отчёта</h3>
 
             <label>Период с</label>
             <input type="date"
@@ -269,15 +269,8 @@ window.openWriteoffsForm = function() {
                    value="${today}">
 
             <div class="modal-actions">
-
-                <button onclick="requestWriteoffsReport()">
-                    Получить
-                </button>
-
-                <button onclick="closeWriteoffsForm()">
-                    Отмена
-                </button>
-
+                <button type="button" class="btn-secondary" onclick="closeWriteoffsForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestWriteoffsReport()">Получить</button>
             </div>
 
         </div>

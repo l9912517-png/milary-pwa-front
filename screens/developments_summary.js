@@ -390,7 +390,7 @@
     async function loadList() {
 
         const box = root.querySelector("#dsList");
-        box.innerHTML = `<div class="ds-empty">Загрузка...</div>`;
+        box.innerHTML = `<div class="ds-empty">Загрузка…</div>`;
 
         try {
 

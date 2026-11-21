@@ -53,7 +53,7 @@ const decision = decisions[r.id];
         onclick="handleBlockDecision(${jsArg(r.id)}, 'approve', ${jsArg(r.id)}, ${jsArg(p.counterparty)})"
         style="background:${decision === 'approve' ? '#5B7BE0' : decision ? 'rgba(255,255,255,0.10)' : 'var(--accent)'};"
         ${decision ? "disabled" : ""}>
-        ✔ Подтвердить
+        ${iconSvg("M5 12l5 5 9-10", "btn-ico")} Подтвердить
     </button>
 
     <button 
@@ -61,7 +61,7 @@ const decision = decisions[r.id];
         onclick="handleBlockDecision(${jsArg(r.id)}, 'reject', ${jsArg(r.id)}, ${jsArg(p.counterparty)})"
         style="background:${decision === 'reject' ? '#5B7BE0' : decision ? 'rgba(255,255,255,0.10)' : 'var(--danger)'};color:#fff;"
         ${decision ? "disabled" : ""}>
-        ✖ Отклонить
+        ${iconSvg("M6 6l12 12 M18 6L6 18", "btn-ico")} Отклонить
     </button>
 
 </div>
@@ -175,7 +175,7 @@ async function openBlockCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="blockCpSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="blockCpList" style="max-height:300px;overflow:auto;"></div>

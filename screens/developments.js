@@ -30,7 +30,7 @@ registerScreen("developments", async function () {
                 box-sizing:border-box;
              ">
             <div id="developmentsContent">
-                Загрузка...
+                Загрузка…
             </div>
         </div>
     `;
@@ -1542,7 +1542,7 @@ async function openDevelopmentEventsModal() {
                 padding:10px;
                 color:var(--muted);
             ">
-                Поиск...
+                Поиск…
             </div>
         `;
 

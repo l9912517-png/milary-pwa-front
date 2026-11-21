@@ -90,7 +90,7 @@ function renderOrderItems() {
 
                 <button onclick="openOrderItemSelect(${i})"
                         style="width:40px;padding:0;">
-                    🔍
+                    ${iconSvg("M11 18a7 7 0 1 0 0-14a7 7 0 0 0 0 14z M21 21l-5-5", "btn-ico")}
                 </button>
 
             </div>
@@ -174,7 +174,7 @@ async function openOrderItemSelect(index) {
     overlay.innerHTML = `
         <div class="modal-window">
 
-            <input id="searchItem" placeholder="Поиск..." style="width:100%;padding:8px;">
+            <input id="searchItem" placeholder="Поиск…" style="width:100%;padding:8px;">
 
             <div id="itemList" style="max-height:300px;overflow:auto;"></div>
 
@@ -350,7 +350,7 @@ async function openOrderCounterpartySelect() {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="orderCpSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="orderCpList" style="max-height:300px;overflow:auto;"></div>

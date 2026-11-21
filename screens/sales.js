@@ -10,9 +10,9 @@ registerScreen("sales", function() {
             <div class="report-actions">
                 <button type="button" class="btn-wide" onclick="openSalesForm()">
                     ${iconSvg("M4 20V10 M10 20V4 M16 20v-7 M3 20h18")}
-                    Получить отчёт
+                    Получить продажи
                 </button>
-                <button type="button" class="btn-icon-only" aria-label="Обновить" title="Обновить"
+                <button type="button" class="btn-icon-only" aria-label="Показать последний полученный отчёт" title="Показать последний полученный отчёт"
                         onclick="loadSalesReport()">
                     ${iconSvg("M20 11a8 8 0 1 0-2.3 5.7 M20 4v7h-7")}
                 </button>
@@ -156,7 +156,7 @@ function loadSalesReport() {
         .then(r => {
 
             if (!r.ok) {
-                status("Отчёт ещё не получен. Нажмите «Получить отчёт».");
+                status("Отчёт ещё не получен. Нажмите «Получить продажи».");
                 return null;
             }
 

@@ -18,13 +18,15 @@ registerScreen("debt", function () {
         ">
 
             <button
+                type="button"
+                class="btn-wide"
                 onclick="openDebtForm()"
                 style="
                     flex:0 0 auto;
                     white-space:nowrap;
                 "
             >
-                Получить дебиторку
+                ${iconSvg(ICON_REPORT)}Получить дебиторку
             </button>
 
             <!-- ПОИСК ПО КОНТРАГЕНТУ -->
@@ -37,7 +39,7 @@ registerScreen("debt", function () {
                 <input
                     type="text"
                     id="debtSearch"
-                    placeholder="Поиск..."
+                    placeholder="Поиск…"
                     autocomplete="off"
                     style="
                         width:100%;
@@ -154,14 +156,14 @@ function loadDebt() {
     const header = document.getElementById("debtHeader");
     const container = document.getElementById("debtContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     fetch(url + "?t=" + Date.now())
         .then(r => {
 
             if (!r.ok) {
-                header.innerText = "Отчет не найден";
+                header.innerText = "Отчёт ещё не получен. Нажмите «Получить дебиторку».";
                 return null;
             }
 
@@ -546,9 +548,9 @@ window.openDebtForm = function () {
                    onclick="openDirectorySelect('managers','debtManager')">
 
             <div class="modal-actions">
-    <button onclick="requestDebt()">Обновить отчет</button>
-    <button onclick="requestDebt(true)">Получить в файле</button>
-    <button onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+    <button type="button" class="btn-secondary" onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+    <button type="button" class="btn-secondary" onclick="requestDebt(true)">Получить файлом</button>
+    <button type="button" class="btn-primary-wide" onclick="requestDebt()">Показать на экране</button>
 </div>
         </div>
     `;
@@ -680,7 +682,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

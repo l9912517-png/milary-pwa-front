@@ -9,9 +9,7 @@ registerScreen("grossprofit", function () {
     container.innerHTML = `
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
 
-            <button onclick="openGrossProfitForm()">
-                Обновить
-            </button>
+            <button type="button" class="btn-wide" onclick="openGrossProfitForm()">${iconSvg(ICON_REPORT)}Получить прибыль</button>
 
         </div>
 
@@ -45,7 +43,7 @@ async function loadGrossProfitReport(retry = 0) {
     const container =
         document.getElementById("grossProfitContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -81,7 +79,7 @@ async function loadGrossProfitReport(retry = 0) {
         } else {
 
             header.innerText =
-                "Отчет загружен";
+                "Отчёт загружен";
         }
 
         let updatedHtml = "";
@@ -436,7 +434,7 @@ window.openGrossProfitForm = function () {
         <div class="modal-window">
 
             <h3>
-                Параметры отчета
+                Параметры отчёта
             </h3>
 
             <label>
@@ -472,15 +470,8 @@ window.openGrossProfitForm = function () {
             >
 
             <div class="modal-actions">
-
-                <button onclick="requestGrossProfitReport()">
-                    Получить
-                </button>
-
-                <button onclick="closeGrossProfitForm()">
-                    Отмена
-                </button>
-
+                <button type="button" class="btn-secondary" onclick="closeGrossProfitForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestGrossProfitReport()">Получить</button>
             </div>
 
         </div>
@@ -543,7 +534,7 @@ async function openDirectorySelect(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

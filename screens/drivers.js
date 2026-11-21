@@ -10,7 +10,7 @@ registerScreen("drivers", function () {
         <div style="display:flex;flex-direction:column;gap:10px;">
 
             <div style="display:flex;gap:10px;">
-                <button onclick="openDriversForm()">Обновить данные</button>
+                <button type="button" class="btn-wide" onclick="openDriversForm()">${iconSvg(ICON_REPORT)}Получить водителей</button>${refreshButton("loadDrivers")}
                 
             </div>
 
@@ -43,8 +43,8 @@ function openDriversForm() {
                    placeholder="Выберите менеджера">
 
             <div class="modal-actions">
-                <button onclick="requestDrivers()">Обновить</button>
-                <button onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestDrivers()">Получить</button>
             </div>
 
         </div>
@@ -132,13 +132,13 @@ function loadDrivers() {
     const header = document.getElementById("driversHeader");
     const container = document.getElementById("driversContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     fetch(url + "?t=" + Date.now())
         .then(r => {
             if (!r.ok) {
-                header.innerText = "Файл не найден";
+                header.innerText = "Данные ещё не получены. Нажмите «Получить водителей».";
                 return null;
             }
             return r.json();
@@ -257,7 +257,7 @@ window.openDirectorySelect = async function(type, targetInputId) {
             <h3>Выбор</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>

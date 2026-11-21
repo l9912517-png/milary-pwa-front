@@ -9,7 +9,7 @@ registerScreen("payments", function() {
     container.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;gap:10px;">
-                <button onclick="openPaymentsForm()">Получить</button>
+                <button type="button" class="btn-wide" onclick="openPaymentsForm()">${iconSvg(ICON_REPORT)}Получить оплаты</button>
             </div>
 
             <div id="paymentsHeader" style="font-weight:600;margin-top:10px;"></div>
@@ -31,7 +31,7 @@ async function loadPaymentsReport(retry = 0) {
     const header = document.getElementById("paymentsHeader");
     const container = document.getElementById("paymentsContainer");
 
-    header.innerText = "Загрузка...";
+    header.innerText = "Загрузка…";
     container.innerHTML = "";
 
     try {
@@ -153,7 +153,7 @@ window.openPaymentsForm = function() {
     overlay.innerHTML = `
         <div class="modal-window">
 
-            <h3>Параметры отчета</h3>
+            <h3>Параметры отчёта</h3>
 
             <div class="period-buttons">
             <button class="period-btn" onclick="setPaymentsPeriod('yesterday',this)">Вчера</button>
@@ -170,8 +170,8 @@ window.openPaymentsForm = function() {
             <input type="date" id="paymentsDateTo">
 
             <div class="modal-actions">
-                <button onclick="requestPaymentsReport()">Получить</button>
-                <button onclick="closePaymentsForm()">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="closePaymentsForm()">Отмена</button>
+                <button type="button" class="btn-primary-wide" onclick="requestPaymentsReport()">Получить</button>
             </div>
 
         </div>

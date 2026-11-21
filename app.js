@@ -152,10 +152,10 @@ async function sendTask(type, payload) {
 
     const jwt = localStorage.getItem("jwt");
 
-   // 🔥 только для отчетов
+   // 🔥 только для отчётов
 if (type.includes("_report")) {
     window.waitingTaskType = type;
-    showLoadingOverlay("Формируем отчет...");
+    showLoadingOverlay("Формируем отчёт...");
 }
 
     try {
@@ -175,7 +175,7 @@ if (type.includes("_report")) {
             return;
         }
         
-        // 🔥 для обычных задач (не отчеты)
+        // 🔥 для обычных задач (не отчёты)
 if (!type.includes("_report")) {
     alert("Задача отправлена");
     return;
@@ -443,6 +443,20 @@ function iconSvg(d, cls) {
     return `<svg${cls ? ` class="${cls}"` : ""} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 }
 
+const ICON_REPORT = "M4 20V10 M10 20V4 M16 20v-7 M3 20h18";
+const ICON_REFRESH = "M20 11a8 8 0 1 0-2.3 5.7 M20 4v7h-7";
+
+/* ↻ — показать последний полученный отчёт без нового запроса в 1С */
+/* пустое состояние отчёта: одна формулировка на всех экранах */
+function reportEmptyHtml(buttonLabel) {
+    return `<div class="report-status">Отчёт ещё не получен. Нажмите «${escapeHtml(buttonLabel)}».</div>`;
+}
+
+function refreshButton(fnName) {
+    return `<button type="button" class="btn-icon-only" aria-label="Показать последний полученный отчёт"
+                    title="Показать последний полученный отчёт" onclick="${fnName}()">${iconSvg(ICON_REFRESH)}</button>`;
+}
+
 const ICON_EYE = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0";
 const ICON_CHEVRON = "M9 6l6 6-6 6";
 
@@ -670,7 +684,7 @@ const MENU_ANALYTICS = [
     { id: "dir_sales", icon: "👨‍💼", title: "Продажи по менеджерам" },
     { id: "ordersCount", icon: "📦", title: "Количество заказов" },
     { id: "cashState", icon: "🏦", title: "Состояние ДС" },
-    { id: "financeReport", icon: "📊", title: "Финансовый отчет" },
+    { id: "financeReport", icon: "📊", title: "Финансовый отчёт" },
     { id: "writeoffs", icon: "🧾", title: "Списания" },
     { id: "grossprofit", icon: "📈", title: "Валовая прибыль" },
     { id: "receipts", icon: "📥", title: "Поступления" }
@@ -1278,14 +1292,14 @@ async function openAdminPanel() {
                         <button
                             onclick="event.stopPropagation(); copyText(${jsArg(u.access_token)})"
                         >
-                            📋 Копировать
+                            ${iconSvg("M8 8h12v12H8z M4 16V4h12", "btn-ico")} Копировать
                         </button>
 
 
                         <button
                             onclick="event.stopPropagation(); saveUser(${u.id})"
                         >
-                            💾 Сохранить
+                            ${iconSvg("M5 3h11l3 3v15H5z M8 3v6h8V3 M8 21v-7h8v7", "btn-ico")} Сохранить
                         </button>
 
 
@@ -1302,7 +1316,7 @@ async function openAdminPanel() {
                         <button
                             onclick="event.stopPropagation(); regenerateToken(${u.id})"
                         >
-                            🔐 Новый токен
+                            ${iconSvg("M15 7a4 4 0 1 1-3.5 6L4 20.5V17h3v-3h3l1.5-1.5", "btn-ico")} Новый токен
                         </button>
 
 
@@ -1310,7 +1324,7 @@ async function openAdminPanel() {
                             class="admin-danger"
                             onclick="event.stopPropagation(); deleteUser(${u.id})"
                         >
-                            🗑 Удалить
+                            ${iconSvg("M4 7h16 M9 7V4h6v3 M6 7l1 14h10l1-14", "btn-ico")} Удалить
                         </button>
 
                     </div>
@@ -1423,11 +1437,11 @@ async function openAdminPanel() {
             >
 
                 <button onclick="runBackup()">
-                    💾 Сделать бэкап
+                    ${iconSvg("M12 8c4.4 0 8-1.3 8-3s-3.6-3-8-3-8 1.3-8 3 3.6 3 8 3z M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5", "btn-ico")} Сделать бэкап
                 </button>
 
                 <button onclick="openScreen('tasklist')">
-                    📋 Список задач
+                    ${iconSvg("M8 6h13 M8 12h13 M8 18h13 M3 6h1 M3 12h1 M3 18h1", "btn-ico")} Список задач
                 </button>
 
             </div>
@@ -2165,7 +2179,7 @@ async function openDirectorySelectEmail(targetInputId) {
             <h3>Выбор контрагента</h3>
 
             <input type="text" id="searchInput"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
@@ -2288,7 +2302,7 @@ function showLoadingOverlay(text) {
         document.body.appendChild(overlay);
     }
 
-    document.getElementById("loadingText").innerText = text || "Загрузка...";
+    document.getElementById("loadingText").innerText = text || "Загрузка…";
 }
 
 function hideLoadingOverlay() {
@@ -2300,7 +2314,7 @@ function hideLoadingOverlay() {
 
 function waitForReport(fileName, text) {
 
-    showLoadingOverlay(text || "Формирование отчета...");
+    showLoadingOverlay(text || "Формирование отчёта…");
 
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -3120,7 +3134,7 @@ async function openNomenclatureSelect(targetInputId, options = {}) {
             <h3>${options.title || "Выбор номенклатуры"}</h3>
 
             <input type="text" id="nomenclatureSearch"
-                   placeholder="Поиск..."
+                   placeholder="Поиск…"
                    style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="nomenclatureList" style="max-height:300px;overflow:auto;"></div>
@@ -3256,7 +3270,7 @@ async function runReport(options) {
 
     const opts = Object.assign({
         payload: {},
-        text: "Формирование отчета...",
+        text: "Формирование отчёта…",
         timeoutMs: 3 * 60 * 1000,
         intervalMs: 2000
     }, options || {});
@@ -3409,7 +3423,7 @@ function reportStatusText(status) {
         return "Ожидание очереди 1С...";
     }
 
-    return "1С формирует отчет...";
+    return "1С формирует отчёт...";
 }
 
 function finishReportRun(run) {
@@ -3445,7 +3459,7 @@ function showReportOverlay(text, statusText, onCancel) {
 
     document.body.appendChild(overlay);
 
-    overlay.querySelector("#reportOverlayText").innerText = text || "Формирование отчета...";
+    overlay.querySelector("#reportOverlayText").innerText = text || "Формирование отчёта…";
     overlay.querySelector("#reportOverlayStatus").innerText = statusText || "";
 
     overlay.querySelector("#reportOverlayCancel").onclick = () => {
