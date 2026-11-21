@@ -66,8 +66,8 @@ async function aeLoad() {
             </div>
             <div class="tq-item-body">
                 ${where ? `<div class="ad-dev"><small>Где</small>${escapeHtml(where)}</div>` : ""}
-                <div class="ad-dev"><small>Последний раз</small>${escapeHtml(tqTimeSafe(e.last_seen))}${e.last_version ? ", версия " + escapeHtml(e.last_version) : ""}${e.last_device ? "<br>" + escapeHtml(e.last_device) : ""}</div>
-                <div class="ad-dev"><small>Впервые</small>${escapeHtml(tqTimeSafe(e.first_seen))}</div>
+                <div class="ad-dev"><small>Последний раз</small>${escapeHtml(adminTime(e.last_seen))}${e.last_version ? ", версия " + escapeHtml(e.last_version) : ""}${e.last_device ? "<br>" + escapeHtml(e.last_device) : ""}</div>
+                <div class="ad-dev"><small>Впервые</small>${escapeHtml(adminTime(e.first_seen))}</div>
                 ${e.stack ? `<pre class="ae-stack">${escapeHtml(e.stack)}</pre>` : ""}
                 ${aeHidden ? "" : `<button type="button" class="btn-secondary" onclick="aeHide(${jsArg(e.id)}, this)">Скрыть (разобрано)</button>`}
             </div>
@@ -75,11 +75,6 @@ async function aeLoad() {
     }).join("");
 }
 
-function tqTimeSafe(iso) {
-    if (!iso) return "";
-    const d = new Date(iso);
-    return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" }) + " " + d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-}
 
 async function aeHide(id, btn) {
     if (id === "all" && !confirm("Скрыть все открытые ошибки? Повторившиеся снова появятся в списке.")) return;

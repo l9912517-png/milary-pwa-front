@@ -732,6 +732,7 @@ if (role === "logistics") {
 initPushPermission().catch(() => null);
 if (typeof supportAfterLogin === "function") supportAfterLogin();
 if (typeof clientReport === "function") setTimeout(clientReport, 1500);
+if (typeof announceOpenFromUrl === "function") announceOpenFromUrl();
 }
 
 
@@ -1069,6 +1070,8 @@ function showMenu() {
     if (typeof initDevButton === 'function') {
         initDevButton();
     }
+
+    if (typeof announceBannerRefresh === "function") announceBannerRefresh();
 }
 
 function handleMenuClick(id) {
