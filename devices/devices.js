@@ -108,8 +108,9 @@ async function devicesLoad() {
         box.innerHTML = `<div class="transfer-sub">Не удалось загрузить список. Проверьте связь</div>`;
         return;
     }
-    const others = data.sessions.filter(s => !s.current).length;
-    box.innerHTML = data.sessions.map(s => `
+    const list = Array.isArray(data.sessions) ? data.sessions : [];
+    const others = list.filter(s => !s.current).length;
+    box.innerHTML = list.map(s => `
         <div class="device-item${s.current ? " is-current" : ""}">
             <span class="device-icon">${iconSvg(/телефон|iOS|Android/.test(s.device) ? "M7 2h10v20H7z M11 18h2" : "M3 5h18v11H3z M8 20h8 M12 16v4")}</span>
             <span class="device-text">
