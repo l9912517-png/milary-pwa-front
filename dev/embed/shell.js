@@ -3,8 +3,8 @@
  * Поле HTML документа в обработке PWA_РабочееМестоРазработок.
  *
  * 1С открывает /pwa/dev/embed/?code=<одноразовый код>
- * (POST /api/idf/embed/session с context { page: 'developments' }).
- * Страница меняет код на JWT (POST /api/idf/embed/exchange) и держит его только в памяти.
+ * (POST /api/embed/session с context { page: 'developments' }).
+ * Страница меняет код на JWT (POST /api/embed/exchange) и держит его только в памяти.
  *
  * Связь с 1С:
  *   - ссылка v8:dev/relogin — получить новый код и войти заново;
@@ -508,7 +508,7 @@
     function exchange(code) {
         return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/idf/embed/exchange', true);
+            xhr.open('POST', '/api/embed/exchange', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
                 var data = null;

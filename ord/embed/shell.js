@@ -1,8 +1,8 @@
 /*
  * Рабочее место оператора заказов в 1С (поле HTML документа в обработке PWA_РабочееМестоОператора).
  *
- * 1С открывает /pwa/ord/embed/?code=<одноразовый код> (POST /api/idf/embed/session с context { page: 'orders' }).
- * Страница меняет код на JWT (POST /api/idf/embed/exchange) и держит его только в памяти.
+ * 1С открывает /pwa/ord/embed/?code=<одноразовый код> (POST /api/embed/session с context { page: 'orders' }).
+ * Страница меняет код на JWT (POST /api/embed/exchange) и держит его только в памяти.
  * Показывает тот же экран, что «Проверка заказов» в PWA (screens/ord_review.js).
  *
  * Связь с 1С:
@@ -98,7 +98,7 @@ function ordShellStart() {
     function exchange(code) {
         return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/idf/embed/exchange', true);
+            xhr.open('POST', '/api/embed/exchange', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
                 var data = null;

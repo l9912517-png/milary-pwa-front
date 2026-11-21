@@ -1,4 +1,4 @@
-const CACHE_NAME = "app-cache-v55";
+const CACHE_NAME = "app-cache-v56";
 
 const STATIC_ASSETS = [
     "/pwa/index.html",
@@ -72,60 +72,12 @@ self.addEventListener("push", event => {
         return;
     }
 
-    /*
-     * Messenger push èìååò ñòðóêòóðó:
-     *
-     * {
-     *     title: "...",
-     *     body: "...",
-     *     data: {
-     *         type: "messenger_message",
-     *         chat_id: 123,
-     *         message_id: 456
-     *     }
-     * }
-     *
-     * Ïîýòîìó Messenger-äàííûå íàõîäÿòñÿ
-     * âíóòðè payload.data.
-     */
-
     const pushData =
         payload.data || {};
 
-
-    /*
-     * Îáû÷íûå óâåäîìëåíèÿ:
-     *
-     * /pwa/
-     *
-     * Messenger:
-     *
-     * /pwa/?messenger_chat=CHAT_ID
-     */
-
-    let notificationUrl =
-        "https://pwa.mealfresh.ru/pwa/";
-
-
-    if (
-        pushData.type === "messenger_message" &&
-        pushData.chat_id
-    ) {
-
-        notificationUrl =
-            "https://pwa.mealfresh.ru/pwa/" +
-            "?messenger_chat=" +
-            encodeURIComponent(
-                pushData.chat_id
-            );
-    }
-
-    // IDF task push: open the task (/pwa/?idf_task=ID, handled by idf/pwa.js)
-    if (pushData.type === "idf" && pushData.task_id) {
-        notificationUrl =
-            "https://pwa.mealfresh.ru/pwa/?idf_task=" +
-            encodeURIComponent(pushData.task_id);
-    }
+    // ÐŸÐ¾ Ð½Ð°Ð¶Ð°Ñ‚Ð¸ÑŽ Ð½Ð° ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð¾Ñ‚ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð½Ð° ÑÑ‚Ð¾Ð¼ Ð¶Ðµ ÑÐ°Ð¹Ñ‚Ðµ
+    const notificationUrl =
+        new URL("/pwa/", self.location.origin).href;
 
 
     event.waitUntil(
@@ -146,17 +98,17 @@ self.addEventListener("push", event => {
                 badge:
                     "/pwa/logo.png",
 
-                // Óâåäîìëåíèå îñòà¸òñÿ íà ýêðàíå,
-                // ïîêà ïîëüçîâàòåëü åãî íå îòêðîåò/çàêðîåò.
+                // Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð¾ÑÑ‚Ð°Ñ‘Ñ‚ÑÑ Ð½Ð° ÑÐºÑ€Ð°Ð½Ðµ,
+                // Ð¿Ð¾ÐºÐ° Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÐµÐ³Ð¾ Ð½Ðµ Ð¾Ñ‚ÐºÑ€Ð¾ÐµÑ‚/Ð·Ð°ÐºÑ€Ð¾ÐµÑ‚.
                 requireInteraction:
                     true,
 
-                // Âèáðàöèÿ íà ïîääåðæèâàåìûõ óñòðîéñòâàõ.
+                // Ð’Ð¸Ð±Ñ€Ð°Ñ†Ð¸Ñ Ð½Ð° Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ñ… ÑƒÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²Ð°Ñ….
                 vibrate:
                     [200, 100, 200],
 
-                // Íå îáúåäèíÿòü ðàçíûå push
-                // â îäíî óâåäîìëåíèå.
+                // ÐÐµ Ð¾Ð±ÑŠÐµÐ´Ð¸Ð½ÑÑ‚ÑŒ Ñ€Ð°Ð·Ð½Ñ‹Ðµ push
+                // Ð² Ð¾Ð´Ð½Ð¾ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ.
                 tag:
                     "mealfresh-" +
                     Date.now(),
@@ -168,9 +120,6 @@ self.addEventListener("push", event => {
 
                     type:
                         pushData.type || null,
-
-                    chat_id:
-                        pushData.chat_id || null,
 
                     message_id:
                         pushData.message_id || null
@@ -196,7 +145,7 @@ self.addEventListener(
 
         const url =
             event.notification.data?.url ||
-            "https://pwa.mealfresh.ru/pwa/";
+            new URL("/pwa/", self.location.origin).href;
 
 
         /*
