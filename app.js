@@ -1162,7 +1162,7 @@ async function openAdminPanel() {
                         <div>
 
                             <strong>
-                                ${u.name}
+                                ${escapeHtml(u.name)}
                             </strong>
 
                             <div class="admin-user-status">
@@ -1195,7 +1195,7 @@ async function openAdminPanel() {
 
                     <input
                         id="name_${u.id}"
-                        value="${u.name}"
+                        value="${escapeHtml(u.name)}"
                     />
 
 
@@ -1225,7 +1225,7 @@ async function openAdminPanel() {
 
                     <input
                         id="uuid_${u.id}"
-                        value="${u.user_id}"
+                        value="${escapeHtml(u.user_id)}"
                     />
 
 
@@ -1234,7 +1234,7 @@ async function openAdminPanel() {
                     </label>
 
                     <input
-                        value="${u.access_token}"
+                        value="${escapeHtml(u.access_token)}"
                         readonly
                     />
 
@@ -1242,7 +1242,7 @@ async function openAdminPanel() {
                     <div class="admin-user-actions">
 
                         <button
-                            onclick="event.stopPropagation(); copyText('${u.access_token}')"
+                            onclick="event.stopPropagation(); copyText(${jsArg(u.access_token)})"
                         >
                             📋 Копировать
                         </button>
@@ -1399,20 +1399,16 @@ async function openAdminPanel() {
             </div>
 
 
-            <button
-                onclick="showMenu()"
-                style="
-                    background:#ccc;
-                    color:#000;
-                    margin-top:12px;
-                "
-            >
-                Назад
-            </button>
 
         </div>
 
     `;
+}
+
+/* Значение для вызова в атрибуте onclick: onclick="fn(${jsArg(x)})".
+   JSON даёт строку JS с экранированием, escapeHtml — безопасный атрибут (кавычки → &quot;). */
+function jsArg(value) {
+    return escapeHtml(JSON.stringify(String(value ?? "")));
 }
 
 function escapeHtml(value) {
@@ -1767,7 +1763,6 @@ async function showFiles() {
             <div class="menu-item">
                 Файлы отсутствуют
             </div>
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">Назад</button>
         `;
         return;
     }
@@ -1798,7 +1793,7 @@ ${!selectionMode ? `
     <div style="display:flex;gap:8px;margin-bottom:8px;">
         <input id="selectedEmail"
                placeholder="Email"
-               style="flex:1;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+               style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
         <button style="white-space:nowrap;"
                 onclick="openDirectorySelectEmail('selectedEmail')">
@@ -1809,12 +1804,12 @@ ${!selectionMode ? `
     <!-- 🔹 БЛОК ДЕЙСТВИЙ -->
     <div style="display:flex;gap:8px;margin-bottom:8px;">
         <button style="flex:1;" onclick="downloadSelected()">Скачать</button>
-        <button style="flex:1;background:#b30000;" onclick="deleteSelected()">Удалить</button>
+        <button style="flex:1;background:var(--danger);" onclick="deleteSelected()">Удалить</button>
     </div>
 
     <!-- 🔹 ОТМЕНА -->
     <button onclick="disableSelection()" 
-            style="width:100%;background:#ccc;color:#000;">
+            style="width:100%;background:rgba(255,255,255,0.10);color:var(--text);">
         Отмена
     </button>
 
@@ -1825,8 +1820,8 @@ ${!selectionMode ? `
     Object.keys(groups).forEach(groupName => {
 
         html += `
-            <div style="margin-top:16px;margin-bottom:8px;font-weight:600;color:#555;">
-                ${groupName}
+            <div style="margin-top:16px;margin-bottom:8px;font-weight:600;color:var(--text);">
+                ${escapeHtml(groupName)}
             </div>
         `;
 
@@ -1846,7 +1841,7 @@ ${!selectionMode ? `
                     <span class="icon">${icon}</span>
                     <div style="display:flex;flex-direction:column;">
                         <span style="word-break:break-all;">${escapeHtml(file)}</span>
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(fileObj.mtime)}
                         </span>
                     </div>
@@ -1860,14 +1855,13 @@ ${!selectionMode ? `
         <div style="
             margin-top:16px;
             font-size:13px;
-            color:#777;
+            color:var(--muted);
             text-align:center;
             line-height:1.4;
         ">
             Если файл не отправляется через «Отправить», скачайте его и отправьте со своего устройства.
         </div>
 
-        <button onclick="showMenu()" style="background:#ccc;color:#000;margin-top:16px;">Назад</button>
     `;
 
     container.innerHTML = html;
@@ -2137,7 +2131,7 @@ async function openDirectorySelectEmail(targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -2187,8 +2181,8 @@ async function openDirectorySelectEmail(targetInputId) {
         div.className = "menu-item";
 
         div.innerHTML = `
-            <strong>${item.name}</strong><br>
-            <small>${item.email}</small>
+            <strong>${escapeHtml(item.name)}</strong><br>
+            <small>${escapeHtml(item.email)}</small>
         `;
 
         // 🔥 НОРМАЛЬНЫЙ обработчик (без HTML-каши)
@@ -2260,7 +2254,7 @@ function showLoadingOverlay(text) {
 
         overlay.innerHTML = `
             <div style="
-                background:#fff;
+                background:var(--card);
                 padding:20px;
                 border-radius:12px;
                 text-align:center;
@@ -2734,10 +2728,6 @@ async function showMessages() {
             <div style="padding:12px;">
                 <div class="menu-item">Сообщений нет</div>
 
-                <button onclick="showMenu()" 
-                        style="background:#ccc;color:#000;width:100%;margin-top:10px;">
-                    Назад
-                </button>
             </div>
         `;
         return;
@@ -2745,7 +2735,7 @@ async function showMessages() {
 
     const html = messages.map(m => `
 
-        <div onclick="openMessage(${m.id})"
+        <div onclick="openMessage(${Number(m.id) || 0})"
              style="
                 display:flex;
                 flex-direction:column;
@@ -2753,14 +2743,14 @@ async function showMessages() {
                 padding:12px;
                 margin-bottom:10px;
                 border-radius:12px;
-                background:#fff;
+                background:var(--card);
                 box-shadow:0 2px 6px rgba(0,0,0,0.08);
                 cursor:pointer;
                 max-width:100%;
                 box-sizing:border-box;
                 word-break:break-word;
                 overflow-wrap:break-word;
-                ${m.is_read ? "opacity:0.6;" : "border-left:4px solid #4CAF50;"}
+                ${m.is_read ? "opacity:0.6;" : "border-left:4px solid var(--accent);"}
              ">
 
             <div style="font-weight:600;">
@@ -2777,7 +2767,7 @@ async function showMessages() {
 
             <div style="
                 font-size:12px;
-                color:#888;
+                color:var(--muted);
                 margin-top:4px;
             ">
                 ${new Date(m.created_at).toLocaleString("ru-RU")}
@@ -2792,7 +2782,7 @@ async function showMessages() {
 
            <div style="display:flex;gap:8px;margin-bottom:10px;">
     <button onclick="clearAllMessages()" 
-            style="flex:1;background:#b30000;">
+            style="flex:1;background:var(--danger);">
         Очистить
     </button>
 
@@ -2803,10 +2793,6 @@ async function showMessages() {
 
             ${html}
 
-            <button onclick="showMenu()" 
-                    style="background:#ccc;color:#000;width:100%;margin-top:10px;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -3066,8 +3052,8 @@ function renderUpdatedAt(date) {
     if (!date) return "";
 
     return `
-        <div style="font-size:12px;color:#666;margin-bottom:6px;">
-            Обновлено: ${date}
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+            Обновлено: ${escapeHtml(date)}
         </div>
     `;
 }
@@ -3115,7 +3101,7 @@ async function openNomenclatureSelect(targetInputId, options = {}) {
 
             <input type="text" id="nomenclatureSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="nomenclatureList" style="max-height:300px;overflow:auto;"></div>
 
@@ -3175,9 +3161,9 @@ async function openNomenclatureSelect(targetInputId, options = {}) {
 
                 div.innerHTML = `
                     <div style="display:flex;flex-direction:column;">
-                        <span>${i.name}</span>
-                        <span style="font-size:12px;color:#888;">
-                            ${i.full_name || ""}
+                        <span>${escapeHtml(i.name)}</span>
+                        <span style="font-size:12px;color:var(--muted);">
+                            ${escapeHtml(i.full_name || "")}
                         </span>
                     </div>
                 `;
@@ -3432,7 +3418,7 @@ function showReportOverlay(text, statusText, onCancel) {
 
     overlay.innerHTML = `
         <div style="
-            background:#fff;
+            background:var(--card);
             padding:20px;
             border-radius:12px;
             text-align:center;
@@ -3442,9 +3428,9 @@ function showReportOverlay(text, statusText, onCancel) {
         ">
             <div style="font-size:28px;">⏳</div>
             <div id="reportOverlayText" style="margin-top:10px;font-weight:600;"></div>
-            <div id="reportOverlayStatus" style="margin-top:6px;font-size:13px;color:#777;"></div>
+            <div id="reportOverlayStatus" style="margin-top:6px;font-size:13px;color:var(--muted);"></div>
             <button id="reportOverlayCancel"
-                    style="margin-top:16px;width:100%;background:#ccc;color:#000;">
+                    style="margin-top:16px;width:100%;background:rgba(255,255,255,0.10);color:var(--text);">
                 Отменить
             </button>
         </div>

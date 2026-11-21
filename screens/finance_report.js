@@ -94,10 +94,10 @@ async function loadFinanceReport(retry = 0) {
 
             const num = parseNumber(val);
 
-            let color = "#222";
+            let color = "var(--text)";
 
-            if (num > 0) color = "#2e7d32";
-            if (num < 0) color = "#c62828";
+            if (num > 0) color = "var(--accent)";
+            if (num < 0) color = "#FF8FB3";
 
             return `
                 <span style="color:${color};font-weight:500;">
@@ -125,10 +125,10 @@ async function loadFinanceReport(retry = 0) {
                         padding:${isTotal ? "8px 0 0 0" : "4px 0"};
                         font-weight:${isTotal ? "600" : "400"};
                         font-size:${isTotal ? "15px" : "13px"};
-                        border-top:${isTotal ? "1px solid #eee" : "none"};
+                        border-top:${isTotal ? "1px solid var(--line)" : "none"};
                         margin-top:${isTotal ? "6px" : "0"};
                     ">
-                        <div>${i.name}</div>
+                        <div>${escapeHtml(i.name)}</div>
                         <div>${formatMoneyColored(i.value)}</div>
                     </div>
                 `;
@@ -136,19 +136,19 @@ async function loadFinanceReport(retry = 0) {
 
             return `
                 <div style="
-                    background:#fff;
+                    background:var(--card);
                     border-radius:14px;
                     padding:14px;
                     box-shadow:0 4px 12px rgba(0,0,0,0.06);
                 ">
                     <div style="
                         font-size:12px;
-                        color:#777;
+                        color:var(--muted);
                         margin-bottom:6px;
                         text-transform:uppercase;
                         letter-spacing:0.5px;
                     ">
-                        ${title}
+                        ${escapeHtml(title)}
                     </div>
                     ${rows}
                 </div>
@@ -162,15 +162,15 @@ async function loadFinanceReport(retry = 0) {
 
             <div style="display:flex;gap:10px;margin-bottom:8px;">
 
-                <div style="flex:1;background:#fff;padding:10px;border-radius:12px;">
-                    <div style="font-size:11px;color:#888;">Продажи</div>
+                <div style="flex:1;background:var(--card);padding:10px;border-radius:12px;">
+                    <div style="font-size:11px;color:var(--muted);">Продажи</div>
                     <div style="font-weight:600;">
                         ${formatMoney(report.sales?.total)}
                     </div>
                 </div>
 
-                <div style="flex:1;background:#fff;padding:10px;border-radius:12px;">
-                    <div style="font-size:11px;color:#888;">ВП</div>
+                <div style="flex:1;background:var(--card);padding:10px;border-radius:12px;">
+                    <div style="font-size:11px;color:var(--muted);">ВП</div>
                     <div style="font-weight:600;">
                         ${formatMoney(report.profit_block?.profit)}
                     </div>
@@ -232,8 +232,9 @@ async function loadFinanceReport(retry = 0) {
             html += `
                 <div style="
                     margin-top:12px;
-                    background:linear-gradient(135deg,#4f8cff,#6aa6ff);
-                    color:#fff;
+                    background:linear-gradient(135deg, rgba(181,224,138,0.16) 0%, rgba(255,255,255,0.05) 100%);
+                    border:1px solid rgba(181,224,138,0.35);
+                    color:var(--text);
                     border-radius:16px;
                     padding:18px;
                     display:flex;

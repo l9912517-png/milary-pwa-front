@@ -99,8 +99,8 @@ async function loadPaymentsReport(retry = 0) {
 
             html += `
                 <div class="report-row">
-                    <div>${manager}</div>
-                    <div class="report-sum">${formatSum(sum)}</div>
+                    <div>${escapeHtml(manager)}</div>
+                    <div class="report-sum">${escapeHtml(formatSum(sum))}</div>
                 </div>
             `;
         });
@@ -109,7 +109,7 @@ async function loadPaymentsReport(retry = 0) {
         html += `
             <div class="report-row total">
                 <div><b>ИТОГО</b></div>
-                <div class="report-sum">${formatSum(total)}</div>
+                <div class="report-sum">${escapeHtml(formatSum(total))}</div>
             </div>
         </div>`;
 

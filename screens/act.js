@@ -39,8 +39,8 @@ registerScreen("act", async function () {
     const historyItems = history.map(h => ({
         type: "request",
         date: new Date(h.date),
-        text: `Запрос акта: ${h.counterparty_name}
-${h.date_from} - ${h.date_to}`
+        text: `Запрос акта: ${escapeHtml(h.counterparty_name)}
+${escapeHtml(h.date_from)} - ${escapeHtml(h.date_to)}`
     }));
 
     // ===== ОБЪЕДИНЯЕМ =====
@@ -67,7 +67,7 @@ ${h.date_from} - ${h.date_to}`
                             ${item.text}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -80,11 +80,11 @@ ${h.date_from} - ${h.date_to}`
                 return `
                     <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
                         
-                        <span style="color:#4CAF50;">
-                            ${item.text}
+                        <span style="color:var(--accent);">
+                            ${escapeHtml(item.text)}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -107,16 +107,16 @@ ${h.date_from} - ${h.date_to}`
                        id="actCounterparty"
                        placeholder="Выберите контрагента"
                        readonly
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;"
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);"
                        onclick="openActCounterpartySelect()">
 
                 <label>Период с</label>
                 <input type="date" id="actDateFrom"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <label>Период по</label>
                 <input type="date" id="actDateTo"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
                 <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
     <input type="checkbox" id="actForINN">
     <span>По ИНН</span>
@@ -135,9 +135,6 @@ ${h.date_from} - ${h.date_to}`
                 ${html}
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -159,7 +156,7 @@ async function openActCounterpartySelect() {
 
             <input type="text" id="actSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="actList" style="max-height:300px;overflow:auto;"></div>
 
@@ -202,7 +199,7 @@ async function openActCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 

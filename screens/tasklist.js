@@ -87,30 +87,30 @@ function loadTaskList() {
 
 
         <div style="font-weight:600;">
-            ${row.ТипЗадачи || "-"}
+            ${escapeHtml(row.ТипЗадачи || "-")}
         </div>
 
 
-        <div style="font-size:12px;color:#888;">
-            ${formatTaskDate(row.ДатаСоздания)}
+        <div style="font-size:12px;color:var(--muted);">
+            ${escapeHtml(formatTaskDate(row.ДатаСоздания))}
         </div>
 
 
-        <div>👤 ${row.Пользователь || "-"}</div>
+        <div>👤 ${escapeHtml(row.Пользователь || "-")}</div>
 
 
-        ${row.Менеджер ? `<div>👔 ${row.Менеджер}</div>` : ""}
-        ${row.Контрагент ? `<div>🏢 ${row.Контрагент}</div>` : ""}
-        ${row.Номенклатура ? `<div>📦 ${row.Номенклатура}</div>` : ""}
+        ${row.Менеджер ? `<div>👔 ${escapeHtml(row.Менеджер)}</div>` : ""}
+        ${row.Контрагент ? `<div>🏢 ${escapeHtml(row.Контрагент)}</div>` : ""}
+        ${row.Номенклатура ? `<div>📦 ${escapeHtml(row.Номенклатура)}</div>` : ""}
 
 
-        ${row.ИмяКонтрагента ? `<div>📛 ${row.ИмяКонтрагента}</div>` : ""}
-        ${row.СтрокаПоиска ? `<div>🔍 ${row.СтрокаПоиска}</div>` : ""}
+        ${row.ИмяКонтрагента ? `<div>📛 ${escapeHtml(row.ИмяКонтрагента)}</div>` : ""}
+        ${row.СтрокаПоиска ? `<div>🔍 ${escapeHtml(row.СтрокаПоиска)}</div>` : ""}
 
 
         ${(row.Дата1 || row.Дата2) ? `
-            <div style="font-size:12px;color:#555;">
-                📅 ${row.Дата1 || ""} — ${row.Дата2 || ""}
+            <div style="font-size:12px;color:var(--text);">
+                📅 ${escapeHtml(row.Дата1 || "")} — ${escapeHtml(row.Дата2 || "")}
             </div>
         ` : ""}
 

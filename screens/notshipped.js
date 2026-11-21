@@ -70,7 +70,7 @@ function loadNotshipped() {
 
 
                 html += `<div class="report-table">`;
-                html += `<div class="report-head"><div>${block.title}</div></div>`;
+                html += `<div class="report-head"><div>${escapeHtml(block.title)}</div></div>`;
 
 
                 block.groups.forEach(group => {
@@ -78,7 +78,7 @@ function loadNotshipped() {
 
                     html += `
                         <div class="report-row manager">
-                            <div><b>${group.name}</b></div>
+                            <div><b>${escapeHtml(group.name)}</b></div>
                             <div></div>
                         </div>
                     `;
@@ -92,12 +92,12 @@ function loadNotshipped() {
 
 
     <div>
-        ${row.date} | ${row.counterparty || row.product}
+        ${escapeHtml(row.date)} | ${escapeHtml(row.counterparty || row.product)}
     </div>
     <div class="report-sum">
-        <span style="color:#2e7d32;">${row.qty || 0}</span>
+        <span style="color:var(--accent);">${escapeHtml(row.qty || 0)}</span>
         /
-        <span style="color:#c62828;">${row.ordered || 0}</span>
+        <span style="color:#FF8FB3;">${escapeHtml(row.ordered || 0)}</span>
     </div>
 </div>
                         `;

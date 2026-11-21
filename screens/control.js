@@ -26,8 +26,8 @@ registerScreen("control", async function () {
                 // дата обновления
                 if (data.updated_at) {
                     updatedHtml = `
-                        <div style="font-size:12px;color:#666;margin-bottom:6px;">
-                            Обновлено: ${data.updated_at}
+                        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+                            Обновлено: ${escapeHtml(data.updated_at)}
                         </div>
                     `;
                 }
@@ -37,9 +37,9 @@ registerScreen("control", async function () {
 
                     listHtml = data.items.map(i => `
                         <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
-                            <div><strong>${i.name || "-"}</strong></div>
-                            <div style="font-size:12px;color:#666;">
-                                До: ${i.date_to || "-"}
+                            <div><strong>${escapeHtml(i.name || "-")}</strong></div>
+                            <div style="font-size:12px;color:var(--muted);">
+                                До: ${escapeHtml(i.date_to || "-")}
                             </div>
                         </div>
                     `).join("");
@@ -66,7 +66,7 @@ registerScreen("control", async function () {
                 gap:10px;
                 padding:12px;
                 border-radius:12px;
-                background:#fff;
+                background:var(--card);
             ">
 
                 <label>Контрагент</label>
@@ -76,13 +76,13 @@ registerScreen("control", async function () {
                        placeholder="Выберите контрагента"
                        readonly
                        onclick="openControlCounterpartySelect()"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
-                <button onclick="controlClient()" style="background:#4CAF50;">
+                <button onclick="controlClient()" style="background:var(--accent);">
                     Контроль
                 </button>
 
-                <button onclick="refreshControl()" style="background:#2196F3;">
+                <button onclick="refreshControl()" class="btn-secondary">
                     Обновить
                 </button>
 
@@ -100,9 +100,6 @@ registerScreen("control", async function () {
                 ${listHtml}
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -123,7 +120,7 @@ async function openControlCounterpartySelect() {
 
             <input type="text" id="controlCpSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="controlCpList" style="max-height:300px;overflow:auto;"></div>
 
@@ -165,7 +162,7 @@ async function openControlCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 

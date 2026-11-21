@@ -36,8 +36,8 @@ registerScreen("logistic", function () {
                         box-sizing:border-box;
                         padding:14px;
                         border-radius:14px;
-                        border:1px solid #dbe2ea;
-                        background:#fff;
+                        border:1px solid var(--card-border);
+                        background:var(--card);
                         font-size:15px;
                         box-shadow:0 2px 6px rgba(0,0,0,0.04);
                     "
@@ -188,16 +188,16 @@ async function loadLogistic() {
 
                     onclick="
                         openLogisticRoute(
-                            '${route.route_uuid}'
+                            ${jsArg(route.route_uuid)}
                         )
                     "
 
                     data-search="
-                        ${(
+                        ${escapeHtml((
                             (driver.name || '') + ' ' +
                             (driver.phone || '') + ' ' +
                             (vehicle.description || '')
-                        ).toLowerCase()}
+                        ).toLowerCase())}
                     "
 
                     style="
@@ -216,7 +216,7 @@ async function loadLogistic() {
                             rgba(0,0,0,0.08);
 
                         border:
-                            1px solid #e8edf3;
+                            1px solid var(--card-border);
 
                         display:flex;
                         flex-direction:column;
@@ -245,18 +245,18 @@ async function loadLogistic() {
                             <div style="
                                 font-size:18px;
                                 font-weight:700;
-                                color:#111827;
+                                color:#9DB8FF;
                                 line-height:1.3;
                             ">
                                 🚚
-                                ${driver.name || "-"}
+                                ${escapeHtml(driver.name || "-")}
                             </div>
 
                             <div style="
                                 font-size:13px;
-                                color:#6b7280;
+                                color:var(--muted);
                             ">
-                                👤 Маршрут #${route.driver_slot || "-"}
+                                👤 Маршрут #${escapeHtml(route.driver_slot || "-")}
                             </div>
 
                         </div>
@@ -264,13 +264,13 @@ async function loadLogistic() {
                         <div style="
                             background:
                                 ${hasLocation
-                                    ? '#dcfce7'
-                                    : '#fee2e2'};
+                                    ? 'rgba(181,224,138,0.14)'
+                                    : 'rgba(224,69,123,0.16)'};
 
                             color:
                                 ${hasLocation
-                                    ? '#166534'
-                                    : '#991b1b'};
+                                    ? 'var(--accent)'
+                                    : '#FF8FB3'};
 
                             padding:6px 10px;
                             border-radius:999px;
@@ -292,23 +292,23 @@ async function loadLogistic() {
                         align-items:center;
                         gap:8px;
                         font-size:15px;
-                        color:#374151;
+                        color:#9DB8FF;
                     ">
 
                         📞
 
                         <a
-                            href="tel:${driver.phone || ''}"
+                            href="tel:${escapeHtml(String(driver.phone || '').replace(/[^\d+]/g, ''))}"
 
                             onclick="event.stopPropagation()"
 
                             style="
-                                color:#2563eb;
+                                color:#9DB8FF;
                                 text-decoration:none;
                                 font-weight:600;
                             "
                         >
-                            ${driver.phone || "-"}
+                            ${escapeHtml(driver.phone || "-")}
                         </a>
 
                     </div>
@@ -316,15 +316,15 @@ async function loadLogistic() {
                     <!-- AUTO -->
 
                     <div style="
-                        background:#eef2ff;
-                        color:#3730a3;
+                        background:var(--card);
+                        color:#9DB8FF;
                         border-radius:12px;
                         padding:12px;
                         font-size:14px;
                         font-weight:600;
                     ">
                         🚘
-                        ${vehicle.description || "-"}
+                        ${escapeHtml(vehicle.description || "-")}
                     </div>
 
                     <!-- PROGRESS -->
@@ -339,26 +339,26 @@ async function loadLogistic() {
                             display:flex;
                             justify-content:space-between;
                             font-size:13px;
-                            color:#4b5563;
+                            color:var(--text);
                             font-weight:600;
                         ">
 
                             <span>
                                 📦
-                                ${donePoints}
+                                ${escapeHtml(donePoints)}
                                 /
-                                ${totalPoints}
+                                ${escapeHtml(totalPoints)}
                             </span>
 
                             <span>
-                                ${progress}%
+                                ${escapeHtml(progress)}%
                             </span>
 
                         </div>
 
                         <div style="
                             height:10px;
-                            background:#e5e7eb;
+                            background:rgba(255,255,255,0.10);
                             border-radius:999px;
                             overflow:hidden;
                         ">
@@ -386,19 +386,19 @@ async function loadLogistic() {
                         flex-direction:column;
                         gap:4px;
                         font-size:12px;
-                        color:#6b7280;
+                        color:var(--muted);
                     ">
 
                         <div>
                             📍
-                            ${hasLocation
+                            ${escapeHtml(hasLocation
                                 ? location.lat + ", " + location.lng
-                                : "нет координат"}
+                                : "нет координат")}
                         </div>
 
                         <div>
                             🕒
-                            ${location.updated_at || "не обновлялось"}
+                            ${escapeHtml(location.updated_at || "не обновлялось")}
                         </div>
 
                     </div>
@@ -416,14 +416,14 @@ async function loadLogistic() {
                                 event.stopPropagation();
 
                                 requestDriverLocation(
-                                    '${route.route_uuid}'
+                                    ${jsArg(route.route_uuid)}
                                 );
                             "
 
                             style="
                                 flex:1;
 
-                                background:#2563eb;
+                                background:#5B7BE0;
                                 color:#fff;
 
                                 border:none;
@@ -443,8 +443,8 @@ async function loadLogistic() {
                                 event.stopPropagation();
 
                                 openDriverMap(
-                                    ${location.lat},
-                                    ${location.lng}
+                                    ${Number(location.lat) || 0},
+                                    ${Number(location.lng) || 0}
                                 );
                             "
 
@@ -453,8 +453,8 @@ async function loadLogistic() {
 
                                 background:
                                     ${hasLocation
-                                        ? '#16a34a'
-                                        : '#9ca3af'};
+                                        ? 'var(--accent)'
+                                        : 'rgba(255,255,255,0.16)'};
 
                                 color:#fff;
 
@@ -489,17 +489,6 @@ async function loadLogistic() {
 
             html += `
 
-                <button
-                    onclick="showMenu()"
-
-                    style="
-                        margin-top:10px;
-                        background:#d1d5db;
-                        color:#111827;
-                    "
-                >
-                    Назад
-                </button>
             `;
         }
 
@@ -657,16 +646,16 @@ function openLogisticRoute(routeUuid) {
                 flex-direction:column;
                 gap:12px;
 
-                border:1px solid #e5e7eb;
+                border:1px solid var(--card-border);
             ">
 
                 <div style="
                     font-size:20px;
                     font-weight:700;
-                    color:#111827;
+                    color:#9DB8FF;
                 ">
                     🚚
-                    ${route.driver?.name || "-"}
+                    ${escapeHtml(route.driver?.name || "-")}
                 </div>
 
                 <div style="
@@ -674,25 +663,25 @@ function openLogisticRoute(routeUuid) {
                     flex-direction:column;
                     gap:6px;
 
-                    color:#374151;
+                    color:#9DB8FF;
                     font-size:14px;
                 ">
 
                     <div>
                         📞
-                        ${route.driver?.phone || "-"}
+                        ${escapeHtml(route.driver?.phone || "-")}
                     </div>
 
                     <div>
                         🚘
-                        ${route.vehicle?.description || "-"}
+                        ${escapeHtml(route.vehicle?.description || "-")}
                     </div>
 
                     <div>
                         📦
-                        ${route.stats?.points_done || 0}
+                        ${escapeHtml(route.stats?.points_done || 0)}
                         /
-                        ${route.stats?.points_total || 0}
+                        ${escapeHtml(route.stats?.points_total || 0)}
                     </div>
 
                 </div>
@@ -723,12 +712,12 @@ function openLogisticRoute(routeUuid) {
             html += `
 
                 <div style="
-                    background:#ffffff;
+                    background:var(--card);
                     border-radius:20px;
 
                     overflow:hidden;
 
-                    border:1px solid #dbeafe;
+                    border:1px solid rgba(120,170,255,0.5);
 
                     box-shadow:
                         0 4px 14px
@@ -758,7 +747,7 @@ function openLogisticRoute(routeUuid) {
                     ">
 
                         <div>
-                            🚛 Ходка ${trip}
+                            🚛 Ходка ${escapeHtml(trip)}
                         </div>
 
                         <div style="
@@ -771,7 +760,7 @@ function openLogisticRoute(routeUuid) {
 
                             font-size:12px;
                         ">
-                            ${tripStops.length} точек
+                            ${escapeHtml(tripStops.length)} точек
                         </div>
 
                     </div>
@@ -785,7 +774,7 @@ function openLogisticRoute(routeUuid) {
                         flex-direction:column;
                         gap:10px;
 
-                        background:#f8fafc;
+                        background:var(--card);
                     ">
             `;
 
@@ -794,13 +783,13 @@ function openLogisticRoute(routeUuid) {
                 html += `
 
                     <div style="
-                        background:#fff;
+                        background:var(--card);
 
                         border-radius:16px;
                         padding:14px;
 
                         border-left:
-                            5px solid #2563eb;
+                            5px solid rgba(120,170,255,0.5);
 
                         box-shadow:
                             0 2px 8px
@@ -816,22 +805,22 @@ function openLogisticRoute(routeUuid) {
                         <div style="
                             font-size:15px;
                             font-weight:700;
-                            color:#111827;
+                            color:#9DB8FF;
                             line-height:1.4;
                         ">
                             🏪
-                            ${stop.counterparty?.name || "-"}
+                            ${escapeHtml(stop.counterparty?.name || "-")}
                         </div>
 
                         <!-- ADDRESS -->
 
                         <div style="
                             font-size:14px;
-                            color:#374151;
+                            color:#9DB8FF;
                             line-height:1.5;
                         ">
                             📍
-                            ${stop.address || "-"}
+                            ${escapeHtml(stop.address || "-")}
                         </div>
 
                         <!-- TIME -->
@@ -843,8 +832,8 @@ function openLogisticRoute(routeUuid) {
 
                             width:max-content;
 
-                            background:#eef2ff;
-                            color:#3730a3;
+                            background:var(--card);
+                            color:#9DB8FF;
 
                             padding:6px 10px;
 
@@ -854,7 +843,7 @@ function openLogisticRoute(routeUuid) {
                             font-weight:600;
                         ">
                             ⏰
-                            ${stop.delivery_time || "-"}
+                            ${escapeHtml(stop.delivery_time || "-")}
                         </div>
 
                     </div>
@@ -879,8 +868,8 @@ function openLogisticRoute(routeUuid) {
 
             style="
                 margin-top:10px;
-                background:#d1d5db;
-                color:#111827;
+                background:rgba(255,255,255,0.10);
+                color:#9DB8FF;
             "
         >
             Назад

@@ -64,10 +64,10 @@ registerScreen("bills", async function () {
                     <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
                         
                         <span style="font-weight:600;">
-                            ${item.text}
+                            ${escapeHtml(item.text)}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -80,11 +80,11 @@ registerScreen("bills", async function () {
                 return `
                     <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
                         
-                        <span style="color:#4CAF50;">
-                            ${item.text}
+                        <span style="color:var(--accent);">
+                            ${escapeHtml(item.text)}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -103,14 +103,14 @@ registerScreen("bills", async function () {
                 <label>Период с</label>
                 <input type="date"
                        id="billsDateFrom"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <label>Период по</label>
                 <input type="date"
                        id="billsDateTo"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
-                <div style="font-size:12px;color:#777;">
+                <div style="font-size:12px;color:var(--muted);">
                     * если хоть одна дата не заполнена, будут отправлены все неоплаченные счета
                 </div>
 
@@ -120,7 +120,7 @@ registerScreen("bills", async function () {
                        id="billsCounterparty"
                        placeholder="Выберите контрагента"
                        readonly
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;"
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);"
                        onclick="openBillsCounterpartySelect()">
 
                 <button onclick="requestBills()" style="width:100%;">
@@ -137,9 +137,6 @@ registerScreen("bills", async function () {
                 ${html}
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -159,7 +156,7 @@ async function openBillsCounterpartySelect() {
 
             <input type="text" id="billsSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="billsList" style="max-height:300px;overflow:auto;"></div>
 
@@ -202,7 +199,7 @@ data = filterCounterpartiesByRole(data, user);
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 

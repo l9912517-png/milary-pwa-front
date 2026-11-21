@@ -106,8 +106,9 @@ async function loadWriteoffsReport(retry = 0) {
                 html += `
                     <div class="report-row director"
      style="
-        background:linear-gradient(135deg,#4f8cff,#6aa6ff);
-        color:#fff;
+        background:linear-gradient(135deg, rgba(181,224,138,0.16) 0%, rgba(255,255,255,0.05) 100%);
+        border:1px solid rgba(181,224,138,0.35);
+        color:var(--text);
         font-weight:600;
         border-radius:10px;
         margin-top:10px;
@@ -116,7 +117,7 @@ async function loadWriteoffsReport(retry = 0) {
      ">
 
                         <div>
-                            <b>${article}</b>
+                            <b>${escapeHtml(article)}</b>
                         </div>
 
                         <div></div>
@@ -157,15 +158,15 @@ async function loadWriteoffsReport(retry = 0) {
                     <div style="display:flex;flex-direction:column;">
 
                         <div>
-                            ${product}
+                            ${escapeHtml(product)}
                         </div>
 
                         <div style="
                             font-size:12px;
-                            color:#777;
+                            color:var(--muted);
                             margin-top:2px;
                         ">
-                            ${qty} ${unit}
+                            ${escapeHtml(qty)} ${escapeHtml(unit)}
                             ×
                             ${formatMoney(price)}
                         </div>

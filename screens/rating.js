@@ -61,7 +61,7 @@ function loadRating() {
 
                 html += `<div class="rating-block">`;
 
-                html += `<div class="rating-title">${block.title}</div>`;
+                html += `<div class="rating-title">${escapeHtml(block.title)}</div>`;
 
                 block.items.forEach(item => {
 
@@ -73,9 +73,9 @@ function loadRating() {
 
                     html += `
                         <div class="rating-row ${item.pos <= 3 ? 'top' : ''}">
-                            <div class="rating-pos">${medal || item.pos}</div>
-                            <div class="rating-name">${item.name}</div>
-                            <div class="rating-value">${item.percent}%</div>
+                            <div class="rating-pos">${escapeHtml(medal || item.pos)}</div>
+                            <div class="rating-name">${escapeHtml(item.name)}</div>
+                            <div class="rating-value">${escapeHtml(item.percent)}%</div>
                         </div>
                     `;
                 });

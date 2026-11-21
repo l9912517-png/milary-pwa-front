@@ -128,10 +128,10 @@ async function loadGrossProfitReport(retry = 0) {
             html += `
 
                 <div style="
-                    background:#fff;
+                    background:var(--card);
                     border-radius:14px;
                     padding:14px;
-                    border:1px solid #ececec;
+                    border:1px solid var(--card-border);
                     box-shadow:0 2px 8px rgba(0,0,0,.05);
                 ">
 
@@ -161,7 +161,7 @@ async function loadGrossProfitReport(retry = 0) {
                     <div class="report-row">
                         <div><b>Валовая прибыль</b></div>
                         <div style="
-                            color:#2e7d32;
+                            color:var(--accent);
                             font-weight:700;
                         ">
                             ${formatMoney(report.totals.profit)}
@@ -171,7 +171,7 @@ async function loadGrossProfitReport(retry = 0) {
                     <div class="report-row">
                         <div>ВП %</div>
                         <div>
-                            ${report.totals.profit_percent}
+                            ${escapeHtml(report.totals.profit_percent)}
                         </div>
                     </div>
 
@@ -197,10 +197,10 @@ async function loadGrossProfitReport(retry = 0) {
             html += `
 
                 <div style="
-                    background:#fff;
+                    background:var(--card);
                     border-radius:14px;
                     overflow:hidden;
-                    border:1px solid #ececec;
+                    border:1px solid var(--card-border);
                     box-shadow:0 2px 8px rgba(0,0,0,.05);
                 ">
 
@@ -208,7 +208,7 @@ async function loadGrossProfitReport(retry = 0) {
                         onclick="toggleGrossProfit('${managerId}')"
                         style="
                             padding:12px;
-                            background:linear-gradient(135deg,#5f6672,#7a8594);
+                            background:linear-gradient(135deg,var(--surface),rgba(255,255,255,0.16));
                             color:#fff;
                             cursor:pointer;
                         "
@@ -226,7 +226,7 @@ async function loadGrossProfitReport(retry = 0) {
                                     font-size:15px;
                                     font-weight:700;
                                 ">
-                                    ${managerName}
+                                    ${escapeHtml(managerName)}
                                 </div>
 
                                 <div style="
@@ -252,7 +252,7 @@ async function loadGrossProfitReport(retry = 0) {
                                 <div style="
                                     font-weight:700;
                                 ">
-                                    ${manager.profit_percent}
+                                    ${escapeHtml(manager.profit_percent)}
                                 </div>
 
                             </div>
@@ -273,14 +273,14 @@ async function loadGrossProfitReport(retry = 0) {
 
                     <div style="
                         padding:12px;
-                        border-bottom:1px solid #f0f0f0;
+                        border-bottom:1px solid var(--card-border);
                     ">
 
                         <div style="
                             font-weight:600;
                             margin-bottom:8px;
                         ">
-                            ${client.client}
+                            ${escapeHtml(client.client)}
                         </div>
 
                         <div style="
@@ -308,7 +308,7 @@ async function loadGrossProfitReport(retry = 0) {
                             <div>ВП</div>
                             <div style="
                                 text-align:right;
-                                color:#2e7d32;
+                                color:var(--accent);
                                 font-weight:700;
                             ">
                                 ${formatMoney(client.profit)}
@@ -319,7 +319,7 @@ async function loadGrossProfitReport(retry = 0) {
                                 text-align:right;
                                 font-weight:700;
                             ">
-                                ${client.profit_percent}
+                                ${escapeHtml(client.profit_percent)}
                             </div>
 
                         </div>
@@ -512,8 +512,7 @@ window.openGrossProfitForm = function () {
             "onclick"
         );
 
-        input.style.background =
-            "#eee";
+        input.style.background = "var(--card)";
     }
 };
 
@@ -545,7 +544,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -618,7 +617,7 @@ function renderDirectoryList(data, container, targetInputId) {
         const div = document.createElement("div");
         div.className = "menu-item";
 
-        div.innerHTML = `<span>${item.name}</span>`;
+        div.innerHTML = `<span>${escapeHtml(item.name)}</span>`;
 
         div.onclick = function() {
 

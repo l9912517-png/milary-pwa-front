@@ -20,9 +20,9 @@
             /* Цвет текста и фон кнопок заданы явно, чтобы не зависеть
                от общих стилей приложения. */
             .dev-summary-page .ds-btn {
-                background: #ffffff !important;
-                color: #1b4d20 !important;
-                border: 1px solid #9cc3a1 !important;
+                background: var(--card) !important;
+                color: var(--accent) !important;
+                border: 1px solid var(--accent-line) !important;
                 border-radius: 999px;
                 padding: 8px 14px;
                 font-size: 14px;
@@ -30,14 +30,14 @@
                 cursor: pointer;
             }
             .dev-summary-page .ds-btn.is-on {
-                background: #2e7d32 !important;
-                color: #ffffff !important;
-                border-color: #2e7d32 !important;
+                background: var(--accent) !important;
+                color: var(--accent-ink) !important;
+                border-color: var(--accent-line) !important;
             }
 
             .dev-summary-page .ds-card {
-                background: #ffffff;
-                color: #1f2a1f;
+                background: var(--card);
+                color: var(--text);
                 border-radius: 12px;
                 box-shadow: 0 1px 4px rgba(0,0,0,.12);
                 padding: 12px;
@@ -55,9 +55,9 @@
                 font-size: 16px;
                 padding: 10px;
                 border-radius: 10px;
-                border: 1px solid #9cc3a1;
-                background: #ffffff;
-                color: #1f2a1f;
+                border: 1px solid var(--accent-line);
+                background: var(--card);
+                color: var(--text);
                 margin-top: 10px;
             }
 
@@ -68,8 +68,8 @@
                 margin-top: 10px;
             }
             .dev-summary-page .ds-tab {
-                background: #f2f7f3 !important;
-                color: #1f2a1f !important;
+                background: var(--card) !important;
+                color: var(--text) !important;
                 border: 2px solid transparent !important;
                 border-radius: 10px;
                 padding: 8px 2px;
@@ -86,20 +86,20 @@
                 color: inherit;
             }
             .dev-summary-page .ds-tab.is-on {
-                background: #e1f1e3 !important;
-                border-color: #2e7d32 !important;
+                background: rgba(255,255,255,0.10) !important;
+                border-color: var(--accent-line) !important;
             }
 
             .dev-summary-page .ds-meta {
                 margin-top: 10px;
                 font-size: 13px;
-                color: #4a574a !important;
+                color: var(--text) !important;
             }
 
             .dev-summary-page .ds-item-title {
                 font-weight: 700;
                 font-size: 16px;
-                color: #1f2a1f !important;
+                color: var(--text) !important;
             }
             .dev-summary-page .ds-badge {
                 display: inline-block;
@@ -112,12 +112,12 @@
             }
             .dev-summary-page .ds-line {
                 font-size: 13px;
-                color: #3b473b !important;
+                color: var(--text) !important;
                 margin-top: 4px;
             }
             .dev-summary-page .ds-empty {
                 text-align: center;
-                color: #4a574a;
+                color: var(--text);
                 padding: 18px 8px;
             }
         </style>
@@ -293,7 +293,7 @@
             в работе сейчас: <b>${escapeHtml(row.active_now ?? 0)}</b> ·
             дошли до клиента: <b>${escapeHtml(pct)}</b> ·
             до заведения в среднем: <b>${escapeHtml(avg)}</b>
-            ${row.overdue_requests ? `<br><span style="color:#b00000;font-weight:700;">
+            ${row.overdue_requests ? `<br><span style="color:#FF8FB3;font-weight:700;">
                 ⚠️ Заявок без карточки в 1С (14+ дней): ${escapeHtml(row.overdue_requests)}</span>` : ""}
         `;
 
@@ -341,7 +341,7 @@
             );
             lines.push(
                 item.overdue
-                    ? `<span style="color:#b00000;font-weight:700;">⚠️ Карточки в 1С нет уже ${escapeHtml(days)} дн.</span>`
+                    ? `<span style="color:#FF8FB3;font-weight:700;">⚠️ Карточки в 1С нет уже ${escapeHtml(days)} дн.</span>`
                     : `Карточки в 1С пока нет${days !== "" ? ` (${escapeHtml(days)} дн.)` : ""}`
             );
         } else lines.push(
@@ -408,7 +408,7 @@
                 : `<div class="ds-card ds-empty">За выбранный период ничего нет</div>`;
 
         } catch (error) {
-            box.innerHTML = `<div class="ds-card ds-empty" style="color:#b00000;">
+            box.innerHTML = `<div class="ds-card ds-empty" style="color:#FF8FB3;">
                 ${escapeHtml(error.message || "Не удалось загрузить")}</div>`;
         }
     }
@@ -418,7 +418,7 @@
         try {
             state.summary = await api("/api/developments/summary?days=" + state.days);
         } catch (error) {
-            root.querySelector("#dsList").innerHTML = `<div class="ds-card ds-empty" style="color:#b00000;">
+            root.querySelector("#dsList").innerHTML = `<div class="ds-card ds-empty" style="color:#FF8FB3;">
                 ${escapeHtml(error.message || "Сводка недоступна")}</div>`;
             return;
         }

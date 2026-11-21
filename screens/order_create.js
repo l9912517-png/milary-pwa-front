@@ -15,31 +15,31 @@ registerScreen("order_create", function () {
 
             <div class="order-card" style="display:flex;flex-direction:column;gap:10px;">
 
-                <label style="font-size:13px;color:#666;">Контрагент</label>
+                <label style="font-size:13px;color:var(--muted);">Контрагент</label>
                 <input type="text"
                        id="orderCounterparty"
                        placeholder="Выберите контрагента"
                        readonly
                        onclick="openOrderCounterpartySelect()"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;font-size:14px;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);font-size:14px;">
 
-                <label style="font-size:13px;color:#666;">Дата доставки</label>
+                <label style="font-size:13px;color:var(--muted);">Дата доставки</label>
                 <input type="date"
                        id="orderDate"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;font-size:14px;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);font-size:14px;">
 
                 <div style="display:flex;gap:10px;width:100%;">
                     <div style="flex:1;">
-                        <label style="font-size:13px;color:#666;">С</label>
+                        <label style="font-size:13px;color:var(--muted);">С</label>
                         <input type="time"
                                id="orderTimeFrom"
-                               style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;font-size:14px;">
+                               style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);font-size:14px;">
                     </div>
                     <div style="flex:1;">
-                        <label style="font-size:13px;color:#666;">По</label>
+                        <label style="font-size:13px;color:var(--muted);">По</label>
                         <input type="time"
                                id="orderTimeTo"
-                               style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;font-size:14px;">
+                               style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);font-size:14px;">
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@ registerScreen("order_create", function () {
 
             <!-- ===== СОХРАНЕНИЕ ===== -->
 
-            <button onclick="saveOrder()" style="width:100%;background:#2e7d32;">
+            <button onclick="saveOrder()" style="width:100%;background:var(--accent);">
                 Сохранить заказ
             </button>
 
@@ -84,7 +84,7 @@ function renderOrderItems() {
 
                 <input type="text"
                        placeholder="Номенклатура"
-                       value="${row.name || ""}"
+                       value="${escapeHtml(row.name || "")}"
                        oninput="searchNomenclature(${i}, this.value)"
                        style="flex:1;padding:8px;">
 
@@ -103,7 +103,7 @@ function renderOrderItems() {
 
                 <input type="number"
                        placeholder="Кол-во"
-                       value="${row.qty || ""}"
+                       value="${escapeHtml(row.qty || "")}"
                        onchange="updateQty(${i}, this.value)"
                        style="flex:1;">
 
@@ -118,12 +118,12 @@ function renderOrderItems() {
             <!-- КОММЕНТ -->
             <input type="text"
                    placeholder="Комментарий"
-                   value="${row.comment || ""}"
+                   value="${escapeHtml(row.comment || "")}"
                    onchange="updateComment(${i}, this.value)"
                    style="width:100%;">
 
             <button onclick="removeRow(${i})"
-                    style="background:#eee;color:#000;">
+                    style="background:var(--card);color:var(--text);">
                 Удалить
             </button>
 
@@ -320,8 +320,8 @@ async function searchNomenclature(index, query) {
         container.innerHTML = filtered.map(i => `
             <div class="menu-item"
                  style="padding:6px;font-size:13px;"
-                 onclick="selectNomenclature(${index}, '${i.guid}', '${i.name.replace(/'/g,"")}')">
-                ${i.name}
+                 onclick="selectNomenclature(${index}, ${jsArg(i.guid)}, ${jsArg(i.name)})">
+                ${escapeHtml(i.name)}
             </div>
         `).join("");
 
@@ -351,7 +351,7 @@ async function openOrderCounterpartySelect() {
 
             <input type="text" id="orderCpSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="orderCpList" style="max-height:300px;overflow:auto;"></div>
 
@@ -391,7 +391,7 @@ async function openOrderCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${i.name || "-"}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(i.name || "-")}</strong>`;
 
                 div.onclick = () => {
 

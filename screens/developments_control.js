@@ -223,7 +223,7 @@
 
             /* Менеджер — отдельный нейтрально-синий блок */
             .developments-control-page .development-manager-header {
-                background: #355c7d !important;
+                background: #5B7BE0 !important;
                 color: #fff !important;
             }
 
@@ -234,19 +234,19 @@
             /* В работе — зелёный */
             .developments-control-page .development-status-group.status-active .development-status-group-header,
             .developments-control-page .development-status-group.active .development-status-group-header {
-                background: #2f7d32 !important;
-                color: #fff !important;
+                background: var(--accent) !important;
+                color: var(--accent-ink) !important;
             }
 
             /* Заявка на договор — оранжевый */
             .developments-control-page .development-status-group-contract .development-status-group-header {
-                background: #c47f17 !important;
+                background: #E0A040 !important;
                 color: #fff !important;
             }
 
             /* Закрытые / истекшие — серый */
             .developments-control-page .development-status-group-archive .development-status-group-header {
-                background: #6b7280 !important;
+                background: rgba(255,255,255,0.16) !important;
                 color: #fff !important;
             }
 
@@ -256,9 +256,9 @@
 
             /* Сами карточки — светлый нейтральный фон */
             .developments-control-page .development-control-card {
-                background: #fff !important;
-                color: #202020 !important;
-                border: 1px solid #d6d6d6 !important;
+                background: var(--card) !important;
+                color: var(--text) !important;
+                border: 1px solid var(--card-border) !important;
             }
 
             .developments-control-page .development-control-card strong,
@@ -269,8 +269,8 @@
 
             /* Неактивные/архивные карточки немного приглушаем */
             .developments-control-page .development-status-group-archive .development-control-card {
-                background: #f1f1f1 !important;
-                color: #555 !important;
+                background: var(--card) !important;
+                color: var(--text) !important;
             }
 
 
@@ -329,9 +329,9 @@
                     id="developmentsSummaryOpen"
                     style="
                         margin-left:8px;
-                        background:#ffffff !important;
-                        color:#1b4d20 !important;
-                        border:1px solid #2e7d32 !important;
+                        background:var(--card) !important;
+                        color:var(--accent) !important;
+                        border:1px solid var(--accent-line) !important;
                         border-radius:8px;
                         padding:8px 12px;
                         font-weight:600;
@@ -860,7 +860,7 @@
 
         if (overdue) {
             html += `
-                <div style="color:#b00000;font-weight:700;">
+                <div style="color:#FF8FB3;font-weight:700;">
                     ⚠️ Заявка без карточки в 1С уже ${overdueDays} дн.
                 </div>
             `;
@@ -943,7 +943,7 @@
         development.repeat_blocked_until
     ) {
         html += `
-                <div style="color:#8a5a00 !important;font-weight:700;margin-top:6px;">
+                <div style="color:#FFC680 !important;font-weight:700;margin-top:6px;">
                     ⛔ Менеджер не может взять её снова до
                     ${escapeHtml(formatDate(development.repeat_blocked_until))}
                 </div>
@@ -955,7 +955,7 @@
                     <button
                         type="button"
                         class="development-allow-repeat-button"
-                        style="background:#ef6c00 !important;color:#ffffff !important;border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:600;"
+                        style="background:#E0A040 !important;color:#ffffff !important;border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:600;"
                         data-allow-repeat-id="${escapeHtml(development.id)}"
                     >
                         Разрешить повтор
@@ -975,7 +975,7 @@
                     <button
                         type="button"
                         class="development-unlink-button"
-                        style="background:#b00020 !important;color:#ffffff !important;border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:600;"
+                        style="background:var(--danger) !important;color:#ffffff !important;border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:600;"
                         data-unlink-id="${escapeHtml(development.id)}"
                     >
                         Отвязать карточку
@@ -1566,13 +1566,13 @@ function bindManagerEvents() {
             "align-items:flex-end;justify-content:center;";
 
         overlay.innerHTML = `
-            <div style="background:#ffffff !important;color:#1a1a1a !important;
+            <div style="background:var(--card) !important;color:var(--text) !important;
                         width:100%;max-width:640px;max-height:88vh;
                         border-radius:14px 14px 0 0;display:flex;
                         flex-direction:column;box-sizing:border-box;">
-                <div style="padding:14px 16px 8px;font-weight:700;font-size:16px;color:#1a1a1a !important;">
+                <div style="padding:14px 16px 8px;font-weight:700;font-size:16px;color:var(--text) !important;">
                     Привязать карточку 1С
-                    <div style="font-weight:400;font-size:13px;color:#555555 !important;margin-top:2px;">
+                    <div style="font-weight:400;font-size:13px;color:var(--text) !important;margin-top:2px;">
                         ${escapeHtml(developmentName)}
                     </div>
                 </div>
@@ -1580,21 +1580,21 @@ function bindManagerEvents() {
                     <input type="text" class="link-dialog-search"
                         placeholder="Название, юр. лицо или ИНН"
                         style="flex:1;padding:10px;font-size:15px;
-                               border:1px solid #bbbbbb;border-radius:8px;
-                               background:#ffffff !important;color:#1a1a1a !important;">
+                               border:1px solid var(--card-border);border-radius:8px;
+                               background:var(--card) !important;color:var(--text) !important;">
                     <button type="button" class="link-dialog-find"
-                        style="background:#1565c0 !important;color:#ffffff !important;
+                        style="background:#5B7BE0 !important;color:#ffffff !important;
                                border:0;border-radius:8px;padding:10px 14px;font-weight:600;">
                         Найти
                     </button>
                 </div>
                 <div class="link-dialog-hint"
-                     style="padding:0 16px 6px;font-size:12px;color:#555555 !important;"></div>
+                     style="padding:0 16px 6px;font-size:12px;color:var(--text) !important;"></div>
                 <div class="link-dialog-list"
                      style="overflow:auto;padding:0 16px 8px;flex:1;"></div>
                 <div style="padding:8px 16px 16px;">
                     <button type="button" class="link-dialog-close"
-                        style="width:100%;background:#e0e0e0 !important;color:#1a1a1a !important;
+                        style="width:100%;background:rgba(255,255,255,0.10) !important;color:var(--text) !important;
                                border:0;border-radius:8px;padding:11px;font-weight:600;">
                         Закрыть
                     </button>
@@ -1623,32 +1623,32 @@ function bindManagerEvents() {
 
             if (!items.length) {
                 list.innerHTML =
-                    `<div style="padding:14px 0;color:#555555 !important;">
+                    `<div style="padding:14px 0;color:var(--text) !important;">
                         Ничего не найдено. Измените запрос.
                     </div>`;
                 return;
             }
 
             list.innerHTML = items.map((item, index) => `
-                <div style="border:1px solid #d0d0d0;border-radius:10px;
+                <div style="border:1px solid var(--card-border);border-radius:10px;
                             padding:10px;margin-bottom:8px;
-                            background:#fafafa !important;color:#1a1a1a !important;">
-                    <div style="font-weight:700;color:#1a1a1a !important;">
+                            background:var(--card) !important;color:var(--text) !important;">
+                    <div style="font-weight:700;color:var(--text) !important;">
                         ${escapeHtml(item.name)}
                     </div>
-                    ${item.legal_name ? `<div style="font-size:13px;color:#333333 !important;">${escapeHtml(item.legal_name)}</div>` : ""}
-                    ${item.inn ? `<div style="font-size:13px;color:#333333 !important;">ИНН ${escapeHtml(item.inn)}</div>` : ""}
-                    <div style="font-size:13px;color:#333333 !important;">
+                    ${item.legal_name ? `<div style="font-size:13px;color:var(--text) !important;">${escapeHtml(item.legal_name)}</div>` : ""}
+                    ${item.inn ? `<div style="font-size:13px;color:var(--text) !important;">ИНН ${escapeHtml(item.inn)}</div>` : ""}
+                    <div style="font-size:13px;color:var(--text) !important;">
                         ${escapeHtml(item.address || "адрес не указан")}
                     </div>
-                    <div style="font-size:12px;color:#555555 !important;">
+                    <div style="font-size:12px;color:var(--text) !important;">
                         Создана в 1С: ${escapeHtml(item.created_at ? formatDate(item.created_at) : "—")};
                         последняя отгрузка: ${escapeHtml(item.last_shipment_date ? formatDate(item.last_shipment_date) : "нет")}
                     </div>
-                    ${item.taken_by ? `<div style="font-size:12px;color:#b00020 !important;font-weight:600;">
+                    ${item.taken_by ? `<div style="font-size:12px;color:#FF8FB3 !important;font-weight:600;">
                         ⚠️ Уже привязана к разработке «${escapeHtml(item.taken_by.name)}»</div>` : ""}
                     <button type="button" data-pick="${index}"
-                        style="margin-top:8px;background:#2e7d32 !important;color:#ffffff !important;
+                        style="margin-top:8px;background:var(--accent) !important;color:var(--accent-ink) !important;
                                border:0;border-radius:8px;padding:9px 14px;font-weight:600;">
                         Привязать эту карточку
                     </button>
@@ -1694,7 +1694,7 @@ function bindManagerEvents() {
         async function load(query) {
 
             list.innerHTML =
-                `<div style="padding:14px 0;color:#555555 !important;">Загрузка...</div>`;
+                `<div style="padding:14px 0;color:var(--text) !important;">Загрузка...</div>`;
 
             try {
                 const result = await api(
@@ -1708,7 +1708,7 @@ function bindManagerEvents() {
                 renderItems();
             } catch (error) {
                 list.innerHTML =
-                    `<div style="padding:14px 0;color:#b00020 !important;">${escapeHtml(error.message || "Ошибка загрузки")}</div>`;
+                    `<div style="padding:14px 0;color:#FF8FB3 !important;">${escapeHtml(error.message || "Ошибка загрузки")}</div>`;
             }
         }
 

@@ -56,28 +56,28 @@ function loadPriceFix() {
             const values = row.values || [];
 
 html += `
-<div class="order-card" onclick="openPriceFixDetail('${row.detail}')">
+<div class="order-card" onclick="openPriceFixDetail(${jsArg(row.detail)})">
 
     <div class="order-row">
         <span class="label">Проведен:</span>
-        <span class="value" style="color:${values[0] === "Да" ? "#4CAF50" : "#f44336"};">
-            ${values[0] || "-"}
+        <span class="value" style="color:${values[0] === "Да" ? "var(--accent)" : "#FF8FB3"};">
+            ${escapeHtml(values[0] || "-")}
         </span>
     </div>
 
     <div class="order-row">
         <span class="label">Контрагент:</span>
-        <span class="value">${values[1] || "-"}</span>
+        <span class="value">${escapeHtml(values[1] || "-")}</span>
     </div>
 
     <div class="order-row">
         <span class="label">Номер:</span>
-        <span class="value">№ ${values[2] || "-"}</span>
+        <span class="value">№ ${escapeHtml(values[2] || "-")}</span>
     </div>
 
     <div class="order-row">
         <span class="label">Дата:</span>
-        <span class="value">${values[3] || "-"}</span>
+        <span class="value">${escapeHtml(values[3] || "-")}</span>
     </div>
 
 </div>
@@ -131,8 +131,8 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
     data.fields.forEach(f => {
         html += `
             <div class="order-row">
-                <span class="label">${f[0]}</span>
-                <span class="value">${f[1] || "-"}</span>
+                <span class="label">${escapeHtml(f[0])}</span>
+                <span class="value">${escapeHtml(f[1] || "-")}</span>
             </div>
         `;
     });
@@ -141,7 +141,7 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
     if (!isDone && ["admin","director","rop"].includes(role)) {
 
         html += `
-            <button onclick="acceptPriceFix('${guid}')"
+            <button onclick="acceptPriceFix(${jsArg(guid)})"
                     style="margin-top:10px;width:100%;">
                 Провести
             </button>
@@ -165,7 +165,7 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
 
                     if (col === "ЦенаПрайса") col = "По прайсу";
 
-                    html += `<div>${col}</div>`;
+                    html += `<div>${escapeHtml(col)}</div>`;
                 });
 
                 html += `</div>`;
@@ -173,7 +173,7 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
                 // ===== СТРОКИ =====
                 data.lines.forEach((line, index) => {
 
-                    const bg = index % 2 === 0 ? "#fafafa" : "#ffffff";
+                    const bg = index % 2 === 0 ? "rgba(255,255,255,0.03)" : "transparent";
 
                     html += `<div class="table-grid" style="
                         grid-template-columns: 40% 15% 15% 15% 15%;
@@ -188,7 +188,7 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
                             word-break: break-word;
                             white-space: normal;
                             padding:4px;
-                        ">${value}</div>`;
+                        ">${escapeHtml(value)}</div>`;
                     });
 
                     html += `</div>`;
@@ -199,7 +199,7 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
 
             html += `
                 <button onclick="openScreen('pricefix')" 
-                        style="margin-top:10px;background:#ccc;color:#000;">
+                        style="margin-top:10px;background:rgba(255,255,255,0.10);color:var(--text);">
                     Назад
                 </button>
             </div>`;
@@ -280,7 +280,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -326,7 +326,7 @@ function renderDirectoryList(data, container, targetInputId) {
         const div = document.createElement("div");
         div.className = "menu-item";
 
-        div.innerHTML = `<strong>${item.name || "-"}</strong>`;
+        div.innerHTML = `<strong>${escapeHtml(item.name || "-")}</strong>`;
 
         div.onclick = function () {
 

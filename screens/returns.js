@@ -89,7 +89,7 @@ let currentClient = "";
 
 let html = `
 <div style="
-    background:#f4f4f4;
+    background:var(--card);
     padding:10px;
     border-radius:10px;
     font-size:13px;
@@ -104,13 +104,13 @@ data.rows.forEach(row => {
 
         html += `
             <div style="
-                background:#dcdcdc;
+                background:rgba(255,255,255,0.10);
                 padding:6px 8px;
                 font-weight:600;
                 margin-top:10px;
                 border-radius:6px;
             ">
-                ${currentClient}
+                ${escapeHtml(currentClient)}
             </div>
         `;
 
@@ -126,7 +126,7 @@ data.rows.forEach(row => {
     html += `
         <div style="
             padding:6px 8px;
-            border-bottom:1px solid #ddd;
+            border-bottom:1px solid var(--card-border);
         ">
 
             <!-- строка 1 -->
@@ -136,7 +136,7 @@ data.rows.forEach(row => {
                 gap:10px;
                 font-weight:600;
             ">
-                <div>${formatDate(row.ДатаВозврата)}</div>
+                <div>${escapeHtml(formatDate(row.ДатаВозврата))}</div>
                 <div>${formatMoney(row.Сумма || 0)} руб</div>
             </div>
 
@@ -145,23 +145,23 @@ data.rows.forEach(row => {
                 margin-top:2px;
                 word-break:break-word;
             ">
-                ${row.Номенклатура || ""}
+                ${escapeHtml(row.Номенклатура || "")}
             </div>
 
             <!-- строка 3 -->
             <div style="
-                color:#555;
+                color:var(--text);
                 font-size:12px;
             ">
-                ${row.Количество || ""} ${row.ЕдИзм || ""}
+                ${escapeHtml(row.Количество || "")} ${escapeHtml(row.ЕдИзм || "")}
             </div>
 
             <!-- строка 4 -->
             <div style="
-                color:#a94442;
+                color:#FF8FB3;
                 font-size:12px;
             ">
-                ${row.Причина || ""}
+                ${escapeHtml(row.Причина || "")}
             </div>
 
         </div>
@@ -228,7 +228,7 @@ if (user.role === "manager") {
 
     // блокируем выбор
     input.removeAttribute("onclick");
-    input.style.background = "#eee";
+    input.style.background = "var(--card)";
 }
 };
 
@@ -278,7 +278,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -351,7 +351,7 @@ function renderDirectoryList(data, container, targetInputId) {
         const div = document.createElement("div");
         div.className = "menu-item";
 
-        div.innerHTML = `<span>${item.name}</span>`;
+        div.innerHTML = `<span>${escapeHtml(item.name)}</span>`;
 
         div.onclick = function() {
 

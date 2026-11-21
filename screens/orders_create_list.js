@@ -58,28 +58,28 @@ function loadOrdersList() {
             const status = getOrderStatus(order);
 
             html += `
-            <div class="order-card" onclick="openOrder('${order.id}')">
+            <div class="order-card" onclick="openOrder(${jsArg(order.id)})">
 
                 <div class="order-row">
                     <span class="label">Контрагент:</span>
-                    <span class="value">${order.counterparty_name || "-"}</span>
+                    <span class="value">${escapeHtml(order.counterparty_name || "-")}</span>
                 </div>
 
                 <div class="order-row">
                     <span class="label">Дата:</span>
-                    <span class="value">${order.delivery_date || "-"}</span>
+                    <span class="value">${escapeHtml(order.delivery_date || "-")}</span>
                 </div>
 
                 <div class="order-row">
                     <span class="label">Время:</span>
                     <span class="value">
-                        ${order.time_from || "-"} - ${order.time_to || "-"}
+                        ${escapeHtml(order.time_from || "-")} - ${escapeHtml(order.time_to || "-")}
                     </span>
                 </div>
 
                 <div class="order-row">
                     <span class="label">Статус:</span>
-                    <span class="value">${status}</span>
+                    <span class="value">${escapeHtml(status)}</span>
                 </div>
 
             </div>
@@ -153,7 +153,7 @@ function showOrderView(order) {
 
     html += `
         <div class="menu-item">
-            ${order.counterparty_name}
+            ${escapeHtml(order.counterparty_name)}
         </div>
     `;
 
@@ -162,11 +162,11 @@ function showOrderView(order) {
         html += `
         <div class="order-line">
             <div class="order-line-row">
-                <span>${i.name}</span>
-                <span>${i.qty} ${i.unit}</span>
+                <span>${escapeHtml(i.name)}</span>
+                <span>${escapeHtml(i.qty)} ${escapeHtml(i.unit)}</span>
             </div>
             <div class="order-line-row">
-                <span>${i.comment || ""}</span>
+                <span>${escapeHtml(i.comment || "")}</span>
             </div>
         </div>
         `;
@@ -174,7 +174,7 @@ function showOrderView(order) {
 
     html += `
         <button onclick="openScreen('orders_create_list')" 
-                style="background:#ccc;color:#000;">
+                style="background:rgba(255,255,255,0.10);color:var(--text);">
             Назад
         </button>
     `;

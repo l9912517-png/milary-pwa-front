@@ -43,7 +43,7 @@ registerScreen("debt", function () {
                         width:100%;
                         box-sizing:border-box;
                         padding:8px 34px 8px 10px;
-                        border:1px solid #ccc;
+                        border:1px solid var(--card-border);
                         border-radius:8px;
                         font-size:14px;
                     "
@@ -65,8 +65,8 @@ registerScreen("debt", function () {
                         padding:0;
                         border:none;
                         border-radius:50%;
-                        background:#eee;
-                        color:#777;
+                        background:var(--card);
+                        color:var(--muted);
                         font-size:18px;
                         line-height:26px;
                         cursor:pointer;
@@ -286,7 +286,7 @@ function renderDebtReport(searchQuery = "") {
         // Строка менеджера
         html += `
             <div class="report-row manager">
-                <div class="debt-name">${manager.Имя || ""}</div>
+                <div class="debt-name">${escapeHtml(manager.Имя || "")}</div>
                 <div></div>
                 <div></div>
                 <div class="report-sum">
@@ -305,10 +305,10 @@ function renderDebtReport(searchQuery = "") {
 
             html += `
                 <div class="report-row child"
-                     style="font-weight:600;background:#f5f5f5;">
+                     style="font-weight:600;background:var(--card);">
 
                     <div class="debt-name">
-                        ${client.Имя || ""}
+                        ${escapeHtml(client.Имя || "")}
                     </div>
 
                     <div>
@@ -316,7 +316,7 @@ function renderDebtReport(searchQuery = "") {
                     </div>
 
                     <div>
-                        ${client.Дни || ""}
+                        ${escapeHtml(client.Дни || "")}
                     </div>
 
                     <div class="report-sum">
@@ -336,8 +336,8 @@ function renderDebtReport(searchQuery = "") {
                 const days = String(doc.Дни || "");
 
                 const color = days.includes("-")
-                    ? "red"
-                    : "green";
+                    ? "#FF8FB3"
+                    : "var(--accent)";
 
                 const rework =
                     doc.Переделка &&
@@ -349,13 +349,13 @@ function renderDebtReport(searchQuery = "") {
                     <div class="report-row child">
 
                         <div class="debt-name" style="padding-left:20px;">
-                            ${doc.Имя || ""}${rework}
+                            ${escapeHtml(doc.Имя || "")}${rework}
                         </div>
 
                         <div></div>
 
                         <div style="color:${color};">
-                            ${days}
+                            ${escapeHtml(days)}
                         </div>
 
                         <div class="report-sum">
@@ -377,12 +377,12 @@ function renderDebtReport(searchQuery = "") {
                     <div
                         class="report-row child debt-full"
                         style="
-                            color:red;
+                            color:#FF8FB3;
                             font-size:12px;
                             padding-left:20px;
                         "
                     >
-                        ${reason}
+                        ${escapeHtml(reason)}
                     </div>
                 `;
             }
@@ -398,15 +398,15 @@ function renderDebtReport(searchQuery = "") {
 
                         <button
                             onclick="confirmUnlock(
-                                '${client.GUID}',
-                                '${client.Имя}'
+                                ${jsArg(client.GUID)},
+                                ${jsArg(client.Имя)}
                             )"
                             style="
                                 font-size:11px;
                                 padding:4px 8px;
                                 border:none;
                                 border-radius:6px;
-                                background:#5a0f1c;
+                                background:var(--danger);
                                 color:#fff;
                                 cursor:pointer;
                             "
@@ -431,7 +431,7 @@ function renderDebtReport(searchQuery = "") {
             <div style="
                 padding:20px;
                 text-align:center;
-                color:#777;
+                color:var(--muted);
             ">
                 Контрагент не найден
             </div>
@@ -471,11 +471,11 @@ function confirmUnlock(clientGuid, clientName) {
 
             <div style="margin-bottom:15px;">
                 Отправить заявку на разблокировку<br>
-                <b>${clientName}</b> ?
+                <b>${escapeHtml(clientName)}</b> ?
             </div>
 
             <div style="display:flex;gap:10px;">
-                <button onclick="sendUnlockTask('${clientGuid}', '${clientName}')">Да</button>
+                <button onclick="sendUnlockTask(${jsArg(clientGuid)}, ${jsArg(clientName)})">Да</button>
                 <button onclick="this.closest('.modal-overlay').remove()">Нет</button>
             </div>
 
@@ -570,7 +570,7 @@ window.openDebtForm = function () {
 
         // блокируем выбор
         input.removeAttribute("onclick");
-        input.style.background = "#eee";
+        input.style.background = "var(--card)";
     }
 };
 
@@ -681,7 +681,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -754,7 +754,7 @@ function renderDirectoryList(data, container, targetInputId) {
         const div = document.createElement("div");
         div.className = "menu-item";
 
-        div.innerHTML = `<span>${item.name}</span>`;
+        div.innerHTML = `<span>${escapeHtml(item.name)}</span>`;
 
         div.onclick = function() {
 

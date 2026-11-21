@@ -154,7 +154,7 @@ async function loadBankReport(retry = 0) {
 
                 html += `
                 <div class="report-row director">
-                    <div><b>${director}</b></div>
+                    <div><b>${escapeHtml(director)}</b></div>
                     <div></div>
                 </div>`;
                 return;
@@ -173,7 +173,7 @@ async function loadBankReport(retry = 0) {
 
                 html += `
                 <div class="report-row manager" onclick="toggleManager(this)">
-                    <div style="padding-left:10px;">${manager}</div>
+                    <div style="padding-left:10px;">${escapeHtml(manager)}</div>
                     <div></div>
                 </div>`;
                 return;
@@ -187,8 +187,8 @@ async function loadBankReport(retry = 0) {
 
                 html += `
                 <div class="report-row child">
-                    <div style="padding-left:20px;">${counterparty}</div>
-                    <div class="report-sum">${sumFormatted}</div>
+                    <div style="padding-left:20px;">${escapeHtml(counterparty)}</div>
+                    <div class="report-sum">${escapeHtml(sumFormatted)}</div>
                 </div>`;
             }
 
@@ -296,7 +296,7 @@ window.openBankForm = function() {
 
         // блокируем выбор
         input.onclick = null;
-        input.style.background = "#eee";
+        input.style.background = "var(--card)";
     }
 };
 
@@ -397,7 +397,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -475,9 +475,9 @@ function renderDirectoryList(data, container, targetInputId) {
 
         div.innerHTML = `
             <div style="display:flex;flex-direction:column;">
-                <span>${item.name}</span>
-                <span style="font-size:12px;color:#888;">
-                    ${item.full_name || ""}
+                <span>${escapeHtml(item.name)}</span>
+                <span style="font-size:12px;color:var(--muted);">
+                    ${escapeHtml(item.full_name || "")}
                 </span>
             </div>
         `;

@@ -71,25 +71,25 @@ data.rows.forEach(row => {
     if (window.ordersViewMode !== "tree") {
 
         html += `
-        <div class="order-card" data-url="${row.detail}" onclick="openOrderDetailFromEl(this)">
+        <div class="order-card" data-url="${escapeHtml(row.detail)}" onclick="openOrderDetailFromEl(this)">
 
             <div class="order-row">
                 <span class="label">Контрагент:</span>
-                <span class="value">${counterparty}</span>
+                <span class="value">${escapeHtml(counterparty)}</span>
             </div>
 
             <div class="order-row">
                 <span class="label">Номер:</span>
-                <span class="value">№ ${number}</span>
+                <span class="value">№ ${escapeHtml(number)}</span>
             </div>
 
             <div class="order-row">
                 <span class="label">Сумма:</span>
-                <span class="value">${sum}</span>
+                <span class="value">${escapeHtml(sum)}</span>
             </div>
             <div class="order-row">
     <span class="label">Время:</span>
-    <span class="value">${time}</span>
+    <span class="value">${escapeHtml(time)}</span>
 </div>
             
 
@@ -106,32 +106,32 @@ data.rows.forEach(row => {
         html += `
         <div class="order-card">
 
-            <div onclick="toggleOrderExpand('${rowId}', '${row.detail}')" 
+            <div onclick="toggleOrderExpand(${jsArg(rowId)}, ${jsArg(row.detail)})" 
                  style="cursor:pointer;">
 
                 <div class="order-row">
                     <span class="label">Контрагент:</span>
-                    <span class="value">${counterparty}</span>
+                    <span class="value">${escapeHtml(counterparty)}</span>
                 </div>
 
                 <div class="order-row">
                     <span class="label">Номер:</span>
-                    <span class="value">№ ${number}</span>
+                    <span class="value">№ ${escapeHtml(number)}</span>
                 </div>
 
                 <div class="order-row">
                     <span class="label">Сумма:</span>
-                    <span class="value">${sum}</span>
+                    <span class="value">${escapeHtml(sum)}</span>
                 </div>
                 
                 <div class="order-row">
     <span class="label">Время:</span>
-    <span class="value">${time}</span>
+    <span class="value">${escapeHtml(time)}</span>
 </div>
 
             </div>
 
-            <div id="${rowId}" style="display:${window.ordersExpanded ? "block" : "none"};"></div>
+            <div id="${escapeHtml(rowId)}" style="display:${window.ordersExpanded ? "block" : "none"};"></div>
 
         </div>
         `;
@@ -157,7 +157,7 @@ if (window.ordersExpanded && row.detail) {
 
                 html += `<div class="table-grid table-head">`;
                 data.line_columns.forEach(col => {
-                    html += `<div>${col}</div>`;
+                    html += `<div>${escapeHtml(col)}</div>`;
                 });
                 html += `</div>`;
 
@@ -166,7 +166,7 @@ if (window.ordersExpanded && row.detail) {
                     html += `<div class="table-grid">`;
 
                     data.line_columns.forEach((col, i) => {
-                        html += `<div>${line[i] || "-"}</div>`;
+                        html += `<div>${escapeHtml(line[i] || "-")}</div>`;
                     });
 
                     html += `</div>`;
@@ -230,8 +230,8 @@ function openOrderDetail(url) {
                 data.fields.forEach(f => {
                     html += `
                         <div class="order-row">
-                            <span class="label">${f[0]}</span>
-                            <span class="value">${f[1] || "-"}</span>
+                            <span class="label">${escapeHtml(f[0])}</span>
+                            <span class="value">${escapeHtml(f[1] || "-")}</span>
                         </div>
                     `;
                 });
@@ -247,7 +247,7 @@ function openOrderDetail(url) {
                 // шапка таблицы
                 html += `<div class="table-grid table-head">`;
                 data.line_columns.forEach(col => {
-                    html += `<div>${col}</div>`;
+                    html += `<div>${escapeHtml(col)}</div>`;
                 });
                 html += `</div>`;
 
@@ -257,7 +257,7 @@ function openOrderDetail(url) {
                     html += `<div class="table-grid">`;
 
                     data.line_columns.forEach((col, i) => {
-                        html += `<div>${line[i] || "-"}</div>`;
+                        html += `<div>${escapeHtml(line[i] || "-")}</div>`;
                     });
 
                     html += `</div>`;
@@ -269,7 +269,7 @@ function openOrderDetail(url) {
             // ===== НАЗАД =====
             html += `
                 <button onclick="openScreen('orders')" 
-                        style="margin-top:10px;background:#ccc;color:#000;">
+                        style="margin-top:10px;background:rgba(255,255,255,0.10);color:var(--text);">
                     Назад
                 </button>
             </div>`;
@@ -368,7 +368,7 @@ async function openDirectorySelect(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -446,9 +446,9 @@ function renderDirectoryList(data, container, targetInputId) {
 
         div.innerHTML = `
             <div style="display:flex;flex-direction:column;">
-                <span>${item.name}</span>
-                <span style="font-size:12px;color:#888;">
-                    ${item.full_name || ""}
+                <span>${escapeHtml(item.name)}</span>
+                <span style="font-size:12px;color:var(--muted);">
+                    ${escapeHtml(item.full_name || "")}
                 </span>
             </div>
         `;
@@ -559,7 +559,7 @@ html += `<div class="table-scroll">`;
 
             html += `<div class="table-grid table-head">`;
             data.line_columns.forEach(col => {
-                html += `<div>${col}</div>`;
+                html += `<div>${escapeHtml(col)}</div>`;
             });
             html += `</div>`;
 
@@ -568,7 +568,7 @@ html += `<div class="table-scroll">`;
                 html += `<div class="table-grid">`;
 
                 data.line_columns.forEach((col, i) => {
-                    html += `<div>${line[i] || "-"}</div>`;
+                    html += `<div>${escapeHtml(line[i] || "-")}</div>`;
                 });
 
                 html += `</div>`;

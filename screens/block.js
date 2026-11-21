@@ -40,26 +40,26 @@ const decision = decisions[r.id];
      onclick="void(0)"
      style="flex-direction:column;align-items:flex-start;gap:6px;cursor:pointer;">
 
-    <div><strong>${p.name ? p.name : "Без названия"}</strong></div>
+    <div><strong>${escapeHtml(p.name ? p.name : "Без названия")}</strong></div>
 
-<div style="font-size:12px;color:#666;">
-   Менеджер: ${p.manager || p.Manager || p.manager_name || p["Менеджер"] || "Не указан"}
+<div style="font-size:12px;color:var(--muted);">
+   Менеджер: ${escapeHtml(p.manager || p.Manager || p.manager_name || p["Менеджер"] || "Не указан")}
 </div>
 
 <div style="display:flex;gap:10px;margin-top:6px;">
 
     <button 
-        id="approve_${r.id}"
-        onclick="handleBlockDecision('${r.id}', 'approve', '${r.id}', '${p.counterparty}')"
-        style="background:${decision === 'approve' ? '#5c6bc0' : decision ? '#ccc' : '#4CAF50'};"
+        id="approve_${escapeHtml(r.id)}"
+        onclick="handleBlockDecision(${jsArg(r.id)}, 'approve', ${jsArg(r.id)}, ${jsArg(p.counterparty)})"
+        style="background:${decision === 'approve' ? '#5B7BE0' : decision ? 'rgba(255,255,255,0.10)' : 'var(--accent)'};"
         ${decision ? "disabled" : ""}>
         ✔ Подтвердить
     </button>
 
     <button 
-        id="reject_${r.id}"
-        onclick="handleBlockDecision('${r.id}', 'reject', '${r.id}', '${p.counterparty}')"
-        style="background:${decision === 'reject' ? '#5c6bc0' : decision ? '#ccc' : '#f44336'};"
+        id="reject_${escapeHtml(r.id)}"
+        onclick="handleBlockDecision(${jsArg(r.id)}, 'reject', ${jsArg(r.id)}, ${jsArg(p.counterparty)})"
+        style="background:${decision === 'reject' ? '#5B7BE0' : decision ? 'rgba(255,255,255,0.10)' : 'var(--danger)'};color:#fff;"
         ${decision ? "disabled" : ""}>
         ✖ Отклонить
     </button>
@@ -90,7 +90,7 @@ const decision = decisions[r.id];
                 gap:10px;
                 padding:12px;
                 border-radius:12px;
-                background:#fff;
+                background:var(--card);
             ">
 
                 <label>Контрагент</label>
@@ -100,16 +100,16 @@ const decision = decisions[r.id];
                        placeholder="Выберите контрагента"
                        readonly
                        onclick="openBlockCounterpartySelect()"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
-                <button onclick="blockClient()" style="background:#f44336;">
+                <button onclick="blockClient()" style="background:var(--danger);">
                     Заблокировать
                 </button>
 
-                <button onclick="unblockClient()" style="background:#4CAF50;">
+                <button onclick="unblockClient()" style="background:var(--accent);">
                     Разблокировать
                 </button>
-                <button onclick="openInfoBlockReport()" style="background:#5c6bc0;">
+                <button onclick="openInfoBlockReport()" class="btn-secondary">
     Снятые с блока
 </button>
 
@@ -125,9 +125,6 @@ const decision = decisions[r.id];
                 ${approvalsHtml}
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -179,7 +176,7 @@ async function openBlockCounterpartySelect() {
 
             <input type="text" id="blockCpSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="blockCpList" style="max-height:300px;overflow:auto;"></div>
 
@@ -222,7 +219,7 @@ async function openBlockCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 
@@ -330,11 +327,11 @@ async function handleBlockDecision(id, type, messageId, counterparty) {
 
     // 🎨 окраска
     if (type === "approve") {
-        approveBtn.style.background = "#5c6bc0";
-        rejectBtn.style.background = "#ccc";
+        approveBtn.style.background = "#5B7BE0";
+        rejectBtn.style.background = "rgba(255,255,255,0.10)";
     } else {
-        rejectBtn.style.background = "#5c6bc0";
-        approveBtn.style.background = "#ccc";
+        rejectBtn.style.background = "#5B7BE0";
+        approveBtn.style.background = "rgba(255,255,255,0.10)";
     }
 
     // 🚀 ОТПРАВКА ТАСКА
@@ -523,7 +520,7 @@ async function waitForInfoBlockReport(
                 <div style="
                     padding:20px;
                     text-align:center;
-                    color:#c00;
+                    color:#FF8FB3;
                 ">
                     Не удалось дождаться формирования отчёта
                 </div>
@@ -595,7 +592,7 @@ function renderInfoBlockReport(data, container) {
             <div style="
                 padding:30px 10px;
                 text-align:center;
-                color:#777;
+                color:var(--muted);
             ">
                 Нет снятых с блока контрагентов
             </div>
@@ -631,7 +628,7 @@ function renderInfoBlockReport(data, container) {
                 margin-bottom:18px;
                 border-radius:12px;
                 overflow:hidden;
-                background:#fff;
+                background:var(--card);
                 box-shadow:0 1px 4px rgba(0,0,0,0.10);
             ">
 
@@ -641,8 +638,8 @@ function renderInfoBlockReport(data, container) {
                     padding:12px 14px;
                     font-size:16px;
                     font-weight:700;
-                    background:#f1f3f5;
-                    border-bottom:1px solid #ddd;
+                    background:var(--card);
+                    border-bottom:1px solid var(--card-border);
                 ">
                     ${escapeHtml(manager)}
                 </div>
@@ -657,7 +654,7 @@ function renderInfoBlockReport(data, container) {
             html += `
                 <div style="
                     padding:10px 14px;
-                    border-bottom:1px solid #eee;
+                    border-bottom:1px solid var(--card-border);
                 ">
 
                     <div style="
@@ -670,7 +667,7 @@ function renderInfoBlockReport(data, container) {
                     <div style="
                         margin-top:3px;
                         font-size:12px;
-                        color:#777;
+                        color:var(--muted);
                     ">
                         Снятие блока до:
                         ${escapeHtml(row.date_to || "-")}
@@ -691,7 +688,7 @@ function renderInfoBlockReport(data, container) {
         <div style="
             text-align:center;
             font-size:11px;
-            color:#999;
+            color:var(--muted);
             margin-top:8px;
         ">
             Обновлено:

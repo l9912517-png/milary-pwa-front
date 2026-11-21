@@ -206,7 +206,7 @@ registerScreen("catering", async function () {
             loading = false;
             const box = document.getElementById("catList");
             if (box) {
-                box.innerHTML = `<div style="padding:12px;border-radius:8px;background:#fde8e8;color:#b00000;">${esc(error.message)}</div>`;
+                box.innerHTML = `<div style="padding:12px;border-radius:8px;background:rgba(224,69,123,0.16);color:#FF8FB3;">${esc(error.message)}</div>`;
             }
         }
     }
@@ -227,7 +227,7 @@ registerScreen("catering", async function () {
 
         content.innerHTML = `
 
-            <button id="catBack" type="button" style="width:100%;margin-bottom:12px;padding:10px;border:0;border-radius:10px;background:#ddd;color:#222;cursor:pointer;">
+            <button id="catBack" type="button" style="width:100%;margin-bottom:12px;padding:10px;border:0;border-radius:10px;background:rgba(255,255,255,0.10);color:var(--text);cursor:pointer;">
                 ← К разработкам
             </button>
 
@@ -256,15 +256,15 @@ registerScreen("catering", async function () {
 
             <div id="catFilters" style="display:${state.filtersOpen ? "block" : "none"};margin-top:10px;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fafafa;">
 
-                <label style="display:block;font-size:13px;color:#444;">Округ
+                <label style="display:block;font-size:13px;color:var(--text);">Округ
                     <select id="catArea" style="${inputStyle}margin-top:4px;">${selectOptions(areas, state.adm_area, "Все округа")}</select>
                 </label>
 
-                <label style="display:block;font-size:13px;color:#444;margin-top:10px;">Район
+                <label style="display:block;font-size:13px;color:var(--text);margin-top:10px;">Район
                     <select id="catDistrict" style="${inputStyle}margin-top:4px;">${selectOptions(districts, state.district, "Все районы")}</select>
                 </label>
 
-                <label style="display:block;font-size:13px;color:#444;margin-top:10px;">Сети
+                <label style="display:block;font-size:13px;color:var(--text);margin-top:10px;">Сети
                     <select id="catNet" style="${inputStyle}margin-top:4px;">
                         <option value="no"${state.net === "no" ? " selected" : ""}>Не сеть</option>
                         <option value=""${state.net === "" ? " selected" : ""}>Все</option>
@@ -272,38 +272,38 @@ registerScreen("catering", async function () {
                     </select>
                 </label>
 
-                <div style="font-size:13px;color:#444;margin-top:10px;">Тип заведения</div>
+                <div style="font-size:13px;color:var(--text);margin-top:10px;">Тип заведения</div>
                 <div id="catTypes" style="margin-top:4px;">
                     ${types.map(t => `
-                        <label style="display:inline-block;margin:0 10px 6px 0;font-size:13px;color:#222;${t.hidden && !state.all_types ? "opacity:.55;" : ""}">
+                        <label style="display:inline-block;margin:0 10px 6px 0;font-size:13px;color:var(--text);${t.hidden && !state.all_types ? "opacity:.55;" : ""}">
                             <input type="checkbox" data-type="${esc(t.name)}"${state.types.includes(t.name) ? " checked" : ""}>
                             ${esc(t.name)} (${esc(t.count)})
                         </label>
                     `).join("")}
                 </div>
-                <label style="display:block;margin-top:4px;font-size:12px;color:#666;">
+                <label style="display:block;margin-top:4px;font-size:12px;color:var(--muted);">
                     <input type="checkbox" id="catAllTypes"${state.all_types ? " checked" : ""}>
                     Показывать и заготовочные цеха, магазины (отделы кулинарии), ночные клубы
                 </label>
 
-                <div style="font-size:13px;color:#444;margin-top:10px;">Число мест</div>
+                <div style="font-size:13px;color:var(--text);margin-top:10px;">Число мест</div>
                 <div style="display:flex;margin-top:4px;">
                     <input id="catSeatsMin" type="number" min="0" inputmode="numeric" placeholder="от" value="${esc(state.seats_min)}" style="${inputStyle}flex:1;min-width:0;margin-right:8px;">
                     <input id="catSeatsMax" type="number" min="0" inputmode="numeric" placeholder="до" value="${esc(state.seats_max)}" style="${inputStyle}flex:1;min-width:0;">
                 </div>
-                <label style="display:block;margin-top:6px;font-size:13px;color:#222;">
+                <label style="display:block;margin-top:6px;font-size:13px;color:var(--text);">
                     <input type="checkbox" id="catSeatsUnknown"${state.seats_unknown ? " checked" : ""}>
                     Включая «число мест не указано»${filters && filters.seats ? " (" + esc(filters.seats.unknown) + ")" : ""}
                 </label>
 
-                <label style="display:block;margin-top:10px;font-size:13px;color:#222;">
+                <label style="display:block;margin-top:10px;font-size:13px;color:var(--text);">
                     <input type="checkbox" id="catSocial"${state.social ? " checked" : ""}> Только с социальными льготами
                 </label>
 
                 <button id="catReset" type="button" style="${btnStyle}margin-top:12px;">Сбросить фильтры</button>
             </div>
 
-            <div id="catInfo" style="margin-top:12px;font-size:13px;color:#555;"></div>
+            <div id="catInfo" style="margin-top:12px;font-size:13px;color:var(--text);"></div>
             <div id="catList" style="margin-top:6px;"></div>
         `;
 
@@ -424,7 +424,7 @@ registerScreen("catering", async function () {
 
     function alertInline(text) {
         const info = document.getElementById("catInfo");
-        if (info) info.innerHTML = `<span style="color:#b00000;">${esc(text)}</span>`;
+        if (info) info.innerHTML = `<span style="color:#FF8FB3;">${esc(text)}</span>`;
     }
 
     /* ---------- список ---------- */
@@ -442,7 +442,7 @@ registerScreen("catering", async function () {
 
         const take = blocked
             ? ""
-            : `<button type="button" data-take="${esc(item.id)}" style="padding:8px 12px;margin:0 6px 6px 0;border:0;border-radius:8px;background:#4caf50;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Взять в разработку</button>`;
+            : `<button type="button" data-take="${esc(item.id)}" style="padding:8px 12px;margin:0 6px 6px 0;border:0;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-size:13px;font-weight:600;cursor:pointer;">Взять в разработку</button>`;
 
         return take + links.join("");
     }
@@ -464,23 +464,23 @@ registerScreen("catering", async function () {
         const open = expanded === item.id;
 
         return `
-            <div data-card="${esc(item.id)}" style="margin-bottom:10px;padding:12px;background:#fff;border:1px solid #ddd;border-radius:12px;">
+            <div data-card="${esc(item.id)}" style="margin-bottom:10px;padding:12px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">
 
                 <div data-toggle="${esc(item.id)}" style="cursor:pointer;">
-                    <div style="font-weight:700;font-size:15px;color:#222;line-height:1.3;">${esc(item.name)}</div>
-                    <div style="font-size:13px;color:#666;margin-top:3px;">${esc(meta)}</div>
-                    <div style="font-size:14px;color:#333;margin-top:3px;">${esc(item.address)}</div>
+                    <div style="font-weight:700;font-size:15px;color:var(--text);line-height:1.3;">${esc(item.name)}</div>
+                    <div style="font-size:13px;color:var(--muted);margin-top:3px;">${esc(meta)}</div>
+                    <div style="font-size:14px;color:var(--text);margin-top:3px;">${esc(item.address)}</div>
                     ${a ? `
                         <div style="display:inline-block;margin-top:8px;padding:4px 10px;border-radius:14px;font-size:12px;font-weight:600;background:${colors.bg};color:${colors.fg};border:1px solid ${colors.border};">
                             ${esc(a.state === "in_development" && a.mine ? "Ваша разработка" : a.label)}
                         </div>
-                        ${detail ? `<div style="font-size:13px;color:#555;margin-top:6px;line-height:1.35;">${esc(detail)}</div>` : ""}
+                        ${detail ? `<div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.35;">${esc(detail)}</div>` : ""}
                     ` : ""}
                 </div>
 
                 <div style="margin-top:10px;">${actionButtons(item)}</div>
 
-                ${open ? `<div id="catDetail-${esc(item.id)}" style="margin-top:6px;padding-top:8px;border-top:1px solid #eee;font-size:13px;color:#444;">Загрузка...</div>` : ""}
+                ${open ? `<div id="catDetail-${esc(item.id)}" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--card-border);font-size:13px;color:var(--text);">Загрузка...</div>` : ""}
             </div>
         `;
     }
@@ -495,23 +495,23 @@ registerScreen("catering", async function () {
         let infoHtml = loading && !items.length ? "Загрузка..." : "Найдено: " + total;
 
         if (!statusReady && state.availability !== "all") {
-            infoHtml += `<div style="margin-top:6px;padding:8px;border-radius:8px;background:#fff8e1;color:#7a5d00;">Сверка с клиентами 1С ещё не готова: отметки «свободно» и «занято» могут быть неточными. Попробуйте через минуту.</div>`;
+            infoHtml += `<div style="margin-top:6px;padding:8px;border-radius:8px;background:rgba(255,190,90,0.14);color:#FFC680;">Сверка с клиентами 1С ещё не готова: отметки «свободно» и «занято» могут быть неточными. Попробуйте через минуту.</div>`;
         }
 
         if (restricted && takenHidden > 0) {
-            infoHtml += `<div style="margin-top:6px;padding:8px;border-radius:8px;background:#f3f3f3;color:#555;">Ещё ${takenHidden} по вашему запросу заняты — они в списке не показываются.</div>`;
+            infoHtml += `<div style="margin-top:6px;padding:8px;border-radius:8px;background:var(--card);color:var(--text);">Ещё ${takenHidden} по вашему запросу заняты — они в списке не показываются.</div>`;
         }
 
         info.innerHTML = infoHtml;
 
         if (!items.length) {
-            box.innerHTML = loading ? "" : `<div style="padding:14px;color:#666;">Ничего не найдено. Измените поиск или фильтры.</div>`;
+            box.innerHTML = loading ? "" : `<div style="padding:14px;color:var(--muted);">Ничего не найдено. Измените поиск или фильтры.</div>`;
             return;
         }
 
         box.innerHTML = items.map(card).join("") + (
             items.length < total
-                ? `<button id="catMore" type="button" style="width:100%;padding:11px;border:1px solid #bbb;border-radius:10px;background:#f4f4f4;color:#222;cursor:pointer;" ${loading ? "disabled" : ""}>${loading ? "Загрузка..." : "Показать ещё (" + (total - items.length) + ")"}</button>`
+                ? `<button id="catMore" type="button" style="width:100%;padding:11px;border:1px solid var(--card-border);border-radius:10px;background:var(--card);color:var(--text);cursor:pointer;" ${loading ? "disabled" : ""}>${loading ? "Загрузка..." : "Показать ещё (" + (total - items.length) + ")"}</button>`
                 : ""
         );
 
@@ -586,10 +586,10 @@ registerScreen("catering", async function () {
                     </div>` : "";
 
                 return `<div style="margin-bottom:8px;"><b>${esc(what)}:</b> ${esc(m.name)}${m.address ? ", " + esc(m.address) : ""}
-                    ${m.level !== "duplicate" ? `<span style="color:#7a5d00;"> (возможное совпадение)</span>` : ""}
-                    ${m.confirmed ? `<span style="color:#1b5e20;"> (подтверждено РОПом)</span>` : ""}
+                    ${m.level !== "duplicate" ? `<span style="color:#FFC680;"> (возможное совпадение)</span>` : ""}
+                    ${m.confirmed ? `<span style="color:var(--accent);"> (подтверждено РОПом)</span>` : ""}
                     ${tools}</div>`;
-            }).join("") : `<div style="color:#666;">Совпадений с клиентами и разработками нет.</div>`;
+            }).join("") : `<div style="color:var(--muted);">Совпадений с клиентами и разработками нет.</div>`;
 
             const decisionHtml = decisions.length
                 ? `<div style="margin-top:8px;"><b>Решения РОПа:</b>` + decisions.map(d =>
@@ -599,11 +599,11 @@ registerScreen("catering", async function () {
 
             const historyHtml = history.length
                 ? `<div style="margin-top:8px;"><b>Изменения в наборе:</b>` + history.slice(0, 8).map(h =>
-                    `<div style="margin-top:3px;color:#555;">${esc(dmy(h.at))}: ${esc(HISTORY[h.kind] || (FIELD[h.field] || h.field))}${h.kind === "changed" ? ": " + esc(h.old_value || "пусто") + " → " + esc(h.new_value || "пусто") : ""}</div>`
+                    `<div style="margin-top:3px;color:var(--text);">${esc(dmy(h.at))}: ${esc(HISTORY[h.kind] || (FIELD[h.field] || h.field))}${h.kind === "changed" ? ": " + esc(h.old_value || "пусто") + " → " + esc(h.new_value || "пусто") : ""}</div>`
                 ).join("") + `</div>` : "";
 
             box.innerHTML = `
-                ${place.phone ? `<div style="margin-bottom:6px;">Телефон: <a href="tel:${esc(place.phone.split(",")[0].replace(/[^\d+]/g, ""))}" style="color:#0b57d0;">${esc(place.phone)}</a></div>` : ""}
+                ${place.phone ? `<div style="margin-bottom:6px;">Телефон: <a href="tel:${esc(place.phone.split(",")[0].replace(/[^\d+]/g, ""))}" style="color:#9DB8FF;">${esc(place.phone)}</a></div>` : ""}
                 ${place.operator ? `<div style="margin-bottom:6px;">Оператор сети: ${esc(place.operator)}</div>` : ""}
                 ${matchHtml}${decisionHtml}${historyHtml}
             `;
@@ -618,14 +618,14 @@ registerScreen("catering", async function () {
                         });
                         await load(false);
                     } catch (error) {
-                        box.insertAdjacentHTML("afterbegin", `<div style="margin-bottom:8px;color:#b00000;">${esc(error.message)}</div>`);
+                        box.insertAdjacentHTML("afterbegin", `<div style="margin-bottom:8px;color:#FF8FB3;">${esc(error.message)}</div>`);
                         btn.disabled = false;
                     }
                 });
             });
 
         } catch (error) {
-            if (box.isConnected) box.innerHTML = `<span style="color:#b00000;">${esc(error.message)}</span>`;
+            if (box.isConnected) box.innerHTML = `<span style="color:#FF8FB3;">${esc(error.message)}</span>`;
         }
     }
 
@@ -637,7 +637,7 @@ registerScreen("catering", async function () {
         filters = await api("/api/catering/filters");
         renderShell();
     } catch (error) {
-        document.getElementById("catInfo").innerHTML = `<span style="color:#b00000;">${esc(error.message)}</span>`;
+        document.getElementById("catInfo").innerHTML = `<span style="color:#FF8FB3;">${esc(error.message)}</span>`;
     }
 
     if (filters && !filters.total) {

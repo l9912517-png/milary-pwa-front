@@ -189,16 +189,16 @@ function ostRender(r) {
         <div class="ord-card">
             <div class="ord-card-title">Подбор товара <span class="ost-muted">${L.total} строк в ${L.orders} подтверждённых заказах</span></div>
             <div class="ost-pipe">
-                <span class="ost-pipe-seg" style="width:${L.auto * 100 / L.total}%;background:#3f8f3a"></span>
-                <span class="ost-pipe-seg" style="width:${L.llm * 100 / L.total}%;background:#e0a030"></span>
-                <span class="ost-pipe-seg" style="width:${L.manual * 100 / L.total}%;background:#4a7fc1"></span>
-                <span class="ost-pipe-seg" style="width:${(L.manager || 0) * 100 / L.total}%;background:#8a5cc7"></span>
+                <span class="ost-pipe-seg" style="width:${L.auto * 100 / L.total}%;background:var(--accent)"></span>
+                <span class="ost-pipe-seg" style="width:${L.llm * 100 / L.total}%;background:#E0A040"></span>
+                <span class="ost-pipe-seg" style="width:${L.manual * 100 / L.total}%;background:#5B7BE0"></span>
+                <span class="ost-pipe-seg" style="width:${(L.manager || 0) * 100 / L.total}%;background:var(--brand)"></span>
             </div>
             <div class="ost-legend">
-                <span class="ost-leg"><i style="background:#3f8f3a"></i>Сами (синонимы, история) <b>${ostPct(L.auto, L.total)}%</b></span>
-                <span class="ost-leg"><i style="background:#e0a030"></i>Нейросеть <b>${ostPct(L.llm, L.total)}%</b></span>
-                <span class="ost-leg"><i style="background:#4a7fc1"></i>Оператор вручную <b>${ostPct(L.manual, L.total)}%</b></span>
-                <span class="ost-leg"><i style="background:#8a5cc7"></i>Менеджер <b>${ostPct(L.manager || 0, L.total)}%</b></span>
+                <span class="ost-leg"><i style="background:var(--accent)"></i>Сами (синонимы, история) <b>${ostPct(L.auto, L.total)}%</b></span>
+                <span class="ost-leg"><i style="background:#E0A040"></i>Нейросеть <b>${ostPct(L.llm, L.total)}%</b></span>
+                <span class="ost-leg"><i style="background:#5B7BE0"></i>Оператор вручную <b>${ostPct(L.manual, L.total)}%</b></span>
+                <span class="ost-leg"><i style="background:var(--brand)"></i>Менеджер <b>${ostPct(L.manager || 0, L.total)}%</b></span>
             </div>
         </div>` : "";
 
@@ -257,7 +257,7 @@ function ostDays(days) {
     const max = Math.max(1, ...days.map(d => d.total));
     return `
         <div class="ord-card">
-            <div class="ord-card-title">По дням <span class="ost-legend inline"><span class="ost-leg"><i style="background:#c8d8c6"></i>отправлено</span><span class="ost-leg"><i style="background:#3f8f3a"></i>создано в 1С</span></span></div>
+            <div class="ord-card-title">По дням <span class="ost-legend inline"><span class="ost-leg"><i style="background:rgba(255,255,255,0.10)"></i>отправлено</span><span class="ost-leg"><i style="background:var(--accent)"></i>создано в 1С</span></span></div>
             <div class="ost-days">
                 ${days.map(d => `
                     <div class="ost-day" title="${ORD.fmtDate(d.day)}: отправлено ${d.total}, создано ${d.created}">

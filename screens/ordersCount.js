@@ -94,9 +94,9 @@ async function loadOrdersCount(retry = 0) {
 
             html += `
                 <div class="report-row">
-                    <div>${date}</div>
-                    <div>${day}</div>
-                    <div class="report-sum">${count}</div>
+                    <div>${escapeHtml(date)}</div>
+                    <div>${escapeHtml(day)}</div>
+                    <div class="report-sum">${escapeHtml(count)}</div>
                 </div>
             `;
         });
@@ -105,7 +105,7 @@ async function loadOrdersCount(retry = 0) {
             <div class="report-row total">
                 <div><b>ИТОГО</b></div>
                 <div></div>
-                <div class="report-sum">${total}</div>
+                <div class="report-sum">${escapeHtml(total)}</div>
             </div>
         </div>`;
 

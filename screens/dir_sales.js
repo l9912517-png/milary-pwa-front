@@ -101,8 +101,8 @@ async function loadDirSalesReport(retry = 0) {
             if (director && !manager && director !== "ИТОГ РУКОВОДИТЕЛЯ") {
 
                 html += `
-                    <div class="report-row director" style="background:#f3f6fb;font-weight:600;">
-                        <div>${director}</div>
+                    <div class="report-row director" style="background:var(--card);font-weight:600;">
+                        <div>${escapeHtml(director)}</div>
                         <div></div>
                     </div>
                 `;
@@ -113,9 +113,9 @@ async function loadDirSalesReport(retry = 0) {
             if (director === "ИТОГ РУКОВОДИТЕЛЯ") {
 
                 html += `
-                    <div class="report-row total" style="background:#eef2f7;">
+                    <div class="report-row total" style="background:var(--card);">
                         <div><b>ИТОГ РУКОВОДИТЕЛЯ</b></div>
-                        <div class="report-sum">${sumFormatted}</div>
+                        <div class="report-sum">${escapeHtml(sumFormatted)}</div>
                     </div>
                 `;
 
@@ -128,8 +128,8 @@ async function loadDirSalesReport(retry = 0) {
 
                 html += `
                     <div class="report-row child">
-                        <div style="padding-left:20px;">${manager}</div>
-                        <div class="report-sum">${sumFormatted}</div>
+                        <div style="padding-left:20px;">${escapeHtml(manager)}</div>
+                        <div class="report-sum">${escapeHtml(sumFormatted)}</div>
                     </div>
                 `;
             }
@@ -139,7 +139,7 @@ async function loadDirSalesReport(retry = 0) {
         html += `
             <div class="report-row total">
                 <div><b>ИТОГО</b></div>
-                <div class="report-sum">${formatSum(total)}</div>
+                <div class="report-sum">${escapeHtml(formatSum(total))}</div>
             </div>
         </div>`;
 

@@ -40,12 +40,12 @@ registerScreen("prices", async function () {
                 resultHtml = list.map(block => {
 
                     const header = `
-Контрагент: ${block.counterparty || ""}
-Дата: ${block.date}
+Контрагент: ${escapeHtml(block.counterparty || "")}
+Дата: ${escapeHtml(block.date)}
 `;
 
                     const rows = (block.items || []).map(i =>
-                        `${i.name} | ${i.price} | ${i.total}`
+                        `${escapeHtml(i.name)} | ${escapeHtml(i.price)} | ${escapeHtml(i.total)}`
                     ).join("\n");
 
                     return `
@@ -85,7 +85,7 @@ ${rows}
                        placeholder="Выберите контрагента"
                        readonly
                        onclick="openPricesCounterpartySelect()"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <label>Номенклатура</label>
 
@@ -94,14 +94,14 @@ ${rows}
        placeholder="Выберите номенклатуру"
        readonly
        onclick="openNomenclatureSelect('pricesItem')"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <label>Поиск</label>
 
                 <input type="text"
                        id="pricesSearch"
                        placeholder="Введите часть названия"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <button onclick="requestPrices()" style="width:100%;">
                     Получить цены
@@ -119,9 +119,6 @@ ${rows}
 </div>
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -152,7 +149,7 @@ async function openPricesCounterpartySelect() {
 
             <input type="text" id="pricesCpSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="pricesCpList" style="max-height:300px;overflow:auto;"></div>
 
@@ -198,7 +195,7 @@ async function openPricesCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 
@@ -321,12 +318,12 @@ async function loadPrices() {
         const html = list.map(block => {
 
             const header = `
-Контрагент: ${block.counterparty || ""}
-Дата: ${block.date}
+Контрагент: ${escapeHtml(block.counterparty || "")}
+Дата: ${escapeHtml(block.date)}
 `;
 
             const rows = (block.items || []).map(i =>
-                `${i.name} | ${i.price} | ${i.total}`
+                `${escapeHtml(i.name)} | ${escapeHtml(i.price)} | ${escapeHtml(i.total)}`
             ).join("\n");
 
             return `

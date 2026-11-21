@@ -63,10 +63,10 @@ registerScreen("pricelist", async function () {
                     <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
                         
                         <span style="font-weight:600;">
-                            ${item.text}
+                            ${escapeHtml(item.text)}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -79,11 +79,11 @@ registerScreen("pricelist", async function () {
                 return `
                     <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
                         
-                        <span style="color:#4CAF50;">
-                            ${item.text}
+                        <span style="color:var(--accent);">
+                            ${escapeHtml(item.text)}
                         </span>
 
-                        <span style="font-size:12px;color:#888;">
+                        <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(item.date)}
                         </span>
 
@@ -106,21 +106,21 @@ registerScreen("pricelist", async function () {
                        id="pricelistCounterparty"
                        placeholder="Выберите контрагента"
                        readonly
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;"
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);"
                        onclick="openPricelistCounterpartySelect()">
 
                 <label>Дата</label>
 
                 <input type="date"
                        id="pricelistDate"
-                       style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;">
+                       style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--card-border);">
 
                 <button onclick="requestPricelist()" style="width:100%;">
                     Получить прайс
                 </button>
 
                 <button onclick="requestPricelist('pricelist_pdf_files')"
-                        style="width:100%;margin-top:6px;background:#fff;color:#4CAF50;border:2px solid #4CAF50;">
+                        style="width:100%;margin-top:6px;background:var(--card);color:var(--accent);border:2px solid var(--accent-line);">
                     Получить красивый прайс PDF
                 </button>
 
@@ -134,9 +134,6 @@ registerScreen("pricelist", async function () {
                 ${html}
             </div>
 
-            <button onclick="showMenu()" style="background:#ccc;color:#000;">
-                Назад
-            </button>
 
         </div>
     `;
@@ -165,7 +162,7 @@ async function openPricelistCounterpartySelect() {
 
             <input type="text" id="pricelistSearch"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);margin-bottom:10px;" />
 
             <div id="pricelistList" style="max-height:300px;overflow:auto;"></div>
 
@@ -208,7 +205,7 @@ async function openPricelistCounterpartySelect() {
                 const div = document.createElement("div");
                 div.className = "menu-item";
 
-                div.innerHTML = `<strong>${c.name}</strong>`;
+                div.innerHTML = `<strong>${escapeHtml(c.name)}</strong>`;
 
                 div.onclick = () => {
 

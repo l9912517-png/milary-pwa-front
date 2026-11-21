@@ -31,8 +31,16 @@
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 
-    /* старые имена — чтобы старые правила тоже взяли новые цвета */
+    /* старые имена (MealFresh) — чтобы старые правила и инлайн-стили тоже взяли новые цвета */
     --primary: var(--accent);
+    --primary-dark: #9CCB6E;
+    --primary-soft: rgba(181, 224, 138, 0.12);
+    --surface-muted: rgba(255, 255, 255, 0.04);
+    --text-secondary: var(--muted);
+    --border: var(--line);
+    --border-strong: var(--card-border);
+    --shadow: none;
+    --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 * { font-family: "Golos Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -239,6 +247,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); paddi
     box-shadow: none;
 }
 .menu-item:hover { background: rgba(255, 255, 255, 0.09); }
+.menu-item::after { display: none; }      /* старая стрелка на любой карточке — в том числе на некликабельных */
 
 /* ================= МЕНЮ ================= */
 
@@ -709,3 +718,62 @@ body.is-login .update-notice { bottom: calc(16px + var(--safe-bottom)); }
 .push-prompt-sub { font-size: 13px; color: var(--muted); }
 .push-prompt-actions { grid-column: 1 / -1; display: flex; gap: 8px; }
 .push-prompt-actions button { flex: 1 1 0; min-height: 42px; }
+
+/* ================= «ЗАКАЗ ТЕКСТОМ» (ord.css) — тёмные цвета только в приложении =================
+   ord.css общий со страницей для 1С (/pwa/ord/embed/), там тема не подключается и переменные
+   браузер 1С может не понимать, поэтому сам ord.css не меняем, а перекрываем здесь. */
+
+.ord-input,
+.ord-textarea,
+.ord-select { background: var(--card); }
+button.ord-select { background: var(--card); }
+button.ord-danger { background: var(--card); color: #FF8FB3; border: 1px solid rgba(224,69,123,0.5); }
+.ord-chip { background: var(--card); color: var(--text); }
+.ord-chip.ok { background: rgba(255,255,255,0.10); color: var(--accent); }
+.ord-chip.check { background: rgba(255,255,255,0.10); color: #9DB8FF; }
+.ord-chip.wait { background: rgba(255,190,90,0.14); color: #FFC680; }
+.ord-chip.warn { background: rgba(255,190,90,0.14); color: #FFC680; }
+.ord-chip.bad { background: rgba(224,69,123,0.16); color: #FF8FB3; }
+.ord-chip.info { background: rgba(255,255,255,0.10); color: #9DB8FF; }
+.ord-chip.off { background: var(--card); color: var(--muted); }
+.ord-list-item.late { border-left: 4px solid rgba(255,190,90,0.5); }
+.ord-wait.late { color: #FFC680; }
+.ord-note.ord-busy { background: rgba(255,255,255,0.10); color: #9DB8FF; }
+.ord-note.ord-blocked { background: rgba(224,69,123,0.16); color: #FF8FB3; }
+.ord-empty.bad { color: #FF8FB3; }
+.ord-tab { background: var(--card); }
+.ord-tab.bad { border-color: rgba(224,69,123,0.5); color: #FF8FB3; background: rgba(224,69,123,0.16); }
+.ord-tab.bad.active { background: var(--danger); }
+.ord-note { background: var(--card); }
+.ord-note.warn { background: rgba(255,190,90,0.14); color: #FFC680; }
+.ord-day-btn { background: var(--card); }
+.ord-day-pick { background: var(--card); }
+.ord-view-line.missing .ord-view-name { color: #FF8FB3; }
+.ord-dot { background: rgba(255,255,255,0.16); }
+.ord-dot.ok { background: var(--accent); }
+.ord-dot.warn { background: #E0A040; }
+.ord-dot.info { background: #5B7BE0; }
+.ord-dot.bad { background: var(--danger); }
+.ord-dot.mgr { background: var(--brand); }
+.ord-card.ord-addon { background: rgba(255,190,90,0.14); border-color: rgba(255,190,90,0.5); }
+.ord-addon-mark { color: #FFC680; }
+.ord-addon-title { color: #FFC680; }
+.ord-addon-title span { color: #FFC680; }
+.ord-chip.mgr { background: rgba(255,255,255,0.10); color: #C9A8FF; }
+.ord-input.bad { border-color: rgba(224,69,123,0.5); background: var(--card); }
+.ord-item-btn { background: var(--card); }
+.ord-item-btn.empty { color: #FF8FB3; }
+.ord-stock.low { color: #FFC680; }
+.ord-stock.neg { color: #FF8FB3; }
+.ord-del { color: #FF8FB3; }
+.ord-modal { background: var(--card); }
+.ord-toast { background: var(--surface); }
+.ord-toast.ok { background: var(--accent); }
+.ord-toast.bad { background: var(--danger); }
+.ost-tile { border-top: 4px solid var(--card-border); }
+.ost-alert { border-left: 4px solid rgba(255,190,90,0.5); background: var(--card); }
+.ost-pipe { background: var(--card); }
+.ost-day-all { background: rgba(255,255,255,0.10); }
+.ost-day-ok { background: var(--accent); }
+.ost-mini { background: var(--card); }
+.ost-mini span { background: var(--accent); }

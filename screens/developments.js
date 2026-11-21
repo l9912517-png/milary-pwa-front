@@ -11,7 +11,7 @@ function suggestionHasHouse(selected, value) {
 }
 
 const ADDRESS_NO_HOUSE_HTML = `
-    <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fde8e8;color:#a00000;">
+    <div style="margin-top:12px;padding:10px;border-radius:8px;background:rgba(224,69,123,0.16);color:#FF8FB3;">
         В адресе не указан номер дома. Продолжите ввод адреса и выберите в подсказках вариант с номером дома.
     </div>
 `;
@@ -325,8 +325,8 @@ function daysLeft(expiresAt) {
                     padding:10px;
                     border:0;
                     border-radius:10px;
-                    background:#ddd;
-                    color:#222;
+                    background:rgba(255,255,255,0.10);
+                    color:var(--text);
                     font-size:15px;
                     cursor:pointer;
                 "
@@ -347,7 +347,7 @@ function daysLeft(expiresAt) {
         <div style="
             padding:20px;
             text-align:center;
-            color:#777;
+            color:var(--muted);
         ">
             Загрузка разработок...
         </div>
@@ -406,8 +406,8 @@ function daysLeft(expiresAt) {
             <div style="
                 padding:15px;
                 border-radius:10px;
-                background:#fde8e8;
-                color:#b00000;
+                background:rgba(224,69,123,0.16);
+                color:#FF8FB3;
             ">
                 ${esc(
                     error.message ||
@@ -424,7 +424,7 @@ function daysLeft(expiresAt) {
                     padding:10px;
                     border:0;
                     border-radius:10px;
-                    background:#ddd;
+                    background:rgba(255,255,255,0.10);
                     cursor:pointer;
                 "
             >
@@ -440,7 +440,7 @@ function daysLeft(expiresAt) {
                     padding:10px;
                     border:0;
                     border-radius:10px;
-                    background:#ccc;
+                    background:rgba(255,255,255,0.10);
                     cursor:pointer;
                 "
             >
@@ -482,10 +482,10 @@ function renderMain() {
                 width:100%;
                 margin-bottom:10px;
                 padding:11px;
-                border:1px solid #90caf9;
+                border:1px solid rgba(120,170,255,0.5);
                 border-radius:10px;
-                background:#e3f2fd;
-                color:#0d47a1;
+                background:rgba(120,170,255,0.14);
+                color:#9DB8FF;
                 font-size:15px;
                 font-weight:600;
                 cursor:pointer;
@@ -502,10 +502,10 @@ function renderMain() {
                 width:100%;
                 margin-bottom:10px;
                 padding:11px;
-                border:1px solid #a5d6a7;
+                border:1px solid var(--accent-line);
                 border-radius:10px;
-                background:#e8f5e9;
-                color:#1b5e20;
+                background:var(--card);
+                color:var(--accent);
                 font-size:15px;
                 font-weight:600;
                 cursor:pointer;
@@ -529,7 +529,7 @@ function renderMain() {
                     flex:1;
                     min-width:0;
                     padding:11px;
-                    border:1px solid #ccc;
+                    border:1px solid var(--card-border);
                     border-radius:10px;
                     font-size:15px;
                     box-sizing:border-box;
@@ -543,8 +543,8 @@ function renderMain() {
                     padding:10px 13px;
                     border:0;
                     border-radius:10px;
-                    background:#4caf50;
-                    color:#fff;
+                    background:var(--accent);
+                    color:var(--accent-ink);
                     font-weight:600;
                     cursor:pointer;
                     white-space:nowrap;
@@ -579,8 +579,8 @@ function renderMain() {
                 padding:10px;
                 border:0;
                 border-radius:10px;
-                background:#ddd;
-                color:#222;
+                background:rgba(255,255,255,0.10);
+                color:var(--text);
             "
         >
             ← Назад
@@ -882,7 +882,7 @@ async function openDevelopmentEventsModal() {
                 width:100%;
                 max-width:520px;
                 max-height:85vh;
-                background:#fff;
+                background:var(--card);
                 border-radius:16px;
                 box-shadow:0 8px 30px rgba(0,0,0,.3);
                 overflow:hidden;
@@ -897,8 +897,8 @@ async function openDevelopmentEventsModal() {
                 justify-content:space-between;
                 gap:10px;
                 padding:14px 16px;
-                background:#2f7d32;
-                color:#fff;
+                background:var(--accent);
+                color:var(--accent-ink);
             ">
 
                 <div style="
@@ -939,7 +939,7 @@ async function openDevelopmentEventsModal() {
                 <div style="
                     padding:25px 10px;
                     text-align:center;
-                    color:#777;
+                    color:var(--muted);
                 ">
                     Загрузка уведомлений...
                 </div>
@@ -1026,7 +1026,7 @@ async function openDevelopmentEventsModal() {
                 <div style="
                     padding:30px 15px;
                     text-align:center;
-                    color:#777;
+                    color:var(--muted);
                 ">
                     Пока нет событий по разработкам.
                 </div>
@@ -1097,7 +1097,7 @@ async function openDevelopmentEventsModal() {
                     <div style="
                         padding:12px;
                         margin-bottom:9px;
-                        border:1px solid #e0e0e0;
+                        border:1px solid var(--card-border);
                         border-radius:11px;
                         background:${info.background};
                     ">
@@ -1122,7 +1122,7 @@ async function openDevelopmentEventsModal() {
 
                                 <div style="
                                     font-size:13px;
-                                    color:#777;
+                                    color:var(--muted);
                                     margin-bottom:4px;
                                 ">
                                     ${dateTime(event.event_at)}
@@ -1131,7 +1131,7 @@ async function openDevelopmentEventsModal() {
                                 <div style="
                                     font-weight:700;
                                     font-size:15px;
-                                    color:#222;
+                                    color:var(--text);
                                     overflow-wrap:anywhere;
                                 ">
                                     ${esc(displayName)}
@@ -1142,7 +1142,7 @@ async function openDevelopmentEventsModal() {
                                         ? `
                                             <div style="
                                                 margin-top:4px;
-                                                color:#666;
+                                                color:var(--muted);
                                                 font-size:13px;
                                                 overflow-wrap:anywhere;
                                             ">
@@ -1185,8 +1185,8 @@ async function openDevelopmentEventsModal() {
             <div style="
                 padding:14px;
                 border-radius:10px;
-                background:#fde8e8;
-                color:#a00000;
+                background:rgba(224,69,123,0.16);
+                color:#FF8FB3;
             ">
                 ${esc(
                     error.message ||
@@ -1211,9 +1211,9 @@ async function openDevelopmentEventsModal() {
             return `
                 <div style="
                     padding:15px;
-                    background:#f5f5f5;
+                    background:var(--card);
                     border-radius:10px;
-                    color:#777;
+                    color:var(--muted);
                 ">
                     Пока нет созданных разработок.
                     <br><br>
@@ -1342,9 +1342,9 @@ async function openDevelopmentEventsModal() {
                     style="
                         padding:14px;
                         margin-bottom:8px;
-                        border:1px solid #d6d6d6;
+                        border:1px solid var(--card-border);
                         border-radius:12px;
-                        background:#fff;
+                        background:var(--card);
                         cursor:pointer;
                         box-sizing:border-box;
                         overflow-wrap:anywhere;
@@ -1364,7 +1364,7 @@ async function openDevelopmentEventsModal() {
                             ? `
                                 <div style="
                                     margin-top:7px;
-                                    color:#555;
+                                    color:var(--text);
                                 ">
                                     <b>Юр. лицо:</b>
                                     ${esc(item.legal_name)}
@@ -1378,7 +1378,7 @@ async function openDevelopmentEventsModal() {
                             ? `
                                 <div style="
                                     margin-top:5px;
-                                    color:#555;
+                                    color:var(--text);
                                 ">
                                     <b>ИНН:</b>
                                     ${esc(item.inn)}
@@ -1392,7 +1392,7 @@ async function openDevelopmentEventsModal() {
                             ? `
                                 <div style="
                                     margin-top:5px;
-                                    color:#555;
+                                    color:var(--text);
                                 ">
                                     <b>Адрес:</b>
                                     ${esc(item.address)}
@@ -1407,15 +1407,15 @@ async function openDevelopmentEventsModal() {
                         gap:8px 14px;
                         margin-top:12px;
                         padding-top:10px;
-                        border-top:1px solid #eee;
-                        color:#777;
+                        border-top:1px solid var(--card-border);
+                        color:var(--muted);
                         font-size:13px;
                         line-height:1.4;
                     ">
 
                         <span>
                             Создана:
-                            <b style="color:#333;">
+                            <b style="color:var(--text);">
                                 ${date(item.created_at)}
                             </b>
                         </span>
@@ -1425,7 +1425,7 @@ async function openDevelopmentEventsModal() {
                                 ? `
                                     <span>
                                         Срок до:
-                                        <b style="color:#333;">
+                                        <b style="color:var(--text);">
                                             ${date(item.expires_at)}
                                         </b>
                                     </span>
@@ -1453,7 +1453,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <span style="
                                             font-weight:700;
-                                            color:#856404;
+                                            color:#FFC680;
                                         ">
                                             Заявка на договор
                                         </span>
@@ -1462,7 +1462,7 @@ async function openDevelopmentEventsModal() {
                                         ? `
                                             <span style="
                                                 font-weight:700;
-                                                color:#616161;
+                                                color:var(--muted);
                                             ">
                                                 Закрыта
                                             </span>
@@ -1471,7 +1471,7 @@ async function openDevelopmentEventsModal() {
                                             ? `
                                                 <span style="
                                                     font-weight:700;
-                                                    color:#c62828;
+                                                    color:#FF8FB3;
                                                 ">
                                                     Истекла
                                                 </span>
@@ -1480,7 +1480,7 @@ async function openDevelopmentEventsModal() {
                                                 ? `
                                                     <span style="
                                                         font-weight:700;
-                                                        color:#1565c0;
+                                                        color:#9DB8FF;
                                                     ">
                                                         Клиент заведён
                                                     </span>
@@ -1540,7 +1540,7 @@ async function openDevelopmentEventsModal() {
         box.innerHTML = `
             <div style="
                 padding:10px;
-                color:#777;
+                color:var(--muted);
             ">
                 Поиск...
             </div>
@@ -1568,11 +1568,11 @@ async function openDevelopmentEventsModal() {
                 box.innerHTML = `
                     <div style="
                         padding:12px;
-                        background:#f5f5f5;
+                        background:var(--card);
                         border-radius:10px;
                     ">
                         <div style="
-                            color:#666;
+                            color:var(--muted);
                             margin-bottom:10px;
                         ">
                             Ничего не найдено в справочнике 1С.
@@ -1584,8 +1584,8 @@ async function openDevelopmentEventsModal() {
                                 padding:9px 12px;
                                 border:0;
                                 border-radius:8px;
-                                background:#4caf50;
-                                color:white;
+                                background:var(--accent);
+                                color:var(--accent-ink);
                             "
                         >
                             Создать разработку
@@ -1718,9 +1718,9 @@ async function openDevelopmentEventsModal() {
                             style="
                                 padding:12px;
                                 margin-bottom:8px;
-                                border:1px solid #ddd;
+                                border:1px solid var(--card-border);
                                 border-radius:10px;
-                                background:#fff;
+                                background:var(--card);
                                 cursor:pointer;
                             "
                         >
@@ -1755,7 +1755,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:6px;
-                                            color:#555;
+                                            color:var(--text);
                                         ">
                                             ${esc(item.legal_name)}
                                         </div>
@@ -1769,7 +1769,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:4px;
-                                            color:#777;
+                                            color:var(--muted);
                                             font-size:13px;
                                         ">
                                             ИНН:
@@ -1785,7 +1785,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:6px;
-                                            color:#555;
+                                            color:var(--text);
                                             font-size:13px;
                                         ">
                                             <b>Адрес:</b>
@@ -1801,7 +1801,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:6px;
-                                            color:#555;
+                                            color:var(--text);
                                             font-size:13px;
                                         ">
                                             <b>
@@ -1819,7 +1819,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:7px;
-                                            color:#187a35;
+                                            color:var(--accent);
                                             font-size:13px;
                                             font-weight:700;
                                         ">
@@ -1835,7 +1835,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:5px;
-                                            color:#777;
+                                            color:var(--muted);
                                             font-size:13px;
                                         ">
                                             <b>Дата создания:</b>
@@ -1851,7 +1851,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:5px;
-                                            color:#777;
+                                            color:var(--muted);
                                             font-size:13px;
                                         ">
                                             <b>
@@ -1888,7 +1888,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:5px;
-                                            color:#777;
+                                            color:var(--muted);
                                             font-size:13px;
                                         ">
                                             <b>
@@ -1908,7 +1908,7 @@ async function openDevelopmentEventsModal() {
                                     ? `
                                         <div style="
                                             margin-top:5px;
-                                            color:#c62828;
+                                            color:#FF8FB3;
                                             font-size:13px;
                                             font-weight:700;
                                         ">
@@ -1964,8 +1964,8 @@ async function openDevelopmentEventsModal() {
                 <div style="
                     padding:10px;
                     border-radius:8px;
-                    background:#fde8e8;
-                    color:#a00000;
+                    background:rgba(224,69,123,0.16);
+                    color:#FF8FB3;
                 ">
                     ${esc(error.message)}
                 </div>
@@ -2020,8 +2020,8 @@ async function openDevelopmentEventsModal() {
 
                 <div style="
                     padding:15px;
-                    background:#fff;
-                    border:1px solid #ddd;
+                    background:var(--card);
+                    border:1px solid var(--card-border);
                     border-radius:12px;
                 ">
 
@@ -2139,8 +2139,8 @@ async function openDevelopmentEventsModal() {
                                     margin-top:12px;
                                     padding:10px;
                                     border-radius:8px;
-                                    background:#fff3cd;
-                                    color:#856404;
+                                    background:rgba(255,190,90,0.14);
+                                    color:#FFC680;
                                 ">
                                     Контрагент заблокирован
                                 </div>
@@ -2158,8 +2158,8 @@ async function openDevelopmentEventsModal() {
                                     margin-top:12px;
                                     padding:10px;
                                     border-radius:9px;
-                                    background:#eef8f0;
-                                    color:#246b35;
+                                    background:var(--card);
+                                    color:var(--accent);
                                     font-weight:700;
                                 ">
                                     Осталось:
@@ -2176,8 +2176,8 @@ async function openDevelopmentEventsModal() {
                         margin-top:18px;
                         padding:12px;
                         border-radius:9px;
-                        background:#f5f5f5;
-                        color:#666;
+                        background:var(--card);
+                        color:var(--muted);
                     ">
                         Разработка уже создана.
                     </div>
@@ -2268,8 +2268,8 @@ async function openDevelopmentEventsModal() {
 
             <div style="
                 padding:15px;
-                background:#fff;
-                border:1px solid #ddd;
+                background:var(--card);
+                border:1px solid var(--card-border);
                 border-radius:12px;
             ">
 
@@ -2391,8 +2391,8 @@ async function openDevelopmentEventsModal() {
                                 margin-top:12px;
                                 padding:10px;
                                 border-radius:8px;
-                                background:#eef8f0;
-                                color:#246b35;
+                                background:var(--card);
+                                color:var(--accent);
                                 font-weight:700;
                             ">
                                 Работающий контрагент
@@ -2409,8 +2409,8 @@ async function openDevelopmentEventsModal() {
                                 margin-top:12px;
                                 padding:10px;
                                 border-radius:8px;
-                                background:#fff3cd;
-                                color:#856404;
+                                background:rgba(255,190,90,0.14);
+                                color:#FFC680;
                             ">
                                 Контрагент заблокирован
                             </div>
@@ -2441,8 +2441,8 @@ async function openDevelopmentEventsModal() {
                                 <div style="
                                     padding:12px;
                                     border-radius:9px;
-                                    background:#eef8f0;
-                                    color:#246b35;
+                                    background:var(--card);
+                                    color:var(--accent);
                                 ">
                                     Разработка уже ведётся.
                                 </div>
@@ -2452,8 +2452,8 @@ async function openDevelopmentEventsModal() {
                                     <div style="
                                         padding:12px;
                                         border-radius:9px;
-                                        background:#f5f5f5;
-                                        color:#666;
+                                        background:var(--card);
+                                        color:var(--muted);
                                     ">
                                         Контрагент уже работает.
                                         <br>
@@ -2468,8 +2468,8 @@ async function openDevelopmentEventsModal() {
                                             padding:12px;
                                             border:0;
                                             border-radius:10px;
-                                            background:#4caf50;
-                                            color:#fff;
+                                            background:var(--accent);
+                                            color:var(--accent-ink);
                                             font-size:15px;
                                             font-weight:600;
                                         "
@@ -2561,8 +2561,8 @@ function renderCreate(counterparty = null, preset = null) {
 
         <div style="
             padding:15px;
-            background:#fff;
-            border:1px solid #ddd;
+            background:var(--card);
+            border:1px solid var(--card-border);
             border-radius:12px;
         ">
 
@@ -2579,9 +2579,9 @@ function renderCreate(counterparty = null, preset = null) {
                         <div style="
                             padding:10px;
                             margin-bottom:14px;
-                            background:#eef5ff;
+                            background:var(--card);
                             border-radius:8px;
-                            color:#345;
+                            color:#9DB8FF;
                         ">
                             Клиент выбран из справочника 1С.
                         </div>
@@ -2603,8 +2603,8 @@ function renderCreate(counterparty = null, preset = null) {
                                 position:relative;
                                 margin-bottom:14px;
                                 padding:12px;
-                                background:#f6f9ff;
-                                border:1px solid #d6e2f5;
+                                background:var(--card);
+                                border:1px solid rgba(120,170,255,0.5);
                                 border-radius:10px;
                             ">
                                 <label style="display:block;">
@@ -2620,10 +2620,10 @@ function renderCreate(counterparty = null, preset = null) {
                                             box-sizing:border-box;
                                             margin-top:5px;
                                             padding:10px;
-                                            border:1px solid #ccc;
+                                            border:1px solid var(--card-border);
                                             border-radius:8px;
-                                            background:#fff;
-                                            color:#222;
+                                            background:var(--card);
+                                            color:var(--text);
                                         "
                                     >
                                 </label>
@@ -2635,8 +2635,8 @@ function renderCreate(counterparty = null, preset = null) {
                                         left:12px;
                                         right:12px;
                                         z-index:1003;
-                                        background:#fff;
-                                        border:1px solid #ddd;
+                                        background:var(--card);
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
                                         box-shadow:0 4px 12px rgba(0,0,0,.12);
                                         overflow:hidden;
@@ -2650,10 +2650,10 @@ function renderCreate(counterparty = null, preset = null) {
                                         display:none;
                                         margin-top:10px;
                                         padding:10px;
-                                        background:#e8f5e9;
-                                        border:1px solid #a5d6a7;
+                                        background:var(--card);
+                                        border:1px solid var(--accent-line);
                                         border-radius:8px;
-                                        color:#1b5e20;
+                                        color:var(--accent);
                                         font-size:14px;
                                         line-height:1.4;
                                     "
@@ -2664,7 +2664,7 @@ function renderCreate(counterparty = null, preset = null) {
                                     style="
                                         margin-top:6px;
                                         font-size:12px;
-                                        color:#666;
+                                        color:var(--muted);
                                     "
                                 >
                                     Открытые данные Москвы: адрес, телефон и название подставятся сами.
@@ -2687,7 +2687,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2708,7 +2708,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2729,7 +2729,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2751,7 +2751,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2784,7 +2784,7 @@ function renderCreate(counterparty = null, preset = null) {
                                         box-sizing:border-box;
                                         margin-top:5px;
                                         padding:10px;
-                                        border:1px solid #ccc;
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
                                     "
                                 >
@@ -2797,8 +2797,8 @@ function renderCreate(counterparty = null, preset = null) {
                                         right:0;
                                         top:100%;
                                         z-index:1001;
-                                        background:#fff;
-                                        border:1px solid #ddd;
+                                        background:var(--card);
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
                                         box-shadow:0 4px 12px rgba(0,0,0,.12);
                                         overflow:hidden;
@@ -2834,9 +2834,9 @@ function renderCreate(counterparty = null, preset = null) {
                                         box-sizing:border-box;
                                         margin-top:5px;
                                         padding:10px;
-                                        border:1px solid #ccc;
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
-                                        background:#f5f5f5;
+                                        background:var(--card);
                                     "
                                 >
 
@@ -2848,8 +2848,8 @@ function renderCreate(counterparty = null, preset = null) {
                                         right:0;
                                         top:100%;
                                         z-index:1000;
-                                        background:#fff;
-                                        border:1px solid #ddd;
+                                        background:var(--card);
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
                                         box-shadow:0 4px 12px rgba(0,0,0,.12);
                                         overflow:hidden;
@@ -2876,7 +2876,7 @@ function renderCreate(counterparty = null, preset = null) {
                                         box-sizing:border-box;
                                         margin-top:5px;
                                         padding:10px;
-                                        border:1px solid #ccc;
+                                        border:1px solid var(--card-border);
                                         border-radius:8px;
                                     "
                                 >
@@ -2898,7 +2898,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2919,7 +2919,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2939,7 +2939,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2959,7 +2959,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -2979,7 +2979,7 @@ function renderCreate(counterparty = null, preset = null) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                             min-height:90px;
                         "
@@ -2999,8 +2999,8 @@ function renderCreate(counterparty = null, preset = null) {
                         padding:12px;
                         border:0;
                         border-radius:10px;
-                        background:#4caf50;
-                        color:#fff;
+                        background:var(--accent);
+                        color:var(--accent-ink);
                         font-size:15px;
                         font-weight:600;
                     "
@@ -3053,7 +3053,7 @@ function renderCreate(counterparty = null, preset = null) {
 
         const showMessage = text => {
             items = [];
-            box.innerHTML = `<div style="padding:10px;font-size:13px;color:#666;">${esc(text)}</div>`;
+            box.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--muted);">${esc(text)}</div>`;
             box.style.top = (search.offsetTop + search.offsetHeight + 4) + "px";
             box.style.display = "block";
         };
@@ -3072,7 +3072,7 @@ function renderCreate(counterparty = null, preset = null) {
             if (region) {
                 region.value = "";
                 region.readOnly = false;
-                region.style.background = "#fff";
+                region.style.background = "var(--card)";
             }
 
             if (address) {
@@ -3080,7 +3080,7 @@ function renderCreate(counterparty = null, preset = null) {
                 address.disabled = true;
                 address.readOnly = false;
                 address.placeholder = "Сначала выберите регион";
-                address.style.background = "#f5f5f5";
+                address.style.background = "var(--card)";
             }
 
             info.style.display = "none";
@@ -3110,14 +3110,14 @@ function renderCreate(counterparty = null, preset = null) {
             if (region) {
                 region.value = "город Москва";
                 region.readOnly = true;
-                region.style.background = "#f5f5f5";
+                region.style.background = "var(--card)";
             }
 
             if (address) {
                 address.disabled = false;
                 address.readOnly = true;
                 address.value = item.address || "";
-                address.style.background = "#f5f5f5";
+                address.style.background = "var(--card)";
             }
 
             const details = [
@@ -3127,14 +3127,14 @@ function renderCreate(counterparty = null, preset = null) {
             ].filter(Boolean).join(" · ");
 
             const mapLink = item.map && item.map.point
-                ? `<a href="${esc(item.map.point)}" target="_blank" rel="noopener" style="color:#0b57d0;">На карте</a>`
+                ? `<a href="${esc(item.map.point)}" target="_blank" rel="noopener" style="color:#9DB8FF;">На карте</a>`
                 : "";
 
             info.innerHTML = `
                 <div><b>✔ Заведение из каталога</b>${details ? ": " + esc(details) : ""}</div>
                 <div style="margin-top:8px;">
                     ${mapLink}
-                    <a href="#" id="devCatReset" style="color:#b71c1c;${mapLink ? "margin-left:16px;" : ""}">Выбрать другое или ввести вручную</a>
+                    <a href="#" id="devCatReset" style="color:#FF8FB3;${mapLink ? "margin-left:16px;" : ""}">Выбрать другое или ввести вручную</a>
                 </div>
             `;
             info.style.display = "block";
@@ -3187,23 +3187,23 @@ function renderCreate(counterparty = null, preset = null) {
                             data-cat-index="${index}"
                             style="
                                 padding:10px;
-                                border-bottom:1px solid #eee;
+                                border-bottom:1px solid var(--card-border);
                                 cursor:pointer;
                                 font-size:14px;
                                 line-height:1.35;
-                                color:#222;
+                                color:var(--text);
                             "
                         >
                             <b>${esc(item.name)}</b>
-                            <span style="color:#666;">
+                            <span style="color:var(--muted);">
                                 ${item.is_net ? " · сеть" : ""}
                                 ${item.type ? " · " + esc(item.type) : ""}
                                 ${item.seats ? " · мест: " + esc(item.seats) : ""}
                             </span>
                             ${item.availability && item.availability.taken
-                                ? `<span style="color:#b71c1c;font-weight:600;"> · ${esc(item.availability.label)}</span>`
+                                ? `<span style="color:#FF8FB3;font-weight:600;"> · ${esc(item.availability.label)}</span>`
                                 : ""}
-                            <div style="color:#555;font-size:13px;">${esc(item.address)}</div>
+                            <div style="color:var(--text);font-size:13px;">${esc(item.address)}</div>
                         </div>
                     `).join("");
 
@@ -3308,8 +3308,7 @@ function renderCreate(counterparty = null, preset = null) {
                     addressInput.placeholder =
                         "Сначала выберите регион";
 
-                    addressInput.style.background =
-                        "#f5f5f5";
+                    addressInput.style.background = "var(--card)";
 
 
                     addressSuggestions.innerHTML = "";
@@ -3419,7 +3418,7 @@ function renderCreate(counterparty = null, preset = null) {
                                                             data-region-index="${index}"
                                                             style="
                                                                 padding:10px;
-                                                                border-bottom:1px solid #eee;
+                                                                border-bottom:1px solid var(--card-border);
                                                                 cursor:pointer;
                                                                 font-size:14px;
                                                                 line-height:1.35;
@@ -3500,8 +3499,7 @@ function renderCreate(counterparty = null, preset = null) {
                                                         addressInput.placeholder =
                                                             "Начните вводить улицу, дом...";
 
-                                                        addressInput.style.background =
-                                                            "#fff";
+                                                        addressInput.style.background = "var(--card)";
 
                                                     }
                                                 );
@@ -3625,7 +3623,7 @@ function renderCreate(counterparty = null, preset = null) {
                                                             data-address-index="${index}"
                                                             style="
                                                                 padding:10px;
-                                                                border-bottom:1px solid #eee;
+                                                                border-bottom:1px solid var(--card-border);
                                                                 cursor:pointer;
                                                                 font-size:14px;
                                                                 line-height:1.35;
@@ -3857,7 +3855,7 @@ function renderCreate(counterparty = null, preset = null) {
                 // Проверяем адрес до отправки запроса на сервер.
                 if (!payload.address) {
                     error.innerHTML = `
-                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fde8e8;color:#a00000;">
+                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:rgba(224,69,123,0.16);color:#FF8FB3;">
                             Укажите адрес. Без адреса разработку создать нельзя.
                         </div>
                     `;
@@ -3870,7 +3868,7 @@ function renderCreate(counterparty = null, preset = null) {
 
                 if (!data.counterparty_guid && (!data.region || !data.region_fias_id)) {
                     error.innerHTML = `
-                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fde8e8;color:#a00000;">
+                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:rgba(224,69,123,0.16);color:#FF8FB3;">
                             Сначала выберите регион из списка подсказок, затем укажите адрес.
                         </div>
                     `;
@@ -3880,7 +3878,7 @@ function renderCreate(counterparty = null, preset = null) {
 
                 if (!data.counterparty_guid && !payload.address_selected_from_dadata) {
                     error.innerHTML = `
-                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fde8e8;color:#a00000;">
+                        <div style="margin-top:12px;padding:10px;border-radius:8px;background:rgba(224,69,123,0.16);color:#FF8FB3;">
                             Выберите адрес из подсказок DaData: начните вводить и нажмите на нужный вариант из списка.
                         </div>
                     `;
@@ -4211,8 +4209,8 @@ function renderCreate(counterparty = null, preset = null) {
                             margin-top:12px;
                             padding:10px;
                             border-radius:8px;
-                            background:#fde8e8;
-                            color:#a00000;
+                            background:rgba(224,69,123,0.16);
+                            color:#FF8FB3;
                         ">
                             ${esc(err.message)}
                         </div>
@@ -4233,7 +4231,7 @@ function renderCreate(counterparty = null, preset = null) {
             <div style="
                 padding:20px;
                 text-align:center;
-                color:#777;
+                color:var(--muted);
             ">
                 Загрузка разработки...
             </div>
@@ -4267,8 +4265,8 @@ function renderCreate(counterparty = null, preset = null) {
                 <div style="
                     padding:12px;
                     border-radius:8px;
-                    background:#fde8e8;
-                    color:#a00000;
+                    background:rgba(224,69,123,0.16);
+                    color:#FF8FB3;
                 ">
                     ${esc(error.message)}
                 </div>
@@ -4342,8 +4340,8 @@ function renderDevelopment(d) {
 
         <div style="
             padding:15px;
-            background:#fff;
-            border:1px solid #ddd;
+            background:var(--card);
+            border:1px solid var(--card-border);
             border-radius:12px;
         ">
 
@@ -4446,7 +4444,7 @@ function renderDevelopment(d) {
             <div style="
                 margin-top:16px;
                 padding-top:12px;
-                border-top:1px solid #eee;
+                border-top:1px solid var(--card-border);
             ">
 
                 <div style="margin-top:7px;">
@@ -4498,7 +4496,7 @@ function renderDevelopment(d) {
                             margin-top:16px;
                             padding:12px;
                             border-radius:9px;
-                            background:#f7f7f7;
+                            background:var(--card);
                         ">
 
                             <div style="
@@ -4510,7 +4508,7 @@ function renderDevelopment(d) {
 
                             <div style="
                                 white-space:pre-wrap;
-                                color:#444;
+                                color:var(--text);
                             ">
                                 ${esc(d.comment)}
                             </div>
@@ -4522,8 +4520,8 @@ function renderDevelopment(d) {
                             margin-top:16px;
                             padding:12px;
                             border-radius:9px;
-                            background:#f7f7f7;
-                            color:#999;
+                            background:var(--card);
+                            color:var(--muted);
                         ">
                             Комментарий не добавлен.
                         </div>
@@ -4547,7 +4545,7 @@ function renderDevelopment(d) {
                                             padding:12px;
                                             border:0;
                                             border-radius:10px;
-                                            background:#6a1b9a;
+                                            background:var(--brand);
                                             color:#fff;
                                             font-size:15px;
                                             font-weight:600;
@@ -4570,8 +4568,8 @@ function renderDevelopment(d) {
                                 padding:12px;
                                 border:0;
                                 border-radius:10px;
-                                background:#2e7d32;
-                                color:#fff;
+                                background:var(--accent);
+                                color:var(--accent-ink);
                                 font-size:15px;
                                 font-weight:600;
                                 cursor:pointer;
@@ -4590,7 +4588,7 @@ function renderDevelopment(d) {
                                 padding:12px;
                                 border:0;
                                 border-radius:10px;
-                                background:#1976d2;
+                                background:#5B7BE0;
                                 color:#fff;
                                 font-size:15px;
                                 font-weight:600;
@@ -4610,7 +4608,7 @@ function renderDevelopment(d) {
                                 padding:12px;
                                 border:0;
                                 border-radius:10px;
-                                background:#757575;
+                                background:rgba(255,255,255,0.16);
                                 color:#fff;
                                 font-size:15px;
                                 font-weight:600;
@@ -5068,8 +5066,8 @@ function renderDevelopmentEdit(d) {
 
         <div style="
             padding:15px;
-            background:#fff;
-            border:1px solid #ddd;
+            background:var(--card);
+            border:1px solid var(--card-border);
             border-radius:12px;
         ">
 
@@ -5098,7 +5096,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5120,7 +5118,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5141,7 +5139,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5164,7 +5162,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5182,7 +5180,7 @@ function renderDevelopmentEdit(d) {
                                     required
                                     value="${esc(d.address || d.actual_address || d.delivery_address || "")}"
                                     placeholder="Введите адрес из 1С"
-                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid #ccc;border-radius:8px;"
+                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid var(--card-border);border-radius:8px;"
                                 >
                             </label>
                         `
@@ -5197,9 +5195,9 @@ function renderDevelopmentEdit(d) {
                                     required
                                     placeholder="Начните вводить регион"
                                     value=""
-                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid #ccc;border-radius:8px;"
+                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid var(--card-border);border-radius:8px;"
                                 >
-                                <div id="devEditRegionSuggestions" style="position:absolute;left:0;right:0;top:100%;z-index:1001;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;display:none;"></div>
+                                <div id="devEditRegionSuggestions" style="position:absolute;left:0;right:0;top:100%;z-index:1001;background:var(--card);border:1px solid var(--card-border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;display:none;"></div>
                             </label>
 
                             <label style="display:block;margin-top:12px;position:relative;">
@@ -5213,9 +5211,9 @@ function renderDevelopmentEdit(d) {
                                     placeholder="Сначала выберите регион"
                                     value="${esc(d.address || "")}"
                                     disabled
-                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid #ccc;border-radius:8px;background:#f5f5f5;"
+                                    style="width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid var(--card-border);border-radius:8px;background:var(--card);"
                                 >
-                                <div id="devEditAddressSuggestions" style="position:absolute;left:0;right:0;top:100%;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;display:none;"></div>
+                                <div id="devEditAddressSuggestions" style="position:absolute;left:0;right:0;top:100%;z-index:1000;background:var(--card);border:1px solid var(--card-border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;display:none;"></div>
                             </label>
                         `
                 }
@@ -5236,7 +5234,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5257,7 +5255,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5278,7 +5276,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                         "
                     >
@@ -5299,7 +5297,7 @@ function renderDevelopmentEdit(d) {
                             box-sizing:border-box;
                             margin-top:5px;
                             padding:10px;
-                            border:1px solid #ccc;
+                            border:1px solid var(--card-border);
                             border-radius:8px;
                             min-height:120px;
                         "
@@ -5319,8 +5317,8 @@ function renderDevelopmentEdit(d) {
                         padding:12px;
                         border:0;
                         border-radius:10px;
-                        background:#4caf50;
-                        color:#fff;
+                        background:var(--accent);
+                        color:var(--accent-ink);
                         font-size:15px;
                         font-weight:600;
                     "
@@ -5377,7 +5375,7 @@ function renderDevelopmentEdit(d) {
             addressInput.value = "";
             addressInput.disabled = true;
             addressInput.placeholder = "Сначала выберите регион";
-            addressInput.style.background = "#f5f5f5";
+            addressInput.style.background = "var(--card)";
             addressSuggestions.innerHTML = "";
             addressSuggestions.style.display = "none";
 
@@ -5417,7 +5415,7 @@ function renderDevelopmentEdit(d) {
                         const value = item?.value || item?.unrestricted_value || "";
                         const fiasId = item?.data?.region_fias_id || "";
                         if (!value || !fiasId) return "";
-                        return `<div data-region-index="${index}" style="padding:10px;border-bottom:1px solid #eee;cursor:pointer;font-size:14px;line-height:1.35;">${esc(value)}</div>`;
+                        return `<div data-region-index="${index}" style="padding:10px;border-bottom:1px solid var(--card-border);cursor:pointer;font-size:14px;line-height:1.35;">${esc(value)}</div>`;
                     }).join("");
                     regionSuggestions.style.display = "block";
 
@@ -5434,7 +5432,7 @@ function renderDevelopmentEdit(d) {
                             regionSuggestions.style.display = "none";
                             addressInput.disabled = false;
                             addressInput.placeholder = "Начните вводить улицу, дом...";
-                            addressInput.style.background = "#fff";
+                            addressInput.style.background = "var(--card)";
                         });
                     });
                 } catch (error) {
@@ -5475,7 +5473,7 @@ function renderDevelopmentEdit(d) {
                     addressSuggestions.innerHTML = suggestions.map((item, index) => {
                         const value = item?.unrestricted_value || item?.value || "";
                         if (!value) return "";
-                        return `<div data-address-index="${index}" style="padding:10px;border-bottom:1px solid #eee;cursor:pointer;font-size:14px;line-height:1.35;">${esc(value)}</div>`;
+                        return `<div data-address-index="${index}" style="padding:10px;border-bottom:1px solid var(--card-border);cursor:pointer;font-size:14px;line-height:1.35;">${esc(value)}</div>`;
                     }).join("");
                     addressSuggestions.style.display = "block";
 
@@ -5538,12 +5536,12 @@ function renderDevelopmentEdit(d) {
             const errorBox = document.getElementById("devEditError");
             if (!isFromCounterparty) {
                 if (!selectedRegionFiasId) {
-                    errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:#ffebee;border:1px solid #ef9a9a;border-radius:8px;color:#b71c1c;">Выберите регион из подсказок DaData.</div>`;
+                    errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:var(--card);border:1px solid rgba(224,69,123,0.5);border-radius:8px;color:#FF8FB3;">Выберите регион из подсказок DaData.</div>`;
                     document.getElementById("devEditRegion").focus();
                     return;
                 }
                 if (!selectedAddressFromDaData || !document.getElementById("devEditAddress").value.trim()) {
-                    errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:#ffebee;border:1px solid #ef9a9a;border-radius:8px;color:#b71c1c;">Выберите адрес из подсказок DaData.</div>`;
+                    errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:var(--card);border:1px solid rgba(224,69,123,0.5);border-radius:8px;color:#FF8FB3;">Выберите адрес из подсказок DaData.</div>`;
                     document.getElementById("devEditAddress").focus();
                     return;
                 }
@@ -5553,7 +5551,7 @@ function renderDevelopmentEdit(d) {
                     return;
                 }
             } else if (!String(new FormData(form).get("address") || "").trim()) {
-                errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:#ffebee;border:1px solid #ef9a9a;border-radius:8px;color:#b71c1c;">Укажите адрес контрагента из 1С.</div>`;
+                errorBox.innerHTML = `<div style="margin-top:12px;padding:10px;background:var(--card);border:1px solid rgba(224,69,123,0.5);border-radius:8px;color:#FF8FB3;">Укажите адрес контрагента из 1С.</div>`;
                 form.elements.address.focus();
                 return;
             }
@@ -5680,10 +5678,10 @@ function renderDevelopmentEdit(d) {
                     <div style="
                         margin-top:12px;
                         padding:10px;
-                        background:#ffebee;
-                        border:1px solid #ef9a9a;
+                        background:var(--card);
+                        border:1px solid rgba(224,69,123,0.5);
                         border-radius:8px;
-                        color:#b71c1c;
+                        color:#FF8FB3;
                     ">
                         ${esc(
                             error?.message ||

@@ -121,11 +121,11 @@ async function loadReceiptsReport(retry = 0) {
             html += `
 
                 <div style="
-                    background:#fff;
+                    background:var(--card);
                     border-radius:14px;
                     overflow:hidden;
                     box-shadow:0 2px 10px rgba(0,0,0,0.05);
-                    border:1px solid #ececec;
+                    border:1px solid var(--card-border);
                 ">
 
                     <!-- HEADER -->
@@ -133,7 +133,7 @@ async function loadReceiptsReport(retry = 0) {
                     <div onclick="toggleReceiptDoc('${docId}')"
                          style="
                             padding:12px;
-                            background:linear-gradient(135deg,#5f6672,#7a8594);
+                            background:linear-gradient(135deg,var(--surface),rgba(255,255,255,0.16));
                             color:#fff;
                             cursor:pointer;
                             display:flex;
@@ -154,7 +154,7 @@ async function loadReceiptsReport(retry = 0) {
                                 font-weight:700;
                                 line-height:1.2;
                             ">
-                                ${doc.counterparty || ""}
+                                ${escapeHtml(doc.counterparty || "")}
                             </div>
 
                             <!-- документ -->
@@ -163,9 +163,9 @@ async function loadReceiptsReport(retry = 0) {
                                 font-size:11px;
                                 opacity:0.85;
                             ">
-                                ${doc.document}
+                                ${escapeHtml(doc.document)}
                                 ·
-                                ${doc.date}
+                                ${escapeHtml(doc.date)}
                             </div>
 
                         </div>
@@ -195,17 +195,17 @@ async function loadReceiptsReport(retry = 0) {
 
                 doc.items.forEach(item => {
 
-                    let priceBg = "#f1f1f1";
-                    let priceColor = "#333";
+                    let priceBg = "rgba(255,255,255,0.08)";
+                    let priceColor = "var(--text)";
 
                     if (item.price_state === "up") {
-                        priceBg = "#ffd9d1";
-                        priceColor = "#c62828";
+                        priceBg = "rgba(224,69,123,0.16)";
+                        priceColor = "#FF8FB3";
                     }
 
                     if (item.price_state === "down") {
-                        priceBg = "#dff5df";
-                        priceColor = "#2e7d32";
+                        priceBg = "rgba(181,224,138,0.14)";
+                        priceColor = "var(--accent)";
                     }
 
                     // ===== ПРОЦЕНТ =====
@@ -247,13 +247,13 @@ async function loadReceiptsReport(retry = 0) {
 
                             percentText = `
                                 <span style="
-                                    background:#ffd9d1;
-                                    color:#c62828;
+                                    background:rgba(224,69,123,0.16);
+                                    color:#FF8FB3;
                                     padding:3px 7px;
                                     border-radius:6px;
                                     font-weight:700;
                                 ">
-                                    ↑ +${rounded}%
+                                    ↑ +${escapeHtml(rounded)}%
                                 </span>
                             `;
                         }
@@ -264,13 +264,13 @@ async function loadReceiptsReport(retry = 0) {
 
                             percentText = `
                                 <span style="
-                                    background:#dff5df;
-                                    color:#2e7d32;
+                                    background:rgba(181,224,138,0.14);
+                                    color:var(--accent);
                                     padding:3px 7px;
                                     border-radius:6px;
                                     font-weight:700;
                                 ">
-                                    ↓ -${rounded}%
+                                    ↓ -${escapeHtml(rounded)}%
                                 </span>
                             `;
                         }
@@ -279,10 +279,10 @@ async function loadReceiptsReport(retry = 0) {
                     html += `
 
                         <div class="receipt-item"
-                             data-price-state="${item.price_state || ''}"
+                             data-price-state="${escapeHtml(item.price_state || '')}"
                              style="
                                 padding:10px 12px;
-                                border-bottom:1px solid #f0f0f0;
+                                border-bottom:1px solid var(--card-border);
                                 display:flex;
                                 justify-content:space-between;
                                 gap:10px;
@@ -309,23 +309,23 @@ async function loadReceiptsReport(retry = 0) {
                                     <div style="
                                         font-size:14px;
                                         font-weight:600;
-                                        color:#222;
+                                        color:var(--text);
                                         line-height:1.3;
                                         flex:1;
                                     ">
-                                        ${item.product}
+                                        ${escapeHtml(item.product)}
                                     </div>
 
                                     <div style="
-                                        background:#f4f4f4;
-                                        color:#222;
+                                        background:var(--card);
+                                        color:var(--text);
                                         padding:3px 8px;
                                         border-radius:7px;
                                         font-size:11px;
                                         white-space:nowrap;
                                         font-weight:700;
                                     ">
-                                        ${item.qty} ${item.unit}
+                                        ${escapeHtml(item.qty)} ${escapeHtml(item.unit)}
                                     </div>
 
                                 </div>
@@ -358,8 +358,8 @@ async function loadReceiptsReport(retry = 0) {
                                     <!-- предыдущая цена -->
 
                                     <span style="
-                                        background:#ececec;
-                                        color:#444;
+                                        background:rgba(255,255,255,0.10);
+                                        color:var(--text);
                                         padding:3px 7px;
                                         border-radius:6px;
                                     ">
@@ -370,8 +370,8 @@ async function loadReceiptsReport(retry = 0) {
                                     <!-- базовая цена -->
 
 <span style="
-    background:#e8f0fe;
-    color:#1a73e8;
+    background:rgba(120,170,255,0.14);
+    color:#9DB8FF;
     padding:3px 7px;
     border-radius:6px;
 ">
@@ -382,20 +382,20 @@ async function loadReceiptsReport(retry = 0) {
                                     <!-- остаток -->
 
                                     <span style="
-                                        background:#fff1d6;
-                                        color:#7a5200;
+                                        background:rgba(255,190,90,0.14);
+                                        color:#FFC680;
                                         padding:3px 7px;
                                         border-radius:6px;
                                     ">
                                         остаток:
-                                        ${item.stock}
+                                        ${escapeHtml(item.stock)}
                                     </span>
 
                                     <!-- прайс -->
 
                                     <span style="
-    background:${item.in_price ? '#e3f5e3' : '#f1f1f1'};
-    color:${item.in_price ? '#2e7d32' : '#999'};
+    background:${item.in_price ? 'rgba(181,224,138,0.14)' : 'rgba(255,255,255,0.08)'};
+    color:${item.in_price ? 'var(--accent)' : 'var(--muted)'};
     padding:3px 7px;
     border-radius:6px;
     font-weight:700;
@@ -417,7 +417,7 @@ async function loadReceiptsReport(retry = 0) {
                                 font-weight:700;
                                 font-size:15px;
                                 align-self:center;
-                                color:#222;
+                                color:var(--text);
                             ">
                                 ${formatMoney(item.sum)}
                             </div>
@@ -638,7 +638,7 @@ function togglePriceIncreaseFilter() {
 
     if (showOnlyIncreasedPrices) {
 
-        btn.style.background = "#c62828";
+        btn.style.background = "var(--danger)";
         btn.style.color = "#fff";
 
     } else {

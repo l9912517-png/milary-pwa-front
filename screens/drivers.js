@@ -79,7 +79,7 @@ function openDriversForm() {
         input.dataset.guid = user.user_id || "";
 
         input.onclick = null;
-        input.style.background = "#eee";
+        input.style.background = "var(--card)";
     }
 }
 
@@ -164,7 +164,7 @@ function loadDrivers() {
 
         html += `
         <div style="
-            background:#f4f4f4;
+            background:var(--card);
             border-radius:12px;
             padding:10px;
             box-shadow:0 2px 6px rgba(0,0,0,0.08);
@@ -175,7 +175,7 @@ function loadDrivers() {
                 font-size:16px;
                 margin-bottom:8px;
             ">
-                ${client.name}
+                ${escapeHtml(client.name)}
             </div>
         `;
 
@@ -186,7 +186,7 @@ function loadDrivers() {
 
             html += `
             <div style="
-                background:#fff;
+                background:var(--card);
                 border-radius:10px;
                 padding:8px;
                 margin-bottom:8px;
@@ -198,29 +198,29 @@ function loadDrivers() {
                     font-size:14px;
                     margin-bottom:4px;
                 ">
-                    🚚 Ходка №${trip.trip}
+                    🚚 Ходка №${escapeHtml(trip.trip)}
                 </div>
 
                 <div style="margin-bottom:4px;">
-                    👤 ${trip.driver}
+                    👤 ${escapeHtml(trip.driver)}
                 </div>
 
-                <div style="font-size:13px;color:#555;">
-                    ${car}
+                <div style="font-size:13px;color:var(--text);">
+                    ${escapeHtml(car)}
                 </div>
 
                 ${phone ? `
                 <div style="margin-top:6px;">
-                    <a href="tel:${phone}" style="
+                    <a href="tel:${escapeHtml(String(phone).replace(/[^\d+]/g, ""))}" style="
                         display:inline-block;
                         padding:4px 10px;
-                        background:#2a7cff;
+                        background:#5B7BE0;
                         color:#fff;
                         border-radius:6px;
                         text-decoration:none;
                         font-size:13px;
                     ">
-                        📞 ${phone}
+                        📞 ${escapeHtml(phone)}
                     </a>
                 </div>
                 ` : ""}
@@ -258,7 +258,7 @@ window.openDirectorySelect = async function(type, targetInputId) {
 
             <input type="text" id="searchInput"
                    placeholder="Поиск..."
-                   style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" />
+                   style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--card-border);" />
 
             <div id="directoryList" style="max-height:300px;overflow:auto;"></div>
 
@@ -330,7 +330,7 @@ function renderDirectoryList(data, container, targetInputId) {
         const div = document.createElement("div");
         div.className = "menu-item";
 
-        div.innerHTML = `<span>${item.name}</span>`;
+        div.innerHTML = `<span>${escapeHtml(item.name)}</span>`;
 
         div.onclick = function() {
 

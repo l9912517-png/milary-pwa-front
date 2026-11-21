@@ -95,7 +95,7 @@ async function loadCashState(retry = 0) {
 
             html += `
                 <div style="
-                    background:#fff;
+                    background:var(--card);
                     border-radius:12px;
                     padding:12px;
                     box-shadow:0 2px 6px rgba(0,0,0,0.05);
@@ -103,8 +103,8 @@ async function loadCashState(retry = 0) {
                     justify-content:space-between;
                     align-items:center;
                 ">
-                    <div style="font-size:14px;color:#555;">
-                        ${name}
+                    <div style="font-size:14px;color:var(--text);">
+                        ${escapeHtml(name)}
                     </div>
                     <div style="font-size:16px;font-weight:600;">
                         ${formatMoney(sum)}
@@ -132,8 +132,9 @@ async function loadCashState(retry = 0) {
         html += `
             <div style="
                 margin-top:10px;
-                background:linear-gradient(135deg,#4f8cff,#6aa6ff);
-                color:#fff;
+                background:linear-gradient(135deg, rgba(181,224,138,0.16) 0%, rgba(255,255,255,0.05) 100%);
+                border:1px solid rgba(181,224,138,0.35);
+                color:var(--text);
                 border-radius:14px;
                 padding:16px;
                 display:flex;
