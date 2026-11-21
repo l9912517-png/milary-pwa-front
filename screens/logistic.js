@@ -576,6 +576,8 @@ function requestDriverLocation(routeUuid) {
 
 function openLogisticRoute(routeUuid) {
 
+    navEnter("logistic:route:" + routeUuid, () => openLogisticRoute(routeUuid));
+
     if (
         !window.logisticData ||
         !window.logisticData.routes
@@ -864,7 +866,8 @@ function openLogisticRoute(routeUuid) {
     html += `
 
         <button
-            onclick="openScreen('logistic')"
+            type="button"
+            onclick="headerBack()"
 
             style="
                 margin-top:10px;

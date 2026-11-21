@@ -425,22 +425,135 @@ function setNavActive(id) {
     document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.toggle("active", btn.id === id));
 }
 
-/* Кнопка «назад» в шапке: экран может задать свой шаг назад (window.screenBack), иначе — на главную */
+/* ================= НАВИГАЦИЯ: «НАЗАД» ПО ИСТОРИИ ЭКРАНОВ =================
+   Каждый открытый экран — запись в истории браузера. «Назад» в шапке, кнопка «Назад» на Android,
+   жест назад на iPhone возвращают на предыдущий экран; открытое окно (лист снизу) закрывается.
+   С главной «назад» — выход из приложения (как в обычных приложениях).
+
+   navEnter(key, restore)      — экран открыт (тот же key — не новая запись, а обновление);
+   navEnter(key, restore, true) — заменить текущую запись (например, после отправки формы);
+   navRoot(restore)             — главная: история приложения начинается заново. */
+
+const NAV = {
+    entries: [],        // [{ key, restore }], индекс = state.nav
+    cur: -1,
+    restoring: false,   // во время восстановления новые записи не создаём
+    modal: false,       // для открытого окна добавлена запись истории
+    ignorePop: 0,       // сколько popstate пропустить (сами вызвали history.back)
+    closing: false      // окно закрываем сами — наблюдатель не должен звать history.back
+};
+
+function navRoot(restore) {
+    NAV.entries = [{ key: "home", restore }];
+    NAV.cur = 0;
+    NAV.modal = false;
+    try { history.replaceState({ nav: 0 }, ""); } catch (e) { /* недоступно */ }
+}
+
+function navEnter(key, restore, replace) {
+    if (NAV.restoring || NAV.cur < 0) return;
+    const top = NAV.entries[NAV.cur];
+    if (top && top.key === key) { top.restore = restore; return; }
+    if (replace && NAV.cur > 0) {
+        NAV.entries[NAV.cur] = { key, restore };
+        return;
+    }
+    navDropModalEntry();
+    NAV.cur += 1;
+    NAV.entries.length = NAV.cur;
+    NAV.entries[NAV.cur] = { key, restore };
+    try { history.pushState({ nav: NAV.cur }, ""); } catch (e) { /* недоступно */ }
+}
+
+/* окна поверх экрана: листы снизу, инструкции, просмотр картинки, ожидание отчёта */
+const NAV_OVERLAYS = ".modal-overlay, .support-viewer, .report-overlay";
+
+function navCloseOverlays() {
+    NAV.closing = true;
+    document.querySelectorAll(NAV_OVERLAYS).forEach(el => {
+        // ожидание отчёта — через его «Отменить», чтобы остановить опрос
+        const cancel = el.querySelector && el.querySelector("#reportOverlayCancel");
+        if (cancel) cancel.click(); else el.remove();
+    });
+    if (typeof closeHelp === "function") closeHelp();
+    NAV.closing = false;
+}
+
+/* если окно открыто, у него своя запись истории — убрать её перед переходом на новый экран */
+function navDropModalEntry() {
+    if (!NAV.modal) return;
+    NAV.modal = false;
+    // запись окна превращаем в запись текущего экрана (history.back здесь асинхронный и мешал бы новой записи)
+    try { history.replaceState({ nav: NAV.cur }, ""); } catch (e) { /* недоступно */ }
+}
+
+/* открылось окно — запись в истории, чтобы «назад» закрыло его, а не экран */
+new MutationObserver(() => {
+    const open = Boolean(document.querySelector(NAV_OVERLAYS));
+    if (open && !NAV.modal && NAV.cur >= 0) {
+        NAV.modal = true;
+        try { history.pushState({ nav: NAV.cur, modal: true }, ""); } catch (e) { NAV.modal = false; }
+    } else if (!open && NAV.modal && !NAV.closing) {
+        // окно закрыли кнопкой — убрать его запись из истории
+        NAV.modal = false;
+        NAV.ignorePop += 1;
+        try { history.back(); } catch (e) { NAV.ignorePop -= 1; }
+    }
+}).observe(document.body, { childList: true });
+
+window.addEventListener("popstate", e => {
+    if (NAV.ignorePop > 0) { NAV.ignorePop -= 1; return; }
+    const state = e.state || {};
+    const target = typeof state.nav === "number" ? state.nav : 0;
+
+    // «назад» при открытом окне — закрыть окно
+    if (NAV.modal && document.querySelector(NAV_OVERLAYS) && target === NAV.cur) {
+        NAV.modal = false;
+        navCloseOverlays();
+        return;
+    }
+    NAV.modal = false;
+    navCloseOverlays();
+
+    const entry = NAV.entries[target];
+    if (!entry) return;
+    NAV.cur = target;
+    NAV.restoring = true;
+    try { entry.restore(); } catch (err) { console.error("NAV restore", err); }
+    finally { NAV.restoring = false; }
+    setNavActive(target === 0 ? "navHome" : (entry.key === "files" ? "navFiles" : entry.key === "messages" ? "navMessages" : ""));
+});
+
+/* «назад» в шапке */
 function headerBack() {
+    if (NAV.cur > 0) { history.back(); return; }
     const back = window.screenBack;
     window.screenBack = null;
     if (typeof back === "function") return back();
     goHome();
 }
 
-/* «Главная» (нижняя панель) */
-function goHome() {
-    window.screenBack = null;
-    document.querySelectorAll(".modal-overlay").forEach(el => el.remove());
+/* что показывать на главной (у логиста — свой экран) */
+function homeRender() {
     if (currentUser && String(currentUser.role || "").trim().toLowerCase() === "logistics") {
         openScreen("logistic");
     } else {
         showMenu();
+    }
+}
+
+/* «Главная» (нижняя панель): вернуться к началу истории — тогда «назад» дальше не водит по старым экранам */
+function goHome() {
+    window.screenBack = null;
+    const steps = NAV.cur + (NAV.modal ? 1 : 0);
+    if (NAV.cur > 0) {
+        NAV.modal = false;
+        navCloseOverlays();
+        history.go(-steps);          // popstate вернёт главную
+    } else {
+        if (NAV.modal) navDropModalEntry();
+        navCloseOverlays();
+        homeRender();
     }
     setNavActive("navHome");
 }
@@ -614,6 +727,7 @@ function hideTopBar() {
 
 function logout() {
     localStorage.clear();
+    NAV.entries = []; NAV.cur = -1; NAV.modal = false;
     showLogin();
 }
 
@@ -916,6 +1030,7 @@ function showMenu() {
 
     window.currentScreen = "menu";
     window.screenBack = null;
+    if (!NAV.restoring) navRoot(showMenu);
     setBrandTitle();
     setNavActive("navHome");
 
@@ -1103,6 +1218,11 @@ function openScreen(name) {
     window.currentScreen = name;      // экран может уточнить сам; нужно шапке (кнопка «?»)
     window.screenBack = null;         // свой шаг «назад» экран задаёт сам
 
+    // главная логиста — корень истории, остальные экраны — новая запись
+    const isHome = name === "logistic" && currentUser && String(currentUser.role || "").trim().toLowerCase() === "logistics";
+    if (isHome) { if (!NAV.restoring) navRoot(() => openScreen("logistic")); }
+    else navEnter("s:" + name, () => openScreen(name));
+
     if (SCREENS[name]) {
         SCREENS[name]();
         return;
@@ -1131,6 +1251,7 @@ async function openAdminPanel() {
 
     window.currentScreen = "admin";
     window.screenBack = null;
+    navEnter("admin", openAdminPanel);
     title.innerText = "Администрирование";
 
     const jwt = localStorage.getItem("jwt");
@@ -1782,6 +1903,7 @@ async function showFiles() {
 
     window.currentScreen = "files";
     window.screenBack = null;
+    navEnter("files", showFiles);
     title.innerText = "Файлы";
 
     const jwt = localStorage.getItem("jwt");
@@ -2724,6 +2846,7 @@ async function showMessages() {
 
     window.currentScreen = "messages";
     window.screenBack = null;
+    navEnter("messages", showMessages);
     title.innerText = "Сообщения";
 
     const jwt = localStorage.getItem("jwt");

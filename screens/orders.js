@@ -209,6 +209,8 @@ if (btn) {
 
 function openOrderDetail(url) {
 
+    navEnter("orders:detail:" + url, () => openOrderDetail(url));
+
     fetch(url + "?t=" + Date.now())
         .then(r => {
             if (!r.ok) throw new Error("Ошибка загрузки");
@@ -268,8 +270,8 @@ function openOrderDetail(url) {
 
             // ===== НАЗАД =====
             html += `
-                <button onclick="openScreen('orders')" 
-                        style="margin-top:10px;background:rgba(255,255,255,0.10);color:var(--text);">
+                <button type="button" onclick="headerBack()" class="btn-secondary"
+                        style="margin-top:10px;">
                     Назад
                 </button>
             </div>`;

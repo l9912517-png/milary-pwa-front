@@ -121,6 +121,8 @@ function getOrderStatus(order) {
 
 function openOrder(id) {
 
+    navEnter("ocl:order:" + id, () => openOrder(id));
+
     const user = JSON.parse(localStorage.getItem("user"));
 
     fetch(`/files/${user.user_id}/orders.json?t=` + Date.now())
@@ -173,8 +175,7 @@ function showOrderView(order) {
     });
 
     html += `
-        <button onclick="openScreen('orders_create_list')" 
-                style="background:rgba(255,255,255,0.10);color:var(--text);">
+        <button type="button" onclick="headerBack()" class="btn-secondary">
             Назад
         </button>
     `;

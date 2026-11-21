@@ -93,6 +93,8 @@ html += `
 
 function openPriceFixDetail(url) {
 
+    navEnter("pricefix:detail:" + url, () => openPriceFixDetail(url));
+
     fetch(url + "?t=" + Date.now())
         .then(r => {
             if (!r.ok) throw new Error("Ошибка загрузки");
@@ -197,8 +199,8 @@ const guid = fileName.replace("pricefix_", "").replace(".json", "");
             }
 
             html += `
-                <button onclick="openScreen('pricefix')" 
-                        style="margin-top:10px;background:rgba(255,255,255,0.10);color:var(--text);">
+                <button type="button" onclick="headerBack()" class="btn-secondary"
+                        style="margin-top:10px;">
                     Назад
                 </button>
             </div>`;

@@ -379,6 +379,7 @@ registerScreen("support", async function () {
 /* ===================== Пользователь: новое обращение ===================== */
 
 async function openSupportNew() {
+    navEnter("support_new", openSupportNew);
     window.currentScreen = "support_new";
     window.screenBack = () => openScreen("support");
     title.innerText = "Новое обращение";
@@ -405,7 +406,7 @@ async function openSupportNew() {
             </details>
             <div id="snError" class="login-error" role="alert"></div>
             <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="openScreen('support')">Отмена</button>
+                <button type="button" class="btn-secondary" onclick="headerBack()">Отмена</button>
                 <button type="button" class="btn-primary-wide" id="snSend" onclick="supportSendNew()">Отправить</button>
             </div>
         </div>`;
@@ -424,7 +425,7 @@ async function supportSendNew() {
     try {
         const d = await supportApi("/tickets", { json: { text, attachments: ids, device: window.supportDeviceDraft || await supportCollectDevice() } });
         supportClearFiles("sn");
-        openSupportTicket(d.ticket.id, false);
+        openSupportTicket(d.ticket.id, false, true);
     } catch (e) {
         err.textContent = e.message;
         btn.disabled = false;
@@ -438,7 +439,9 @@ let supportOpenId = null;
 
 let supportOpenAdmin = false;
 
-async function openSupportTicket(id, admin) {
+async function openSupportTicket(id, admin, replace) {
+    // из формы нового обращения — заменить её в истории (назад — к списку, а не к пустой форме)
+    navEnter("ticket:" + Number(id), () => openSupportTicket(id, admin), Boolean(replace));
     supportOpenAdmin = Boolean(admin);
     window.currentScreen = "support_ticket";
     window.screenBack = () => (admin ? openScreen("support_admin") : openScreen("support"));
