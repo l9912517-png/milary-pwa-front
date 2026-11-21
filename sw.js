@@ -1,27 +1,47 @@
-const CACHE_NAME = "milary-cache-v1";
+/*
+ * MILARY — service worker.
+ *
+ * - Файлы приложения: сначала сеть, без сети — последняя сохранённая копия.
+ *   Поэтому после выкатки люди сразу получают новую версию.
+ * - Страница без сети — экран «Нет подключения» (offline.html): без сервера
+ *   приложение всё равно ничего не покажет, а экран честно говорит, в чём дело.
+ * - /api/, /files/, /storage — всегда напрямую в сеть, ничего не сохраняем (данные и файлы пользователей).
+ * - Сохраняем только GET-запросы к своему сайту; адрес — без параметров (?v=, ?t=), чтобы не копить копии.
+ * - Push: показываем уведомление; по нажатию открываем приложение.
+ *
+ * При изменении списка SHELL или логики — поменять номер в CACHE_NAME.
+ */
 
-const STATIC_ASSETS = [
-    "/pwa/index.html",
-    "/pwa/styles.css",
-    "/pwa/theme.css",
+const CACHE_NAME = "milary-v2";
+
+const OFFLINE_URL = "/pwa/offline.html";
+
+/* заранее сохраняем экран «Нет подключения» и картинки для уведомлений */
+const SHELL = [
+    OFFLINE_URL,
     "/pwa/icon-192.png",
-    "/pwa/notification.mp3"
+    "/pwa/badge-96.png"
 ];
+
+/* адреса, которые никогда не идут через service worker */
+const BYPASS = ["/api/", "/files/", "/storage/", "/storage-chunk/"];
+
 
 /* ===== INSTALL ===== */
 self.addEventListener("install", event => {
     self.skipWaiting();
 
-    // Cache each file separately: one failed file must not abort the install
-    // (otherwise the browser silently keeps the old service worker).
+    // Каждый файл отдельно: один неудачный файл не должен сорвать установку
+    // (иначе браузер молча оставит старый service worker).
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => Promise.all(
-                STATIC_ASSETS.map(url => cache.add(url).catch(() => null))
+                SHELL.map(url => cache.add(new Request(url, { cache: "reload" })).catch(() => null))
             ))
             .catch(() => null)
     );
 });
+
 
 /* ===== ACTIVATE ===== */
 self.addEventListener("activate", event => {
@@ -37,139 +57,129 @@ self.addEventListener("activate", event => {
     );
 });
 
+
 /* ===== FETCH ===== */
+
+function cacheKey(url) {
+    return url.origin + url.pathname;          // без ?v= и ?t=
+}
+
+function offlineResponse() {
+    return caches.match(OFFLINE_URL).then(r => r || new Response(
+        "<!doctype html><meta charset=utf-8><title>MILARY</title><p>Нет подключения к интернету.</p>",
+        { status: 503, headers: { "Content-Type": "text/html; charset=utf-8" } }
+    ));
+}
+
 self.addEventListener("fetch", event => {
 
-    // API и файлы пользователей (/files/) — всегда напрямую в сеть, мимо service worker и кэша
-    const reqPath = new URL(event.request.url).pathname;
-    if (reqPath.startsWith("/api/") || reqPath.startsWith("/files/")) {
-        return;
-    }
+    const req = event.request;
+
+    if (req.method !== "GET") return;
+
+    const url = new URL(req.url);
+
+    if (url.origin !== self.location.origin) return;          // шрифты и прочее — браузер сам
+    if (BYPASS.some(prefix => url.pathname.startsWith(prefix))) return;
+
+    const key = cacheKey(url);
 
     event.respondWith(
-        fetch(event.request)
-            .catch(() => caches.match(event.request))
+        fetch(req)
+            .then(response => {
+                // сохраняем только нормальные ответы своего сайта
+                if (response.ok && response.type === "basic") {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME)
+                        .then(cache => cache.put(key, copy))
+                        .catch(() => null);
+                }
+                return response;
+            })
+            .catch(() =>
+                req.mode === "navigate"
+                    ? offlineResponse()
+                    : caches.match(key).then(cached =>
+                        cached || new Response("", { status: 504, statusText: "Offline" }))
+            )
     );
 });
+
 
 /* ===== PUSH ===== */
 self.addEventListener("push", event => {
 
-    if (!event.data) {
-        return;
-    }
-
-    let payload;
+    let payload = {};
 
     try {
-
-        payload = event.data.json();
-
+        payload = event.data ? event.data.json() : {};
     } catch (e) {
-
-        console.error(
-            "PUSH JSON ERROR:",
-            e
-        );
-
-        return;
+        // не JSON — покажем как текст
+        payload = { body: event.data ? event.data.text() : "" };
     }
 
-    const pushData =
-        payload.data || {};
+    const pushData = payload.data || {};
 
-    // По нажатию на уведомление открываем приложение на этом же сайте
-    const notificationUrl =
-        new URL("/pwa/", self.location.origin).href;
+    // по нажатию — только свой сайт
+    let target = "/pwa/";
+    if (typeof pushData.url === "string" && pushData.url.startsWith("/pwa/")) {
+        target = pushData.url;
+    }
 
-
+    // уведомление показываем всегда: браузер требует его на каждый push
     event.waitUntil(
-
         self.registration.showNotification(
-
-            payload.title ||
-            "MILARY",
-
+            payload.title || "MILARY",
             {
+                body: payload.body || "Новое уведомление",
+                icon: "/pwa/icon-192.png",
+                badge: "/pwa/badge-96.png",
 
-                body:
-                    payload.body || "",
+                // остаётся на экране, пока его не откроют или не закроют
+                requireInteraction: true,
+                vibrate: [200, 100, 200],
 
-                icon:
-                    "/pwa/icon-192.png",
-
-                badge:
-                    "/pwa/badge-96.png",
-
-                // Уведомление остаётся на экране,
-                // пока пользователь его не откроет/закроет.
-                requireInteraction:
-                    true,
-
-                // Вибрация на поддерживаемых устройствах.
-                vibrate:
-                    [200, 100, 200],
-
-                // Не объединять разные push
-                // в одно уведомление.
-                tag:
-                    "milary-" +
-                    Date.now(),
+                // разные push не объединяем в одно уведомление
+                tag: "milary-" + Date.now(),
 
                 data: {
-
-                    url:
-                        notificationUrl,
-
-                    type:
-                        pushData.type || null,
-
-                    message_id:
-                        pushData.message_id || null
-
+                    url: new URL(target, self.location.origin).href,
+                    type: pushData.type || null,
+                    message_id: pushData.message_id || null
                 }
-
             }
-
         )
-
     );
-
 });
 
 
 /* ===== CLICK ===== */
-self.addEventListener(
-    "notificationclick",
-    event => {
+self.addEventListener("notificationclick", event => {
 
-        event.notification.close();
+    event.notification.close();
 
+    const url = (event.notification.data && event.notification.data.url) ||
+        new URL("/pwa/", self.location.origin).href;
 
-        const url =
-            event.notification.data?.url ||
-            new URL("/pwa/", self.location.origin).href;
-
-
-        /*
-         * Navigate an open app window that THIS service worker controls.
-         * client.navigate() throws for windows controlled by an older worker
-         * (right after an update) - then fall back to opening the URL.
-         */
-        event.waitUntil(
-            clients.matchAll({ type: "window" })
-                .then(clientList => {
-                    for (const client of clientList) {
-                        if ("focus" in client && "navigate" in client) {
-                            return client.navigate(url)
-                                .then(c => (c || client).focus())
-                                .catch(() => clients.openWindow(url));
-                        }
+    /*
+     * Если приложение уже открыто — переходим в нём и показываем окно.
+     * client.navigate() не работает для окна под старым service worker (сразу после обновления) —
+     * тогда открываем новое окно.
+     */
+    event.waitUntil(
+        clients.matchAll({ type: "window", includeUncontrolled: true })
+            .then(list => {
+                for (const client of list) {
+                    if (new URL(client.url).origin !== self.location.origin) continue;
+                    if ("navigate" in client) {
+                        return client.navigate(url)
+                            .then(c => (c || client).focus())
+                            .catch(() => client.focus());
                     }
-                    return clients.openWindow(url);
-                })
-                .catch(() => clients.openWindow(url))
-        );
-
-    }
-);
+                    return client.focus();
+                }
+                return clients.openWindow(url);
+            })
+            .catch(() => clients.openWindow(url))
+    );
+});

@@ -1,9 +1,10 @@
 {
+  "id": "/",
   "name": "MILARY",
   "short_name": "MILARY",
   "description": "Корпоративный мобильный портал",
   "lang": "ru",
-  "start_url": "/",
+  "start_url": "/pwa/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#1C0E2B",

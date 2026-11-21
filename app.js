@@ -197,74 +197,146 @@ if (!type.includes("_report")) {
 }
 /* ================= SERVICE WORKER ================= */
 
+/* Регистрируем один раз (только здесь). sw.js браузер всегда проверяет на сервере (updateViaCache: none).
+   Новый service worker включается сразу; если приложение уже было открыто под старым —
+   предлагаем обновить страницу, чтобы подтянулись новые файлы. */
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log("Service Worker registered"))
-        .catch(err => console.log("SW registration error:", err));
+    const hadController = Boolean(navigator.serviceWorker.controller);
+
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+        .then(reg => {
+            // приложение на телефоне может быть открыто сутками — проверяем обновление раз в час
+            setInterval(() => reg.update().catch(() => null), 60 * 60 * 1000);
+        })
+        .catch(err => console.log("SW registration error:", err && err.message));
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (hadController) showUpdateNotice();
+    });
 }
 
-/* ================= PUSH PERMISSION ================= */
+function showUpdateNotice() {
+    if (document.getElementById('updateNotice')) return;
+    const box = document.createElement('div');
+    box.id = 'updateNotice';
+    box.className = 'update-notice';
+    box.setAttribute('role', 'status');
+    box.innerHTML = `
+        <span>Доступна новая версия приложения</span>
+        <button type="button" onclick="location.reload()">Обновить</button>`;
+    document.body.appendChild(box);
+}
 
+/* ================= PUSH ================= */
+
+/* Уведомления.
+   - Разрешение спрашиваем только по нажатию кнопки (карточка на главной): iPhone без нажатия не спрашивает,
+     а Chrome глушит сайты, которые спрашивают сразу при открытии.
+   - Открытый ключ берём с сервера (/api/push/public-key). Если подписка сделана другим ключом
+     (например, ключом MealFresh из старой версии) — переподписываемся. */
+
+const PUSH_PROMPT_KEY = "push_prompt_dismissed";      // когда нажали «Не сейчас»
+const PUSH_PROMPT_PAUSE = 7 * 86400000;               // снова предложим через 7 дней
+
+function pushSupported() {
+    return "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
+}
+
+/* после входа: если уже разрешено — тихо обновляем подписку */
 async function initPushPermission() {
-
-    if (!("Notification" in window)) {
-        console.log("Notifications not supported");
-        return;
-    }
-
-    let permission = Notification.permission;
-
-    // 🔥 если не разрешено — запрашиваем
-    if (permission !== "granted") {
-
-        if (permission === "denied") {
-            console.log("Push permission denied");
-            return;
-        }
-
-        permission = await Notification.requestPermission();
-        console.log("Push permission:", permission);
-    }
-
-    // 🔥 если разрешено — сразу подписываемся
-    if (permission === "granted") {
+    if (!pushSupported() || !localStorage.getItem("jwt")) return;
+    if (Notification.permission === "granted") {
         await subscribePush();
     }
 }
 
-/* ================= PUSH SUBSCRIBE ================= */
+function pushPromptHtml() {
+    if (!pushSupported() || Notification.permission !== "default") return "";
+    const dismissed = Number(localStorage.getItem(PUSH_PROMPT_KEY) || 0);
+    if (dismissed && Date.now() - dismissed < PUSH_PROMPT_PAUSE) return "";
+    return `
+        <div class="push-prompt" id="pushPrompt">
+            <span class="push-prompt-icon">${iconSvg("M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.9 1.9 0 0 0 3.4 0")}</span>
+            <span class="push-prompt-text">
+                <span class="push-prompt-title">Включите уведомления</span>
+                <span class="push-prompt-sub">Чтобы сразу узнавать о готовых отчётах и сообщениях</span>
+            </span>
+            <span class="push-prompt-actions">
+                <button type="button" onclick="enablePush()">Включить</button>
+                <button type="button" class="btn-secondary" onclick="dismissPushPrompt()">Не сейчас</button>
+            </span>
+        </div>`;
+}
 
+function hidePushPrompt() {
+    const el = document.getElementById("pushPrompt");
+    if (el) el.remove();
+}
+
+function dismissPushPrompt() {
+    localStorage.setItem(PUSH_PROMPT_KEY, String(Date.now()));
+    hidePushPrompt();
+}
+
+/* по нажатию «Включить» */
+async function enablePush() {
+    if (!pushSupported()) return;
+    let permission = Notification.permission;
+    if (permission === "default") {
+        try {
+            permission = await Notification.requestPermission();
+        } catch (e) {
+            permission = Notification.permission;
+        }
+    }
+    hidePushPrompt();
+    if (permission === "granted") {
+        const ok = await subscribePush();
+        if (!ok) alert("Не удалось включить уведомления. Попробуйте позже.");
+    } else if (permission === "denied") {
+        alert("Уведомления запрещены в настройках браузера. Как включить — в «Справке», раздел «Уведомления».");
+    }
+}
+
+function sameKey(buffer, keyBytes) {
+    if (!buffer) return false;
+    const a = new Uint8Array(buffer);
+    if (a.length !== keyBytes.length) return false;
+    for (let i = 0; i < a.length; i++) if (a[i] !== keyBytes[i]) return false;
+    return true;
+}
+
+/* подписка этого устройства; true — подписка сохранена на сервере */
 async function subscribePush() {
 
     try {
 
-        if (!('serviceWorker' in navigator)) {
-            console.log("NO SW");
-            return;
-        }
+        const jwt = localStorage.getItem("jwt");
+        if (!jwt || !pushSupported()) return false;
+
+        const keyRes = await fetch("/api/push/public-key", {
+            headers: { "Authorization": "Bearer " + jwt }
+        });
+        if (!keyRes.ok) return false;
+        const keyData = await keyRes.json();
+        if (!keyData || !keyData.publicKey) return false;
+        const serverKey = urlBase64ToUint8Array(keyData.publicKey);
 
         const registration = await navigator.serviceWorker.ready;
-
         let subscription = await registration.pushManager.getSubscription();
 
-        if (!subscription) {
-
-            const vapidPublicKey = "BHQKAOwyZsptCCunx8QMFtNaznqSacFv2kywF-nuyJka9P2y1Ex5xnNsa3ZLwE47tH-DliexRr9pjwMIjqbyKZw";
-            const convertedKey = urlBase64ToUint8Array(vapidPublicKey);
-
-            subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: convertedKey
-            });
-
-            console.log("SUB CREATED:", subscription.endpoint);
-
-        } else {
-            console.log("SUB EXISTS:", subscription.endpoint);
+        // подписка другим ключом — сервер не сможет на неё отправлять
+        if (subscription && !sameKey(subscription.options && subscription.options.applicationServerKey, serverKey)) {
+            await subscription.unsubscribe().catch(() => null);
+            subscription = null;
         }
 
-        const jwt = localStorage.getItem("jwt");
-        console.log("JWT:", jwt);
+        if (!subscription) {
+            subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: serverKey
+            });
+        }
 
         const res = await fetch("/api/push/subscribe", {
             method: "POST",
@@ -275,13 +347,11 @@ async function subscribePush() {
             body: JSON.stringify(subscription)
         });
 
-        const text = await res.text();
-
-        console.log("SERVER STATUS:", res.status);
-        console.log("SERVER RESPONSE:", text);
+        return res.ok;
 
     } catch (e) {
-        console.log("PUSH ERROR:", e);
+        console.log("Push subscribe error:", e && e.message);
+        return false;
     }
 }
 
@@ -309,9 +379,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     //preloadScreens();
-
-    // 🔥 push запускаем ПОСЛЕ UI
-    initPushPermission().catch(e => console.log("Push init error", e));
 });
 
 /* ================= ШАПКА ================= */
@@ -453,6 +520,8 @@ async function doLogin() {
     currentUser = data.user;
     showTopBar();
     showMenu();
+
+    initPushPermission().catch(() => null);
 }
 
 async function validateToken(jwt) {
@@ -465,8 +534,6 @@ async function validateToken(jwt) {
 
     currentUser = JSON.parse(localStorage.getItem("user"));
 
-    console.log("CURRENT USER:", currentUser);
-    console.log("ROLE:", currentUser.role);
 
     showTopBar();
 
@@ -488,7 +555,7 @@ if (role === "logistics") {
 
 }
 
-await initPushPermission();
+initPushPermission().catch(() => null);
 }
 
 
@@ -786,9 +853,9 @@ function showMenu() {
     const menuItems = buildMenuByRole(currentUser.role);
 
     if (currentUser.role === "director" || currentUser.role === "admin") {
-        container.innerHTML = menuGroupsHtml(menuItems);       // разделы, сворачиваются; сверху — часто используемые
+        container.innerHTML = pushPromptHtml() + menuGroupsHtml(menuItems);   // разделы, сворачиваются; сверху — часто используемые
     } else {
-        container.innerHTML = `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
+        container.innerHTML = pushPromptHtml() + `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
     }
 
     if (typeof initDevButton === 'function') {
