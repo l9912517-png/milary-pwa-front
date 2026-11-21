@@ -732,20 +732,48 @@ function buildMenuByRole(role) {
 
 /* ================= МЕНЮ ДИРЕКТОРА И АДМИНА: РАЗДЕЛЫ ================= */
 
-const MENU_GROUPS = [
-    { key: "orders", d: MENU_META.orders.d, title: "Заказы", ids: ["ordInfo", "orders", "notshipped", "returns"] },
-    { key: "finance", d: MENU_META.bank.d, title: "Финансы", ids: ["payments", "receipts", "bank", "debt", "cashState", "financeReport", "grossprofit", "writeoffs"] },
-    { key: "sales", d: MENU_META.sales.d, title: "Продажи и аналитика", ids: ["sales", "dir_sales", "ordersCount", "rating"] },
-    { key: "clients", d: MENU_META.dir_sales.d, title: "Клиенты", ids: ["developments_control", "checksJournal", "block", "control"] },
-    { key: "docs", d: MENU_META.upd.d, title: "Документы", ids: ["bills", "act", "upd", "pricelist"] },
-    { key: "prices", d: MENU_META.prices.d, title: "Цены", ids: ["prices", "pricefix"] },
-    { key: "logistics", d: MENU_META.logistics.d, title: "Логистика", ids: ["logistics", "drivers"] },
-    { key: "admin", single: true, ids: ["adminPanel"] }      // одна кнопка — без раздела, просто карточкой внизу
-];
+/* Меню директора и админа — разделы по ролям.
+   Сверху — свои пункты (у директора разложены по смыслу), ниже — «что видит менеджер» и «что видит РОП».
+   У админа ещё раздел «Директор» (простым списком). Каждый пункт показывается один раз —
+   в первом разделе, где он встретился. */
+
+const MENU_IDS_MANAGER = ["orders", "sales", "rating", "notshipped", "returns", "drivers", "bank", "debt",
+    "bills", "act", "upd", "pricelist", "prices", "pricefix"];
+const MENU_IDS_ROP = ["developments_control", "block", "control", "ordInfo"];
+const MENU_IDS_DIRECTOR = ["payments", "receipts", "cashState", "financeReport", "grossprofit", "writeoffs",
+    "dir_sales", "ordersCount", "checksJournal", "logistics"];
+
+const ICON_USER = "M12 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8z M4 21c0-4 4-6 8-6s8 2 8 6";
+const ICON_USERS_STAR = "M9 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8z M2 21c0-4 3-6 7-6 M17 13l1.5 3 3.3.5-2.4 2.3.6 3.2-3-1.6-3 1.6.6-3.2-2.4-2.3 3.3-.5z";
+const ICON_BRIEFCASE = "M3 8h18v12H3z M8 8V5h8v3 M3 13h18";
+
+function menuGroupsForRole(role) {
+    const manager = { key: "r_manager", d: ICON_USER, title: "Менеджер", ids: MENU_IDS_MANAGER };
+    const rop = { key: "r_rop", d: ICON_USERS_STAR, title: "РОП", ids: MENU_IDS_ROP };
+
+    if (role === "admin") {
+        return [
+            { key: "admin", single: true, ids: ["adminPanel"] },
+            { key: "r_director", d: ICON_BRIEFCASE, title: "Директор", ids: MENU_IDS_DIRECTOR },
+            manager,
+            rop
+        ];
+    }
+
+    // директор: свои разделы сверху
+    return [
+        { key: "d_finance", d: MENU_META.bank.d, title: "Финансы", ids: ["payments", "receipts", "cashState", "financeReport", "grossprofit", "writeoffs"] },
+        { key: "d_sales", d: MENU_META.sales.d, title: "Аналитика продаж", ids: ["dir_sales", "ordersCount"] },
+        { key: "d_clients", d: MENU_META.dir_sales.d, title: "Клиенты", ids: ["checksJournal"] },
+        { key: "d_logistics", d: MENU_META.logistics.d, title: "Логистика", ids: ["logistics"] },
+        manager,
+        rop
+    ];
+}
 
 const MENU_USAGE_KEY = "menu_usage";        // { id: [время нажатия, …] } за 14 дней — «часто используемые»
 const MENU_OPEN_KEY = "menu_groups_open";   // { раздел: true/false } — что человек открыл/свернул
-const MENU_OPEN_DEFAULT = { fav: true, orders: true };   // при первом входе открыты эти
+const MENU_OPEN_DEFAULT = {};   // при первом входе все разделы свёрнуты
 
 function menuStoreGet(key) {
     try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; }
@@ -786,7 +814,7 @@ function menuItemHtml(item) {
 }
 
 /* Разделы-плитки: цветная плитка, у свёрнутой — состав мелким текстом, нажатие — открыть/свернуть */
-function menuGroupsHtml(menuItems) {
+function menuGroupsHtml(menuItems, role) {
     const byId = {};
     menuItems.forEach(i => { byId[i.id] = i; });
     const used = {};
@@ -802,8 +830,8 @@ function menuGroupsHtml(menuItems) {
         .slice(0, 4)
         .map(x => byId[x.id]);
 
-    const groups = MENU_GROUPS.map(g => {
-        const items = g.ids.filter(id => byId[id]).map(id => { used[id] = true; return byId[id]; });
+    const groups = menuGroupsForRole(role).map(g => {
+        const items = g.ids.filter(id => byId[id] && !used[id]).map(id => { used[id] = true; return byId[id]; });
         return Object.assign({}, g, { items });
     });
     const rest = menuItems.filter(i => !used[i.id]);              // пункт без раздела — не теряем
@@ -853,7 +881,7 @@ function showMenu() {
     const menuItems = buildMenuByRole(currentUser.role);
 
     if (currentUser.role === "director" || currentUser.role === "admin") {
-        container.innerHTML = pushPromptHtml() + menuGroupsHtml(menuItems);   // разделы, сворачиваются; сверху — часто используемые
+        container.innerHTML = pushPromptHtml() + menuGroupsHtml(menuItems, currentUser.role);   // разделы, сворачиваются; сверху — часто используемые
     } else {
         container.innerHTML = pushPromptHtml() + `<div class="menu-list">${menuItems.map(menuItemHtml).join("")}</div>`;
     }

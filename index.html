@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="/pwa/menu-groups.css?v=5">
 <link rel="stylesheet" href="/pwa/ord/ord.css?v=21">
 <link rel="stylesheet" href="/pwa/chk/chk.css?v=4">
-<link rel="stylesheet" href="/pwa/theme.css?v=1">
+<link rel="stylesheet" href="/pwa/theme.css?v=2">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -85,9 +85,8 @@
             <span>Файлы</span>
         </button>
 
-        <button type="button" id="navHome" class="bottom-btn center-btn" onclick="goHome()">
+        <button type="button" id="navHome" class="bottom-btn center-btn" onclick="goHome()" aria-label="Главная" title="Главная">
             <svg class="nav-svg nav-center" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z"/></svg>
-            <span>Главная</span>
         </button>
 
         <button type="button" id="navMessages" class="bottom-btn" onclick="showMessages();setActive(this)">
@@ -105,7 +104,7 @@
 
 
 <!-- APP -->
-<script src="/pwa/app.js?v=44"></script>
+<script src="/pwa/app.js?v=45"></script>
 
 
 
