@@ -2066,12 +2066,13 @@ ${!selectionMode ? `
                      onclick="fileClick(this.dataset.file, this.dataset.url, this.dataset.ext)">
                     ${selectionMode ? `<input type="checkbox" data-file="${escapeHtml(file)}" ${selectedFiles.has(file) ? "checked" : ""} onclick="toggleSelect(event, this.dataset.file)">` : ""}
                     <span class="icon">${icon}</span>
-                    <div style="display:flex;flex-direction:column;">
+                    <div style="display:flex;flex-direction:column;flex:1 1 auto;min-width:0;">
                         <span style="word-break:break-all;">${escapeHtml(file)}</span>
                         <span style="font-size:12px;color:var(--muted);">
                             ${formatDate(fileObj.mtime)}
                         </span>
                     </div>
+                    ${!selectionMode && typeof fileShareButtonHtml === "function" ? fileShareButtonHtml(file, basePath + encodeURIComponent(file)) : ""}
                 </div>
             `;
         });
@@ -2086,7 +2087,8 @@ ${!selectionMode ? `
             text-align:center;
             line-height:1.4;
         ">
-            Если файл не отправляется через «Отправить», скачайте его и отправьте со своего устройства.
+            Кнопка справа от файла — «Отправить» (Telegram, WhatsApp, почта). Несколько файлов — «Выбрать».<br>
+            Если файл не отправляется, скачайте его и отправьте со своего устройства.
         </div>
 
     `;

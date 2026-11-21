@@ -1167,3 +1167,18 @@ button.ae-hide-all { height: 32px; min-height: 32px; padding: 0 12px; font-size:
 .an-h { font-size: 17px; margin: 6px 0 0; }
 .an-text { font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
 .tq-item.an-off { opacity: 0.6; }
+
+/* ================= ОТПРАВИТЬ ФАЙЛ ================= */
+
+button.file-share-btn {
+    flex: none; margin-left: auto; width: 40px; height: 40px; min-height: 40px; padding: 0;
+    border-radius: 12px; display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--card-border); color: var(--accent);
+}
+button.file-share-btn svg { width: 20px; height: 20px; }
+button.file-share-btn.is-busy { opacity: 0.5; pointer-events: none; animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.2; } }
+.doc-file-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.doc-file-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.doc-file-name { color: var(--accent); overflow-wrap: anywhere; }
+.doc-file-date { font-size: 12px; color: var(--muted); }

@@ -77,19 +77,7 @@ ${escapeHtml(h.date_from)} - ${escapeHtml(h.date_to)}`
 
             if (item.type === "file") {
 
-                return `
-                    <div class="menu-item" style="flex-direction:column;align-items:flex-start;">
-                        
-                        <span style="color:var(--accent);">
-                            ${escapeHtml(item.text)}
-                        </span>
-
-                        <span style="font-size:12px;color:var(--muted);">
-                            ${formatDate(item.date)}
-                        </span>
-
-                    </div>
-                `;
+                return docFileRowHtml(item.text, item.date);
             }
 
         }).join("");
