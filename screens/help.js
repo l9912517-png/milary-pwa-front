@@ -15,6 +15,8 @@ registerScreen("help", function () {
 
             ${typeof devicesHelpButtonHtml === "function" ? devicesHelpButtonHtml() : ""}
 
+            ${typeof themePickerHtml === "function" ? themePickerHtml() : ""}
+
             <nav class="help-card help-toc" aria-label="Содержание">
                 <h2>Содержание</h2>
                 <button type="button" onclick="scrollHelp('about')">Что это такое</button>

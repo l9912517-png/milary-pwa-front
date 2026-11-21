@@ -751,7 +751,9 @@ function hideTopBar() {
 
 function logout() {
     if (typeof devicesRevokeCurrent === "function") devicesRevokeCurrent();
+    const theme = localStorage.getItem("theme");          // оформление — настройка устройства, не пользователя
     localStorage.clear();
+    if (theme) localStorage.setItem("theme", theme);
     NAV.entries = []; NAV.cur = -1; NAV.modal = false;
     showLogin();
 }

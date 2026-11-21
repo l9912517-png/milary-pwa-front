@@ -53,7 +53,9 @@ async function inviteHandleStartup() {
         return true;
     }
 
+    const theme = localStorage.getItem("theme");
     localStorage.clear();                                   // вход другого человека на этом телефоне — с чистого листа
+    if (theme) localStorage.setItem("theme", theme);
     localStorage.setItem("jwt", data.jwt);
     localStorage.setItem("user", JSON.stringify(data.user));
 
