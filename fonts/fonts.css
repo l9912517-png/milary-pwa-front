@@ -1,0 +1,17 @@
+/* Шрифты лежат в приложении (раньше — Google Fonts): быстрее и не зависит от доступности Google.
+   Golos Text — переменный (400–700), латиница + кириллица; Pacifico — только надпись «Milary».
+   Лицензия SIL Open Font License — OFL-*.txt рядом. */
+@font-face {
+    font-family: "Golos Text";
+    src: url("/pwa/fonts/golos-text.woff") format("woff");
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Pacifico";
+    src: url("/pwa/fonts/pacifico.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
