@@ -2485,6 +2485,7 @@ function showLoadingOverlay(text) {
     }
 
     document.getElementById("loadingText").innerText = text || "Загрузка…";
+    if (typeof onecWarn === "function") onecWarn(overlay.querySelector(".report-overlay-box"));
 }
 
 function hideLoadingOverlay() {
@@ -3645,6 +3646,7 @@ function showReportOverlay(text, statusText, onCancel) {
 
     overlay.querySelector("#reportOverlayText").innerText = text || "Формирование отчёта…";
     overlay.querySelector("#reportOverlayStatus").innerText = statusText || "";
+    if (typeof onecWarn === "function") onecWarn(overlay.querySelector(".report-overlay-box"));
 
     overlay.querySelector("#reportOverlayCancel").onclick = () => {
         if (typeof onCancel === "function") {

@@ -1261,3 +1261,12 @@ html[data-theme="light"] .announce-icon { color: #FFFFFF; }
     background: transparent; color: var(--text); border: 1px solid var(--card-border); border-radius: 12px;
 }
 .theme-pick button.active { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); font-weight: 700; }
+
+/* ================= 1С НЕ НА СВЯЗИ ================= */
+
+.onec-warn {
+    display: flex; flex-direction: column; gap: 4px; margin-top: 4px; padding: 10px 12px;
+    border-radius: 12px; text-align: left; font-size: 13px; line-height: 1.4;
+    background: rgba(255, 190, 90, 0.14); border: 1px solid rgba(255, 190, 90, 0.45); color: var(--text);
+}
+.onec-warn b { color: var(--warn-ink); font-size: 14px; }
