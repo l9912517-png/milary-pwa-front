@@ -36,6 +36,6 @@ async function onecWarn(box) {
     box.insertAdjacentHTML("beforeend", `
         <div class="onec-warn" role="alert">
             <b>1С сейчас не на связи</b>
-            <span>${st.minutes != null ? "Последнее обращение — " + escapeHtml(onecAgo(st.minutes)) + " назад. " : ""}Запрос сохранён — 1С выполнит его, когда связь восстановится. Если не срочно, обратитесь к администратору.</span>
+            <span>${st.minutes != null ? "Последнее обращение — " + escapeHtml(onecAgo(st.minutes)) + " назад. " : ""}Запрос сохранён — 1С выполнит его, когда связь восстановится. Если срочно — сообщите администратору.</span>
         </div>`);
 }
