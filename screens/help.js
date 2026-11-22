@@ -1,7 +1,7 @@
 registerScreen("help", function () {
 
     window.currentScreen = "help";
-    title.innerText = "Справка";
+    title.innerText = "Настройки";
 
     container.innerHTML = `
         <div class="help-page">
@@ -11,17 +11,21 @@ registerScreen("help", function () {
                 Поддержка <span class="count-badge dark" data-support-count="user" hidden></span>
             </button>
 
-            ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
+            <h2 class="settings-h">Настройки</h2>
 
             ${typeof devicesHelpButtonHtml === "function" ? devicesHelpButtonHtml() : ""}
 
-            ${typeof whatsNewHelpButtonHtml === "function" ? whatsNewHelpButtonHtml() : ""}
+            ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
 
             ${typeof passkeyHelpSectionHtml === "function" ? passkeyHelpSectionHtml() : ""}
 
             ${typeof themePickerHtml === "function" ? themePickerHtml() : ""}
 
-            <nav class="help-card help-toc" aria-label="Содержание">
+            ${typeof whatsNewHelpButtonHtml === "function" ? whatsNewHelpButtonHtml() : ""}
+
+            <h2 class="settings-h" id="helpTop">Справка</h2>
+
+            <nav class="help-card help-toc" aria-label="Содержание справки">
                 <h2>Содержание</h2>
                 <button type="button" onclick="scrollHelp('about')">Что это такое</button>
                 <button type="button" onclick="scrollHelp('install')">Как установить</button>

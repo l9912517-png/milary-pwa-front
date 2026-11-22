@@ -1,10 +1,10 @@
 /*
  * Поддержка: обращения-переписки пользователя с админом.
  *
- *  - пользователь: «Справка» → «Поддержка» — свои обращения, «Новое обращение»
+ *  - пользователь: «Настройки» → «Поддержка» — свои обращения, «Новое обращение»
  *    (текст, до 5 картинок, сведения об устройстве), переписка;
  *  - админ: «Администрирование» → «Обращения в поддержку» — все обращения, ответ, закрыть/открыть;
- *  - точка на кнопке «Справка» в шапке — есть непрочитанный ответ (у админа — новые сообщения);
+ *  - точка на кнопке «Настройки» (шестерёнка) в шапке — есть непрочитанный ответ (у админа — новые сообщения);
  *  - push ведёт на /pwa/?support=N — открывается это обращение.
  *
  * Сервер: /api/helpdesk/* (бэкенд, helpdesk/).
@@ -306,7 +306,7 @@ async function supportRefreshUnread() {
         const d = await supportApi("/unread");
         supportUnread = { user: d.user || 0, admin: d.admin || 0, open: d.open || 0 };
     } catch (e) { return; }
-    const btn = document.querySelector('.header-actions .icon-btn[aria-label="Справка"]');
+    const btn = document.querySelector('.header-actions .icon-btn.header-settings');
     if (btn) btn.classList.toggle("has-dot", supportUnread.user > 0 || supportUnread.admin > 0);
     document.querySelectorAll("[data-support-count]").forEach(el => {
         const kind = el.dataset.supportCount;
