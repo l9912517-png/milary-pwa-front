@@ -14,13 +14,36 @@ registerScreen("admin_onec", function () {
             <section class="help-card ao-card">
                 <h2>Управление пользователями из 1С</h2>
                 <div id="aoWindow" class="ao-state">Загрузка…</div>
-                <div class="ao-open-label">Открыть на:</div>
-                <div class="ao-buttons">
-                    <button type="button" onclick="aoWindow(15)">15 минут</button>
-                    <button type="button" class="btn-secondary" onclick="aoWindow(60)">1 час</button>
-                    <button type="button" class="btn-secondary" onclick="aoWindow(1440)">1 день</button>
+                <div class="ao-open-buttons" id="aoOpenBox">
+                    <div class="ao-open-label">Открыть на:</div>
+                    <div class="ao-buttons">
+                        <button type="button" onclick="aoWindow(15)">15 мин</button>
+                        <button type="button" class="btn-secondary" onclick="aoWindow(60)">1 час</button>
+                        <button type="button" class="btn-secondary" onclick="aoWindow(240)">4 часа</button>
+                        <button type="button" class="btn-secondary" onclick="aoWindow(1440)">1 день</button>
+                        <button type="button" class="btn-secondary" onclick="aoWindow(10080)">7 дней</button>
+                    </div>
+                    <details class="ao-custom">
+                        <summary>Своё время</summary>
+                        <div class="ao-custom-row">
+                            <input type="number" id="aoNum" min="1" max="720" value="2" inputmode="numeric" aria-label="Сколько">
+                            <select id="aoUnit" aria-label="Единица">
+                                <option value="1">минут</option><option value="60" selected>часов</option><option value="1440">дней</option>
+                            </select>
+                            <button type="button" onclick="aoWindowCustom()">Открыть</button>
+                        </div>
+                        <div class="ao-custom-row">
+                            <span class="ao-until-label">или до</span>
+                            <input type="datetime-local" id="aoUntil" aria-label="До даты и времени">
+                            <button type="button" onclick="aoWindowUntil()">Открыть</button>
+                        </div>
+                        <div class="transfer-sub" style="text-align:left">Не дольше 30 дней.</div>
+                    </details>
                 </div>
-                <button type="button" class="btn-secondary ao-close" id="aoCloseBtn" onclick="aoWindow(0)" hidden>Закрыть сейчас</button>
+                <div class="ao-buttons" id="aoOpenActions" hidden>
+                    <button type="button" class="btn-secondary" id="aoExtendBtn" onclick="aoExtend()">Продлить</button>
+                    <button type="button" class="btn-secondary ao-close" onclick="aoWindow(0)">Закрыть сейчас</button>
+                </div>
                 <div class="transfer-sub" style="text-align:left">Пока окно закрыто, 1С не может создавать, включать и отключать пользователей, выдавать токены и приглашения.
                     Отчёты, файлы, задачи и уведомления работают всегда. Всё, что 1С делает при открытом окне, приходит вам уведомлением.</div>
             </section>
@@ -62,14 +85,18 @@ async function aoLoad() {
         const left = d.window_until ? new Date(d.window_until).getTime() - Date.now() : 0;
         if (left > 0) {
             const m = Math.ceil(left / 60000);
+            const rest = m >= 1440 ? aoDuration(Math.round(m / 60) * 60) : m >= 120 ? aoDuration(Math.round(m / 60) * 60) : m + " мин";
             w.className = "ao-state open";
-            w.innerHTML = `<b>Открыто</b> — ещё ${m >= 120 ? Math.round(m / 60) + " ч" : m + " мин"} (до ${escapeHtml(adminTime(d.window_until))})${d.window_by ? ", открыл(а) " + escapeHtml(d.window_by) : ""}`;
+            w.innerHTML = `<b>Открыто</b> — ещё ${escapeHtml(rest)} (до ${escapeHtml(adminTime(d.window_until))})${d.window_by ? ", открыл(а) " + escapeHtml(d.window_by) : ""}`;
         } else {
             w.className = "ao-state closed";
             w.innerHTML = `<b>Закрыто</b> — 1С не может управлять пользователями`;
             clearInterval(aoTimer);
         }
-        document.getElementById("aoCloseBtn").hidden = !(left > 0);
+        document.getElementById("aoOpenActions").hidden = !(left > 0);
+        document.getElementById("aoOpenBox").hidden = left > 0;
+        const ext = document.getElementById("aoExtendBtn");
+        if (ext && d.window_minutes) ext.textContent = "Продлить +" + aoDuration(d.window_minutes);
     };
     paint();
     if (d.window_open) aoTimer = setInterval(() => { if (window.currentScreen !== "admin_onec") return clearInterval(aoTimer); paint(); }, 30000);
@@ -86,9 +113,40 @@ async function aoLoad() {
         </div>`).join("") : `<div class="report-status">Записей пока нет</div>`;
 }
 
+/* «15 мин», «4 ч», «2 дн 3 ч» */
+function aoDuration(min) {
+    const d = Math.floor(min / 1440), h = Math.floor((min % 1440) / 60), m = min % 60;
+    return [d && d + " дн", h && h + " ч", m && m + " мин"].filter(Boolean).join(" ") || "0 мин";
+}
+
 async function aoWindow(minutes) {
-    if (minutes && !confirm(`Разрешить 1С управлять пользователями на ${minutes >= 1440 ? "1 день" : minutes >= 60 ? "1 час" : minutes + " минут"}?`)) return;
+    if (minutes && !confirm(`Разрешить 1С управлять пользователями на ${aoDuration(minutes)}?`)) return;
     try { await aoApi("/api/admin/onec/window", { minutes }); } catch (e) { return alert(e.message); }
+    aoLoad();
+}
+
+function aoWindowCustom() {
+    const n = Math.floor(Number(document.getElementById("aoNum").value));
+    const unit = Number(document.getElementById("aoUnit").value);
+    if (!n || n < 1) return alert("Укажите число больше нуля");
+    const minutes = n * unit;
+    if (minutes > 43200) return alert("Не дольше 30 дней");
+    aoWindow(minutes);
+}
+
+async function aoWindowUntil() {
+    const v = document.getElementById("aoUntil").value;
+    if (!v) return alert("Выберите дату и время");
+    const t = new Date(v);                                   // местное время телефона
+    if (!(t.getTime() > Date.now())) return alert("Это время уже прошло");
+    if (t.getTime() - Date.now() > 30 * 86400000) return alert("Не дольше 30 дней");
+    if (!confirm(`Разрешить 1С управлять пользователями до ${t.toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}?`)) return;
+    try { await aoApi("/api/admin/onec/window", { until: t.toISOString() }); } catch (e) { return alert(e.message); }
+    aoLoad();
+}
+
+async function aoExtend() {
+    try { await aoApi("/api/admin/onec/window/extend", {}); } catch (e) { return alert(e.message); }
     aoLoad();
 }
 

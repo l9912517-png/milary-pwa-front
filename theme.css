@@ -1331,3 +1331,15 @@ button.lock-out { width: 100%; height: 44px; background: transparent; color: #FF
 .ao-open-label { font-size: 13px; color: var(--muted); margin-bottom: -4px; }
 .ao-buttons button { flex: 1 1 0; }
 button.ao-close { width: 100%; height: 44px; border-color: rgba(255, 190, 90, 0.55); }
+.ao-open-buttons { display: flex; flex-direction: column; gap: 8px; }
+.ao-buttons button { flex: 1 1 calc(33% - 8px); }
+.ao-custom summary { cursor: pointer; color: var(--accent); font-size: 14px; padding: 4px 0; }
+.ao-custom[open] { display: flex; flex-direction: column; gap: 8px; }
+.ao-custom-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ao-custom-row input, .ao-custom-row select { height: 44px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--field); color: var(--text); font: inherit; font-size: 15px; }
+.ao-custom-row input[type=number] { width: 80px; }
+.ao-custom-row input[type=datetime-local] { flex: 1 1 180px; min-width: 0; color-scheme: dark; }
+html[data-theme="light"] .ao-custom-row input[type=datetime-local] { color-scheme: light; }
+.ao-custom-row button { height: 44px; min-height: 44px; flex: 0 0 auto; padding: 0 16px; }
+.ao-until-label { font-size: 14px; color: var(--muted); }
+.ao-open-buttons[hidden], .ao-buttons[hidden] { display: none; }
