@@ -53,11 +53,10 @@ async function inviteHandleStartup() {
         return true;
     }
 
-    const theme = localStorage.getItem("theme");
-    localStorage.clear();                                   // вход другого человека на этом телефоне — с чистого листа
-    if (theme) localStorage.setItem("theme", theme);
+    localClearKeep();                                       // вход другого человека на этом телефоне — с чистого листа
     localStorage.setItem("jwt", data.jwt);
     localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("last_active", String(Date.now()));
 
     if (inviteIsIosBrowser()) {
         currentUser = data.user;
@@ -119,6 +118,9 @@ async function inviteShowIosNext() {
                 <li><span class="install-step-icon">${iconSvg("M5 12l5 5 9-10")}</span><span>Откройте MILARY со значка и введите код:</span></li>
             </ol>
             <div id="transferBox" class="transfer-box"><div class="transfer-code">······</div></div>
+            ${typeof passkeySupported === "function" && passkeySupported() ? `
+            <div class="login-hint">Или создайте ключ доступа сейчас — тогда в приложении достаточно нажать «Войти с ключом доступа» и приложить палец или посмотреть в камеру.</div>
+            <button type="button" class="btn-secondary" onclick="passkeyCreate()">Создать ключ доступа</button>` : ""}
             <button type="button" class="btn-secondary" onclick="inviteContinueInBrowser()">Продолжить в браузере</button>
         </div>`;
     await transferLoad(document.getElementById("transferBox"));

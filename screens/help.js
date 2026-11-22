@@ -15,6 +15,10 @@ registerScreen("help", function () {
 
             ${typeof devicesHelpButtonHtml === "function" ? devicesHelpButtonHtml() : ""}
 
+            ${typeof whatsNewHelpButtonHtml === "function" ? whatsNewHelpButtonHtml() : ""}
+
+            ${typeof passkeyHelpSectionHtml === "function" ? passkeyHelpSectionHtml() : ""}
+
             ${typeof themePickerHtml === "function" ? themePickerHtml() : ""}
 
             <nav class="help-card help-toc" aria-label="Содержание">
@@ -78,6 +82,7 @@ registerScreen("help", function () {
 
     // число непрочитанных ответов на кнопке «Поддержка»
     if (typeof supportRefreshUnread === "function") supportRefreshUnread();
+    if (typeof passkeyHelpLoad === "function") passkeyHelpLoad();
 });
 
 function scrollHelp(id) {

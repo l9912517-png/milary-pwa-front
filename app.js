@@ -627,6 +627,7 @@ function showLogin() {
             </label>
             <div id="loginError" class="login-error" role="alert"></div>
             <button type="submit" class="login-submit">Войти</button>
+            ${typeof passkeyLoginButtonHtml === "function" ? passkeyLoginButtonHtml() : ""}
             <div class="login-foot">Нет ни ссылки, ни кода? Обратитесь к администратору</div>
         </form>
     `;
@@ -674,6 +675,7 @@ async function doLogin() {
 
     localStorage.setItem("jwt", data.jwt);
     localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("last_active", String(Date.now()));     // только что вошли — блокировка не нужна
 
     await validateToken(data.jwt);
 }
@@ -733,6 +735,7 @@ initPushPermission().catch(() => null);
 if (typeof supportAfterLogin === "function") supportAfterLogin();
 if (typeof clientReport === "function") setTimeout(clientReport, 1500);
 if (typeof announceOpenFromUrl === "function") announceOpenFromUrl();
+if (typeof lockCheck === "function") lockCheck();
 }
 
 
@@ -751,9 +754,7 @@ function hideTopBar() {
 
 function logout() {
     if (typeof devicesRevokeCurrent === "function") devicesRevokeCurrent();
-    const theme = localStorage.getItem("theme");          // оформление — настройка устройства, не пользователя
-    localStorage.clear();
-    if (theme) localStorage.setItem("theme", theme);
+    localClearKeep();
     NAV.entries = []; NAV.cur = -1; NAV.modal = false;
     showLogin();
 }
@@ -1074,6 +1075,17 @@ function showMenu() {
     }
 
     if (typeof announceBannerRefresh === "function") announceBannerRefresh();
+    if (typeof passkeyPromptRefresh === "function") setTimeout(passkeyPromptRefresh, 600);
+    if (typeof whatsNewCheck === "function") setTimeout(whatsNewCheck, 1200);
+}
+
+/* очистка при выходе: настройки устройства (тема, «Что нового») остаются */
+const LOCAL_KEEP = ["theme", "whatsnew_seen"];
+function localClearKeep() {
+    const keep = {};
+    LOCAL_KEEP.forEach(k => { const v = localStorage.getItem(k); if (v !== null) keep[k] = v; });
+    localStorage.clear();
+    Object.entries(keep).forEach(([k, v]) => localStorage.setItem(k, v));
 }
 
 function handleMenuClick(id) {
@@ -2090,7 +2102,8 @@ ${!selectionMode ? `
             line-height:1.4;
         ">
             Кнопка справа от файла — «Отправить» (Telegram, WhatsApp, почта). Несколько файлов — «Выбрать».<br>
-            Если файл не отправляется, скачайте его и отправьте со своего устройства.
+            Если файл не отправляется, скачайте его и отправьте со своего устройства.<br>
+            PDF и Excel хранятся на сервере 7 дней — нужное сохраните себе.
         </div>
 
     `;
