@@ -17,6 +17,8 @@ registerScreen("help", function () {
 
             ${typeof installHelpButtonHtml === "function" ? installHelpButtonHtml() : ""}
 
+            ${typeof pinHelpButtonHtml === "function" ? pinHelpButtonHtml() : ""}
+
             ${typeof passkeyHelpSectionHtml === "function" ? passkeyHelpSectionHtml() : ""}
 
             ${typeof themePickerHtml === "function" ? themePickerHtml() : ""}

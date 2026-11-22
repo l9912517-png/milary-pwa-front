@@ -706,7 +706,11 @@ async function validateToken(jwt) {
         headers: { "Authorization": "Bearer " + jwt }
     });
 
-    if (!response.ok) return logout();
+    if (!response.ok) {
+        /* админ после входа: сначала PIN (adminpin/adminpin.js) */
+        if (typeof pinGateIfNeeded === "function" && await pinGateIfNeeded(response)) return;
+        return logout();
+    }
 
     currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -1571,6 +1575,14 @@ async function openAdminPanel() {
                     <span class="menu-card-text">
                         <span class="menu-card-title">Очередь задач 1С</span>
                         <span class="menu-card-sub">Обмен с 1С: что ждёт, что зависло</span>
+                    </span>
+                    ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
+                </button>
+                <button type="button" class="menu-card" onclick="openScreen('admin_onec')">
+                    <span class="menu-card-icon">${iconSvg("M4 7h11 M12 3l4 4-4 4 M20 17H9 M12 13l-4 4 4 4")}</span>
+                    <span class="menu-card-text">
+                        <span class="menu-card-title">Обмен с 1С</span>
+                        <span class="menu-card-sub">Доступ 1С к пользователям, ключ обмена, журнал</span>
                     </span>
                     ${iconSvg(ICON_CHEVRON, "menu-card-chevron")}
                 </button>
