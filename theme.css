@@ -1293,3 +1293,16 @@ button.login-passkey { width: 100%; height: 52px; font-size: 16px; display: inli
 button.lock-out { width: 100%; height: 44px; background: transparent; color: #FFFFFF; border-color: rgba(255, 255, 255, 0.35); }
 .wn-date { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 6px; }
 .settings-h { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 10px 4px -4px; }
+
+/* ================= БЭКАП (админка) ================= */
+
+.backup-card { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: var(--radius-sm); background: var(--card); border: 1px solid var(--card-border); margin-bottom: 10px; }
+.backup-status { display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.4; }
+.backup-line { color: var(--muted); }
+.backup-line b { color: var(--text); }
+.backup-line.ok b { color: var(--accent); }
+.backup-line.work b { color: var(--warn-ink); }
+.backup-line.bad, .backup-line.bad b { color: var(--bad-ink); }
+.backup-file { font-size: 12px; color: var(--muted); padding-left: 10px; overflow-wrap: anywhere; }
+.backup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.backup-actions button { flex: 1 1 140px; }

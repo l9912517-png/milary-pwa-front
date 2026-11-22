@@ -1683,9 +1683,15 @@ async function openAdminPanel() {
                 style="display:none;"
             >
 
-                <button onclick="runBackup()">
-                    ${iconSvg("M12 8c4.4 0 8-1.3 8-3s-3.6-3-8-3-8 1.3-8 3 3.6 3 8 3z M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5", "btn-ico")} Сделать бэкап
-                </button>
+                <div class="backup-card">
+                    <div id="backupStatus" class="backup-status">Состояние бэкапа…</div>
+                    <div class="backup-actions">
+                        <button type="button" id="backupRunBtn" onclick="runBackup()">
+                            ${iconSvg("M12 8c4.4 0 8-1.3 8-3s-3.6-3-8-3-8 1.3-8 3 3.6 3 8 3z M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5", "btn-ico")} Сделать бэкап
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="backupStatusLoad(true)">Копии в Dropbox</button>
+                    </div>
+                </div>
 
                 <button onclick="openScreen('tasklist')">
                     ${iconSvg("M8 6h13 M8 12h13 M8 18h13 M3 6h1 M3 12h1 M3 18h1", "btn-ico")} Список задач
@@ -1701,6 +1707,7 @@ async function openAdminPanel() {
 
     if (typeof supportRefreshUnread === "function") supportRefreshUnread();
     if (typeof errorsRefreshBadge === "function") errorsRefreshBadge();
+    backupStatusLoad(false);
 }
 
 /* Значение для вызова в атрибуте onclick: onclick="fn(${jsArg(x)})".
@@ -2902,26 +2909,60 @@ function openImagePreview(url) {
 
 
 
-async function runBackup() {
+/* ===== Бэкап (сервер: backup/, скрипт ops/app-backup.sh — тот же, что ночью в 02:40) ===== */
 
-    if (!confirm("Запустить резервное копирование сейчас?"))
+let backupTimer = null;
+
+function backupSize(bytes) {
+    const n = Number(bytes) || 0;
+    return n >= 1048576 ? (n / 1048576).toFixed(1) + " МБ" : Math.max(1, Math.round(n / 1024)) + " КБ";
+}
+
+async function backupStatusLoad(withRemote) {
+    const box = document.getElementById("backupStatus");
+    if (!box) { clearInterval(backupTimer); return; }
+    if (withRemote) box.innerHTML = "Спрашиваем Dropbox…";
+    let d;
+    try {
+        const r = await fetch("/api/admin/backup/status" + (withRemote ? "?remote=1" : ""), { headers: { "Authorization": "Bearer " + localStorage.getItem("jwt") } });
+        d = await r.json();
+        if (!r.ok || !d.success) throw new Error();
+    } catch (e) {
+        box.textContent = "Не удалось узнать состояние бэкапа";
         return;
+    }
+    const last = d.last;
+    let html = "";
+    if (d.running) html += `<div class="backup-line work"><b>Идёт бэкап…</b> обычно 1–2 минуты</div>`;
+    else if (!last) html += `<div class="backup-line">Бэкапов ещё не было</div>`;
+    else if (last.ok) html += `<div class="backup-line ok"><b>Последний бэкап: ${escapeHtml(last.finished_at || last.started_at)}</b> — готово${last.uploaded ? ", в Dropbox" : ", в Dropbox не отправлен"}</div>`;
+    else html += `<div class="backup-line bad"><b>Последний бэкап ${escapeHtml(last.started_at)}: ${last.finished_at ? "с ошибками" : "не завершился"}</b>${last.errors.length ? "<br>" + last.errors.map(escapeHtml).join("<br>") : ""}</div>`;
+    const loc = d.local || [];
+    html += `<div class="backup-line">На сервере копий: ${loc.length}${loc[0] ? ` · последняя ${escapeHtml(backupSize(loc[0].size))}` : ""}</div>`;
+    if (d.remote) {
+        html += d.remote.error
+            ? `<div class="backup-line bad">${escapeHtml(d.remote.error)}</div>`
+            : `<div class="backup-line">В Dropbox копий: ${d.remote.list.length}</div>` +
+              d.remote.list.map(f => `<div class="backup-file">${escapeHtml(f.name)} · ${escapeHtml(backupSize(f.size))}</div>`).join("");
+    }
+    box.innerHTML = html;
+    const btn = document.getElementById("backupRunBtn");
+    if (btn) btn.disabled = !!d.running;
+    clearInterval(backupTimer);
+    if (d.running) backupTimer = setInterval(() => backupStatusLoad(false), 5000);
+}
 
-    const jwt = localStorage.getItem("jwt");
-
-    const response = await fetch("/api/admin/backup", {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + jwt
-        }
-    });
-
-    const data = await response.json();
-
-    if (data.success)
-        alert("Бэкап запущен");
-    else
-        alert("Ошибка запуска");
+async function runBackup() {
+    if (!confirm("Запустить резервное копирование сейчас? Займёт 1–2 минуты.")) return;
+    let d = null;
+    try {
+        const r = await fetch("/api/admin/backup", { method: "POST", headers: { "Authorization": "Bearer " + localStorage.getItem("jwt") } });
+        d = await r.json();
+    } catch (e) { d = null; }
+    if (!d || !d.success) {
+        alert((d && d.message) || "Не удалось запустить бэкап");
+    }
+    setTimeout(() => backupStatusLoad(false), 800);
 }
 
 /* ================= MESSAGES ================= */
