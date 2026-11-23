@@ -59,7 +59,8 @@ DATA = {
             {"Имя": "Реализация 000115 от 18.11.2026", "Долг": "62 000", "Просрочка": "0", "Дни": "3", "Переделка": False}]},
         {"Имя": "ООО «Гастроном №1»", "GUID": "g2", "Долг": "50 000", "Просрочка": "0", "Дни": "7", "Блок": False, "children": []}]}]},
     'prices.json': [{"counterparty": "ООО «Вкусный дом»", "date": "21.11.2026", "items": [
-        {"name": "Сыр российский 50%", "price": "650", "total": "650"}]}],
+        {"name": "Сыр российский 50%", "price": "650 руб.", "total": "35 кг"},
+        {"name": "Сыр гауда 45%", "price": "720 руб.", "total": "12 кг"}]}],
 }
 FILES = []
 status_calls = {}
@@ -114,6 +115,7 @@ TAP_JS = """
     document.body.appendChild(d); setTimeout(() => d.remove(), 700);
   }, true);
   window.alert = () => {};
+  if (!navigator.share) navigator.share = () => Promise.resolve();   // в записи — кнопка «Поделиться», как на телефоне
 })();
 """
 
@@ -207,6 +209,14 @@ def prices(s):
     s.pick('#pricesCounterparty', 'ООО «Вкусный дом»')
     s.type('#pricesSearch', 'сыр', after=600)
     s.tap('button:has-text("Получить цены")', after=4200)
+    # ответ клиенту: нажать на блок, дописать текст, «Поделиться»
+    s.tap('.prices-block >> nth=0', after=1400)
+    ta = s.p.locator('#pricesText')
+    ta.click()
+    s.p.keyboard.press('Control+End')
+    s.p.keyboard.type('\nДоставим завтра до 12:00.', delay=70)
+    s.pause(900)
+    s.tap('.modal-overlay .btn-primary-wide', after=1200)
 
 
 def record(name, fn, browser):
@@ -221,7 +231,8 @@ def record(name, fn, browser):
     ctx.route('**/files/u1/**', files)
     user = {"id": 1, "user_id": "u1", "name": "Иванова Анна", "role": "manager"}
     ctx.add_init_script(f"localStorage.setItem('jwt','x');localStorage.setItem('user',JSON.stringify({json.dumps(user, ensure_ascii=False)}));"
-                        "localStorage.setItem('push_prompt_dismissed',String(Date.now()));")
+                        "localStorage.setItem('push_prompt_dismissed',String(Date.now()));localStorage.setItem('install_prompt_dismissed',String(Date.now()));"
+                        "localStorage.setItem('passkey_prompt_dismissed',String(Date.now()));localStorage.setItem('whatsnew_seen','2026-11-22');localStorage.setItem('theme','dark');")
     ctx.add_init_script(TAP_JS)
     page = ctx.new_page()
     errs = []

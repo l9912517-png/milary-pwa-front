@@ -35,31 +35,7 @@ registerScreen("prices", async function () {
 
             if (list.length) {
 
-                list = list.slice().reverse();
-                window.pricesBlocks = list;
-
-                resultHtml = list.map((block, idx) => {
-
-                    const header = `
-Контрагент: ${escapeHtml(block.counterparty || "")}
-Дата: ${escapeHtml(block.date)}
-`;
-
-                    const rows = (block.items || []).map(i =>
-                        `${escapeHtml(i.name)} | ${escapeHtml(i.price)} | ${escapeHtml(i.total)}`
-                    ).join("\n");
-
-                    return `
-<div class="menu-item prices-block" role="button" tabindex="0" onclick="pricesShare(${idx})"
-     onkeydown="if (event.key === 'Enter') pricesShare(${idx})" style="flex-direction:column;align-items:flex-start;">
-    <pre style="margin:0;white-space:pre-wrap;font-family:monospace;">
-${header}
-${rows}
-    </pre>
-    <span class="prices-block-hint">${iconSvg("M12 3v12 M8 7l4-4 4 4 M5 11v9h14v-9", "btn-ico")} Ответить клиенту</span>
-</div>
-`;
-                }).join("");
+                resultHtml = pricesBlocksHtml(list);
             }
 
         } else {
@@ -126,6 +102,30 @@ ${rows}
         </div>
     `;
 });
+
+/* Блоки результата (новые сверху). Нажатие на блок — «Ответ клиенту». Одна разметка для экрана и обновления. */
+function pricesBlocksHtml(list) {
+    window.pricesBlocks = list.slice().reverse();
+    return window.pricesBlocks.map((block, idx) => {
+        const header = `
+Контрагент: ${escapeHtml(block.counterparty || "")}
+Дата: ${escapeHtml(block.date)}
+`;
+        const rows = (block.items || []).map(i =>
+            `${escapeHtml(i.name)} | ${escapeHtml(i.price)} | ${escapeHtml(i.total)}`
+        ).join("\n");
+        return `
+<div class="menu-item prices-block" role="button" tabindex="0" onclick="pricesShare(${idx})"
+     onkeydown="if (event.key === 'Enter') pricesShare(${idx})" style="flex-direction:column;align-items:flex-start;">
+    <pre style="margin:0;white-space:pre-wrap;font-family:monospace;">
+${header}
+${rows}
+    </pre>
+    <span class="prices-block-hint">${iconSvg("M12 3v12 M8 7l4-4 4 4 M5 11v9h14v-9", "btn-ico")} Ответить клиенту</span>
+</div>
+`;
+    }).join("");
+}
 
 /* ================= ОТВЕТ КЛИЕНТУ ================= */
 
@@ -368,28 +368,7 @@ async function loadPrices() {
 
         if (!list.length) return;
 
-        list = list.slice().reverse();
-
-        const html = list.map(block => {
-
-            const header = `
-Контрагент: ${escapeHtml(block.counterparty || "")}
-Дата: ${escapeHtml(block.date)}
-`;
-
-            const rows = (block.items || []).map(i =>
-                `${escapeHtml(i.name)} | ${escapeHtml(i.price)} | ${escapeHtml(i.total)}`
-            ).join("\n");
-
-            return `
-<div class="menu-item" style="flex-direction:column;align-items:flex-start;">
-    <pre style="margin:0;white-space:pre-wrap;font-family:monospace;">
-${header}
-${rows}
-    </pre>
-</div>
-`;
-        }).join("");
+        const html = pricesBlocksHtml(list);
 
         // 🔥 перерисовываем только результат
         const block = document.querySelector("#pricesResult");

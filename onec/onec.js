@@ -32,7 +32,7 @@ function onecAgo(min) {
 /* добавить пояснение в окно ожидания (box — .report-overlay-box) */
 async function onecWarn(box) {
     const st = await onecStatus();
-    if (!st || st.online || !box || !document.body.contains(box) || box.querySelector(".onec-warn")) return;
+    if (!st || st.online !== false || !box || !document.body.contains(box) || box.querySelector(".onec-warn")) return;
     box.insertAdjacentHTML("beforeend", `
         <div class="onec-warn" role="alert">
             <b>1С сейчас не на связи</b>

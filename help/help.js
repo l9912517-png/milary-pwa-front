@@ -119,8 +119,8 @@ function openHelp(screen) {
             <h3>Как пользоваться: ${escapeHtml(topic.title)}</h3>
             <div class="help-video-box">
                 <video class="help-video"
-                       src="/pwa/help/${encodeURIComponent(key)}.mp4?v=2"
-                       poster="/pwa/help/${encodeURIComponent(key)}.jpg?v=2"
+                       src="/pwa/help/${encodeURIComponent(key)}.mp4?v=3"
+                       poster="/pwa/help/${encodeURIComponent(key)}.jpg?v=3"
                        autoplay muted loop playsinline preload="metadata"></video>
             </div>
             <ol class="help-steps">${steps}</ol>
