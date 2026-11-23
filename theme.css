@@ -1343,3 +1343,11 @@ html[data-theme="light"] .ao-custom-row input[type=datetime-local] { color-schem
 .ao-custom-row button { height: 44px; min-height: 44px; flex: 0 0 auto; padding: 0 16px; }
 .ao-until-label { font-size: 14px; color: var(--muted); }
 .ao-open-buttons[hidden], .ao-buttons[hidden] { display: none; }
+
+/* ================= ЦЕНЫ: ответ клиенту ================= */
+
+.prices-block { cursor: pointer; gap: 8px; }
+.prices-block:active { transform: scale(0.99); }
+.prices-block-hint { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.prices-block-hint .btn-ico { width: 16px; height: 16px; }
+.modal-window textarea.prices-text { width: 100%; min-height: 200px; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--card-border); font: inherit; font-size: 15px; line-height: 1.45; resize: vertical; }

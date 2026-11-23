@@ -122,7 +122,7 @@
 
     /* «нал» у заказа на контрагента с наличным расчётом */
     function cashChip(o) {
-        return o && o.cash ? `<span class="ord-chip warn small" title="Наличный расчёт (Нр)">нал</span>` : "";
+        return o && o.cash ? `<span class="ord-chip warn small" title="Наличный расчёт">нал</span>` : "";
     }
 
     function statusChip(status) {
@@ -268,7 +268,7 @@
         cpPicking = new Promise(resolve => {
             const m = modal(`
                 <div class="ord-modal-head">
-                    <b>${cash ? "Контрагент — наличные (Нр)" : "Контрагент"}</b>
+                    <b>${cash ? "Контрагент — наличные" : "Контрагент"}</b>
                     <button class="ord-x" type="button" aria-label="Закрыть">✕</button>
                 </div>
                 <input class="ord-input" type="search" placeholder="Поиск…" autocomplete="off">

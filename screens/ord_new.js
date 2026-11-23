@@ -136,7 +136,7 @@ registerScreen("ord_new", function () {
             <div class="ord-card">
                 <div class="ord-cp-head">
                     <label class="ord-label">Контрагент</label>
-                    <label class="ord-check"><input type="checkbox" id="ordCash" ${d.cp && d.cp.cash ? "checked" : ""}> Наличные (Нр)</label>
+                    <label class="ord-check"><input type="checkbox" id="ordCash" ${d.cp && d.cp.cash ? "checked" : ""}> Наличные</label>
                 </div>
                 <button type="button" id="ordCp" class="ord-select ${d.cp ? "" : "empty"}">
                     ${d.cp ? ORD.esc(d.cp.name) : "Выберите контрагента"}

@@ -36,8 +36,9 @@ registerScreen("prices", async function () {
             if (list.length) {
 
                 list = list.slice().reverse();
+                window.pricesBlocks = list;
 
-                resultHtml = list.map(block => {
+                resultHtml = list.map((block, idx) => {
 
                     const header = `
 Контрагент: ${escapeHtml(block.counterparty || "")}
@@ -49,11 +50,13 @@ registerScreen("prices", async function () {
                     ).join("\n");
 
                     return `
-<div class="menu-item" style="flex-direction:column;align-items:flex-start;">
+<div class="menu-item prices-block" role="button" tabindex="0" onclick="pricesShare(${idx})"
+     onkeydown="if (event.key === 'Enter') pricesShare(${idx})" style="flex-direction:column;align-items:flex-start;">
     <pre style="margin:0;white-space:pre-wrap;font-family:monospace;">
 ${header}
 ${rows}
     </pre>
+    <span class="prices-block-hint">${iconSvg("M12 3v12 M8 7l4-4 4 4 M5 11v9h14v-9", "btn-ico")} Ответить клиенту</span>
 </div>
 `;
                 }).join("");
@@ -76,7 +79,7 @@ ${rows}
                 <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
                     <label>Контрагент</label>
                     <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;">
-                        <input type="checkbox" id="pricesCash" onchange="pricesCashChanged()"> Наличные (Нр)
+                        <input type="checkbox" id="pricesCash" onchange="pricesCashChanged()"> Наличные
                     </label>
                 </div>
 
@@ -124,9 +127,61 @@ ${rows}
     `;
 });
 
-/* ================= НАЛИЧНЫЕ (НР) ================= */
+/* ================= ОТВЕТ КЛИЕНТУ ================= */
 
-/* Галочка «Наличные (Нр)»: выбор клиента из cash_counterparties.data (выгрузка 1С «ВыгрузитьНаличныхКонтрагентовНаVPS»).
+/* Нажали на блок с ценами — окно с готовым текстом для клиента: можно поправить и отправить
+   («Поделиться» — WhatsApp, Telegram и т. п.) или скопировать. */
+function pricesMessageText(block) {
+    const lines = (block.items || []).map(i => {
+        const price = String(i.price ?? "").trim();
+        const stock = String(i.total ?? "").trim();
+        return `${String(i.name ?? "").trim()} — ${price}` + (stock ? `, в наличии ${stock}` : "");
+    });
+    return (block.date ? `Цены на ${String(block.date).trim()}:\n` : "") + lines.join("\n");
+}
+
+function pricesShare(idx) {
+    const block = (window.pricesBlocks || [])[idx];
+    if (!block) return;
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
+    overlay.innerHTML = `
+        <div class="modal-window" role="dialog" aria-label="Ответ клиенту">
+            <h3>Ответ клиенту</h3>
+            <div class="transfer-sub" style="text-align:left">${escapeHtml(block.counterparty || "")} · можно исправить текст перед отправкой</div>
+            <textarea class="prices-text" id="pricesText" rows="10"></textarea>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="copyText(document.getElementById('pricesText').value, 'Текст скопирован')">Копировать</button>
+                <button type="button" class="btn-primary-wide" onclick="pricesShareSend()">${navigator.share ? "Поделиться" : "Копировать и закрыть"}</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    const ta = overlay.querySelector("#pricesText");
+    ta.value = pricesMessageText(block);           // текст — через value, без HTML
+}
+
+async function pricesShareSend() {
+    const ta = document.getElementById("pricesText");
+    if (!ta) return;
+    const text = ta.value.trim();
+    if (!text) return alert("Текст пустой");
+    if (navigator.share) {
+        try {
+            await navigator.share({ text });
+            const o = ta.closest(".modal-overlay");
+            if (o) o.remove();
+        } catch (e) { /* отменили — окно остаётся */ }
+        return;
+    }
+    await copyText(text, "Текст скопирован — вставьте его в сообщение клиенту");
+    const o = ta.closest(".modal-overlay");
+    if (o) o.remove();
+}
+
+/* ================= НАЛИЧНЫЕ ================= */
+
+/* Галочка «Наличные»: выбор клиента из cash_counterparties.data (выгрузка 1С «ВыгрузитьНаличныхКонтрагентовНаVPS»).
    Переключили после выбора — клиент сбрасывается, чтобы не запросить цену по клиенту из другого списка. */
 function pricesCashChanged() {
     const input = document.getElementById("pricesCounterparty");
